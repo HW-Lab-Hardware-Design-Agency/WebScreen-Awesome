@@ -5,9 +5,9 @@ print("Starting JavaScript execution...");
 /************************************************************
  * CA CERT
  ************************************************************/
-let certOk = http_set_ca_cert_from_sd("/timeapi.pem");
+let certOk = http_set_ca_cert_from_sd("/dualclock.pem");
 if (!certOk) {
-  print("Could not load CA from /timeapi.pem. Using insecure fallback.");
+  print("Could not load CA from /dualclock.pem. Using insecure fallback.");
 }
 
 /************************************************************
@@ -31,11 +31,10 @@ if (jsonResponse1 === "") {
   return;
 }
 
-let dateVal1    = parse_json_value(jsonResponse1, "date");
-let hour1       = toNumber(parse_json_value(jsonResponse1, "hour"));
-let minute1     = toNumber(parse_json_value(jsonResponse1, "minute"));
-let seconds1    = toNumber(parse_json_value(jsonResponse1, "seconds"));
-let timeZoneId1 = parse_json_value(jsonResponse1, "timeZone");
+let dateVal1  = parse_json_value(jsonResponse1, "date");
+let hour1     = toNumber(parse_json_value(jsonResponse1, "hour"));
+let minute1   = toNumber(parse_json_value(jsonResponse1, "minute"));
+let seconds1  = toNumber(parse_json_value(jsonResponse1, "seconds"));
 
 /************************************************************
  * INITIAL FETCH - BUENOS AIRES
@@ -44,18 +43,18 @@ let jsonResponse2 = http_get(
   "https://timeapi.io/api/time/current/zone?timeZone=America/Argentina/Buenos_Aires"
 );
 
-let dateVal2    = "N/A";
-let hour2       = 0;
-let minute2     = 0;
-let seconds2    = 0;
-let timeZoneId2 = "America/Argentina/Buenos_Aires";
+let dateVal2  = "N/A";
+let hour2     = 0;
+let minute2   = 0;
+let seconds2  = 0;
 
 if (jsonResponse2 !== "") {
-  dateVal2    = parse_json_value(jsonResponse2, "date");
-  hour2       = toNumber(parse_json_value(jsonResponse2, "hour"));
-  minute2     = toNumber(parse_json_value(jsonResponse2, "minute"));
-  seconds2    = toNumber(parse_json_value(jsonResponse2, "seconds"));
-  timeZoneId2 = parse_json_value(jsonResponse2, "timeZone");
+  dateVal2  = parse_json_value(jsonResponse2, "date");
+  hour2     = toNumber(parse_json_value(jsonResponse2, "hour"));
+  minute2   = toNumber(parse_json_value(jsonResponse2, "minute"));
+  seconds2  = toNumber(parse_json_value(jsonResponse2, "seconds"));
+} else {
+  print("Warning: HTTP GET failed for Buenos Aires. Using defaults.");
 }
 
 /************************************************************
@@ -66,66 +65,65 @@ let cityPretty2 = "Bs As";
 
 /************************************************************
  * STYLES
+ * Reduced from 6 to 4 styles by reusing small styles for city/date
+ * - Large (48pt): time display
+ * - Small (34pt): city name and date
+ * - Alignment: 0=left, 1=center
  ************************************************************/
-let timeStyleCenter = create_style();
-style_set_text_font(timeStyleCenter, 48);
-style_set_text_color(timeStyleCenter, 0xFFFFFF);
-style_set_pad_all(timeStyleCenter, 5);
-style_set_text_align(timeStyleCenter, 1);
+let largeStyleCenter = create_style();
+style_set_text_font(largeStyleCenter, 48);
+style_set_text_color(largeStyleCenter, 0xFFFFFF);
+style_set_pad_all(largeStyleCenter, 5);
+style_set_text_align(largeStyleCenter, 1);
 
-let timeStyleLeft = create_style();
-style_set_text_font(timeStyleLeft, 48);
-style_set_text_color(timeStyleLeft, 0xFFFFFF);
-style_set_pad_all(timeStyleLeft, 5);
-style_set_text_align(timeStyleLeft, 0);
+let largeStyleLeft = create_style();
+style_set_text_font(largeStyleLeft, 48);
+style_set_text_color(largeStyleLeft, 0xFFFFFF);
+style_set_pad_all(largeStyleLeft, 5);
+style_set_text_align(largeStyleLeft, 0);
 
-let cityStyleCenter = create_style();
-style_set_text_font(cityStyleCenter, 34);
-style_set_text_color(cityStyleCenter, 0xFFFFFF);
-style_set_pad_all(cityStyleCenter, 5);
-style_set_text_align(cityStyleCenter, 1);
+let smallStyleCenter = create_style();
+style_set_text_font(smallStyleCenter, 34);
+style_set_text_color(smallStyleCenter, 0xFFFFFF);
+style_set_pad_all(smallStyleCenter, 5);
+style_set_text_align(smallStyleCenter, 1);
 
-let cityStyleLeft = create_style();
-style_set_text_font(cityStyleLeft, 34);
-style_set_text_color(cityStyleLeft, 0xFFFFFF);
-style_set_pad_all(cityStyleLeft, 5);
-style_set_text_align(cityStyleLeft, 0);
-
-let dateStyleCenter = create_style();
-style_set_text_font(dateStyleCenter, 34);
-style_set_text_color(dateStyleCenter, 0xFFFFFF);
-style_set_pad_all(dateStyleCenter, 5);
-style_set_text_align(dateStyleCenter, 1);
-
-let dateStyleLeft = create_style();
-style_set_text_font(dateStyleLeft, 34);
-style_set_text_color(dateStyleLeft, 0xFFFFFF);
-style_set_pad_all(dateStyleLeft, 5);
-style_set_text_align(dateStyleLeft, 0);
+let smallStyleLeft = create_style();
+style_set_text_font(smallStyleLeft, 34);
+style_set_text_color(smallStyleLeft, 0xFFFFFF);
+style_set_pad_all(smallStyleLeft, 5);
+style_set_text_align(smallStyleLeft, 0);
 
 /************************************************************
  * LABELS
+ * Layout: Screen is ~536x240px
+ * - Left zone (Buenos Aires): x=10, labels left-aligned
+ * - Right zone (Tokyo): x=268 (center of screen), labels centered
+ * - Vertical positions: time=40, city=100, date=155
  ************************************************************/
+
+// Right zone - Tokyo (centered)
 let timeLabel1 = create_label(268, 40);
-obj_add_style(timeLabel1, timeStyleCenter, 0);
+obj_add_style(timeLabel1, largeStyleCenter, 0);
 
 let cityLabel1 = create_label(310, 100);
-obj_add_style(cityLabel1, cityStyleCenter, 0);
+obj_add_style(cityLabel1, smallStyleCenter, 0);
 label_set_text(cityLabel1, cityPretty1);
 
 let dateLabel1 = create_label(268, 155);
-obj_add_style(dateLabel1, dateStyleCenter, 0);
+obj_add_style(dateLabel1, smallStyleCenter, 0);
 label_set_text(dateLabel1, dateVal1);
 
+// Left zone - Buenos Aires (left-aligned)
 let timeLabel2 = create_label(10, 40);
-obj_add_style(timeLabel2, timeStyleLeft, 0);
+obj_add_style(timeLabel2, largeStyleLeft, 0);
 
 let cityLabel2 = create_label(50, 100);
-obj_add_style(cityLabel2, cityStyleLeft, 0);
+obj_add_style(cityLabel2, smallStyleLeft, 0);
 label_set_text(cityLabel2, cityPretty2);
 
 let dateLabel2 = create_label(10, 155);
-obj_add_style(dateLabel2, dateStyleLeft, 0);
+obj_add_style(dateLabel2, smallStyleLeft, 0);
 label_set_text(dateLabel2, dateVal2);
 
 /************************************************************
@@ -161,10 +159,12 @@ let fetch_zone = function (tz) {
 
 let try_resync = function () {
   if (!wifi_status()) {
+    print("Resync skipped: WiFi not connected");
     nextResyncMs = RESYNC_RETRY_MS;
     return;
   }
 
+  print("Resyncing time from API...");
   let z1 = fetch_zone("Asia/Tokyo");
   let z2 = fetch_zone("America/Argentina/Buenos_Aires");
 
@@ -173,6 +173,8 @@ let try_resync = function () {
     minute1 = z1.minute;
     seconds1 = z1.seconds;
     dateVal1 = z1.date;
+    label_set_text(dateLabel1, dateVal1);
+    print("Tokyo resynced: " + z1.date);
   }
 
   if (z2) {
@@ -180,6 +182,8 @@ let try_resync = function () {
     minute2 = z2.minute;
     seconds2 = z2.seconds;
     dateVal2 = z2.date;
+    label_set_text(dateLabel2, dateVal2);
+    print("Buenos Aires resynced: " + z2.date);
   }
 
   nextResyncMs = (z1 || z2) ? RESYNC_PERIOD_MS : RESYNC_RETRY_MS;
