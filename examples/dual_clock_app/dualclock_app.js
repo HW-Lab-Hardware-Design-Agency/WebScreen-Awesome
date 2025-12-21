@@ -85,6 +85,25 @@ if (jsonResponse2 !== "") {
 }
 
 /************************************************************
+ * TIMEZONE OFFSET
+ * Calculate offset between zones at startup so we only need
+ * to fetch one timezone during resync (saves API calls)
+ ************************************************************/
+let toMinutes = function(h, m, s) {
+  return h * 60 + m;
+};
+
+let zone1Minutes = toMinutes(hour1, minute1, seconds1);
+let zone2Minutes = toMinutes(hour2, minute2, seconds2);
+let offsetMinutes = zone2Minutes - zone1Minutes;
+
+// Handle day boundary wrap-around (-12h to +12h range)
+if (offsetMinutes > 720) offsetMinutes = offsetMinutes - 1440;
+if (offsetMinutes < -720) offsetMinutes = offsetMinutes + 1440;
+
+print("Timezone offset: " + numberToString(offsetMinutes) + " minutes");
+
+/************************************************************
  * STYLES
  * Reduced from 6 to 4 styles by reusing small styles for city/date
  * - Large (48pt): time display
@@ -185,29 +204,37 @@ let try_resync = function () {
     return;
   }
 
+  // Only fetch zone1, calculate zone2 from offset (saves 1 API call)
   print("Resyncing time from API...");
   let z1 = fetch_zone(timezone1);
-  let z2 = fetch_zone(timezone2);
 
-  if (z1) {
-    hour1 = z1.hour;
-    minute1 = z1.minute;
-    seconds1 = z1.seconds;
-    dateVal1 = z1.date;
-    label_set_text(dateLabel1, dateVal1);
-    print(cityPretty1 + " resynced: " + z1.date);
+  if (!z1) {
+    print("Resync failed: API error");
+    nextResyncMs = RESYNC_RETRY_MS;
+    return;
   }
 
-  if (z2) {
-    hour2 = z2.hour;
-    minute2 = z2.minute;
-    seconds2 = z2.seconds;
-    dateVal2 = z2.date;
-    label_set_text(dateLabel2, dateVal2);
-    print(cityPretty2 + " resynced: " + z2.date);
-  }
+  // Update zone1
+  hour1 = z1.hour;
+  minute1 = z1.minute;
+  seconds1 = z1.seconds;
+  dateVal1 = z1.date;
+  label_set_text(dateLabel1, dateVal1);
 
-  nextResyncMs = (z1 || z2) ? RESYNC_PERIOD_MS : RESYNC_RETRY_MS;
+  // Calculate zone2 from zone1 + offset
+  let total2 = toMinutes(hour1, minute1, 0) + offsetMinutes;
+
+  // Handle day wrap-around
+  if (total2 < 0) total2 = total2 + 1440;
+  if (total2 >= 1440) total2 = total2 - 1440;
+
+  hour2 = (total2 / 60) | 0;  // integer division
+  minute2 = total2 - (hour2 * 60);
+  seconds2 = seconds1;  // sync seconds
+
+  // Note: date might be off by 1 day at boundaries, but close enough for display
+  print(cityPretty1 + " resynced, " + cityPretty2 + " calculated from offset");
+  nextResyncMs = RESYNC_PERIOD_MS;
 };
 
 /************************************************************
