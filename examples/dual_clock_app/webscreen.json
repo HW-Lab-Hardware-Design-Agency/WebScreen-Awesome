@@ -12,5 +12,9 @@
     "background": "#000000",
     "foreground": "#FFFFFF"
   },
-  "script": "dualclock_app.js"
+  "script": "dualclock_app.js",
+  "timezone1": "Asia/Tokyo",
+  "city1": "Tokyo",
+  "timezone2": "America/Argentina/Buenos_Aires",
+  "city2": "Bs As"
 }

@@ -11,6 +11,35 @@ if (!certOk) {
 }
 
 /************************************************************
+ * CONFIGURATION
+ * Read timezone settings from webscreen.json
+ * Defaults: Tokyo and Buenos Aires
+ ************************************************************/
+let config = sd_read_file("/webscreen.json");
+
+let timezone1 = "Asia/Tokyo";
+let timezone2 = "America/Argentina/Buenos_Aires";
+let cityPretty1 = "Tokyo";
+let cityPretty2 = "Bs As";
+
+if (config !== "") {
+  let tz1 = parse_json_value(config, "timezone1");
+  let tz2 = parse_json_value(config, "timezone2");
+  let c1 = parse_json_value(config, "city1");
+  let c2 = parse_json_value(config, "city2");
+
+  if (tz1 !== "") timezone1 = tz1;
+  if (tz2 !== "") timezone2 = tz2;
+  if (c1 !== "") cityPretty1 = c1;
+  if (c2 !== "") cityPretty2 = c2;
+
+  print("Config loaded - Zone 1: " + cityPretty1 + " (" + timezone1 + ")");
+  print("Config loaded - Zone 2: " + cityPretty2 + " (" + timezone2 + ")");
+} else {
+  print("No config found, using defaults");
+}
+
+/************************************************************
  * WIFI WAIT
  ************************************************************/
 for (;;) {
@@ -21,13 +50,12 @@ for (;;) {
 print("Connected! IP: " + wifi_get_ip());
 
 /************************************************************
- * INITIAL FETCH - TOKYO
+ * INITIAL FETCH - ZONE 1
  ************************************************************/
-let jsonResponse1 = http_get(
-  "https://timeapi.io/api/time/current/zone?timeZone=Asia/Tokyo"
-);
+let apiUrl1 = "https://timeapi.io/api/time/current/zone?timeZone=" + timezone1;
+let jsonResponse1 = http_get(apiUrl1);
 if (jsonResponse1 === "") {
-  print("HTTP GET failed for Tokyo. Abort.");
+  print("HTTP GET failed for " + cityPretty1 + ". Abort.");
   return;
 }
 
@@ -37,11 +65,10 @@ let minute1   = toNumber(parse_json_value(jsonResponse1, "minute"));
 let seconds1  = toNumber(parse_json_value(jsonResponse1, "seconds"));
 
 /************************************************************
- * INITIAL FETCH - BUENOS AIRES
+ * INITIAL FETCH - ZONE 2
  ************************************************************/
-let jsonResponse2 = http_get(
-  "https://timeapi.io/api/time/current/zone?timeZone=America/Argentina/Buenos_Aires"
-);
+let apiUrl2 = "https://timeapi.io/api/time/current/zone?timeZone=" + timezone2;
+let jsonResponse2 = http_get(apiUrl2);
 
 let dateVal2  = "N/A";
 let hour2     = 0;
@@ -54,14 +81,8 @@ if (jsonResponse2 !== "") {
   minute2   = toNumber(parse_json_value(jsonResponse2, "minute"));
   seconds2  = toNumber(parse_json_value(jsonResponse2, "seconds"));
 } else {
-  print("Warning: HTTP GET failed for Buenos Aires. Using defaults.");
+  print("Warning: HTTP GET failed for " + cityPretty2 + ". Using defaults.");
 }
-
-/************************************************************
- * CITY NAMES
- ************************************************************/
-let cityPretty1 = "Tokyo";
-let cityPretty2 = "Bs As";
 
 /************************************************************
  * STYLES
@@ -165,8 +186,8 @@ let try_resync = function () {
   }
 
   print("Resyncing time from API...");
-  let z1 = fetch_zone("Asia/Tokyo");
-  let z2 = fetch_zone("America/Argentina/Buenos_Aires");
+  let z1 = fetch_zone(timezone1);
+  let z2 = fetch_zone(timezone2);
 
   if (z1) {
     hour1 = z1.hour;
@@ -174,7 +195,7 @@ let try_resync = function () {
     seconds1 = z1.seconds;
     dateVal1 = z1.date;
     label_set_text(dateLabel1, dateVal1);
-    print("Tokyo resynced: " + z1.date);
+    print(cityPretty1 + " resynced: " + z1.date);
   }
 
   if (z2) {
@@ -183,7 +204,7 @@ let try_resync = function () {
     seconds2 = z2.seconds;
     dateVal2 = z2.date;
     label_set_text(dateLabel2, dateVal2);
-    print("Buenos Aires resynced: " + z2.date);
+    print(cityPretty2 + " resynced: " + z2.date);
   }
 
   nextResyncMs = (z1 || z2) ? RESYNC_PERIOD_MS : RESYNC_RETRY_MS;
