@@ -1,0 +1,11 @@
+{
+  "name": "Pomodoro Timer",
+  "version": "1.0.0",
+  "description": "Focus timer with work and break intervals for productivity",
+  "author": "WebScreen Community",
+  "script_file": "pomodoro_app.js",
+  "display": {
+    "background_color": "#1a1a2e",
+    "foreground_color": "#e94560"
+  }
+}

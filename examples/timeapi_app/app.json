@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "wifi": {
+      "ssid": "ssid",
+      "pass": "pass"
+    },
+    "mqtt": {
+      "enabled": false
+    }
+  },
+  "screen": {
+    "background": "#332616",
+    "foreground": "#FFFFFF"
+  },
+  "script": "script.js"
+}
