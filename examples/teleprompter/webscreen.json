@@ -1,0 +1,11 @@
+{
+  "name": "Teleprompter",
+  "version": "1.0.0",
+  "description": "Scrolling text display for presentations and speeches",
+  "author": "WebScreen Community",
+  "script_file": "teleprompter_app.js",
+  "display": {
+    "background_color": "#000000",
+    "foreground_color": "#FFFFFF"
+  }
+}

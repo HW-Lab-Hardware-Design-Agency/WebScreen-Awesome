@@ -1,0 +1,14 @@
+{
+  "name": "RSS Reader",
+  "version": "1.0.0",
+  "description": "Display latest news and updates from RSS feeds",
+  "author": "WebScreen Community",
+  "script_file": "rss_app.js",
+  "wifi": {
+    "enabled": true
+  },
+  "display": {
+    "background_color": "#fafafa",
+    "foreground_color": "#ff6600"
+  }
+}
