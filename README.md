@@ -12,9 +12,12 @@ A collection of awesome apps, mods, and resources for WebScreen! Share your crea
    cd WebScreen-Awesome
    ```
 
-2. **Create your app configuration** (`webscreen.json`)
+2. **Create your app configuration** (`app.json`)
    ```json
    {
+     "name": "My App",
+     "description": "A cool WebScreen app",
+     "version": "1.0.0",
      "settings": {
        "wifi": {
          "ssid": "your_network",
@@ -28,25 +31,23 @@ A collection of awesome apps, mods, and resources for WebScreen! Share your crea
        "background": "#000000",
        "foreground": "#FFFFFF"
      },
-     "script": "app.js"
+     "script": "script.js"
    }
    ```
 
-3. **Write your JavaScript app** (`app.js`)
+3. **Write your JavaScript app** (`script.js`)
    ```javascript
    "use strict";
 
    print("Hello WebScreen!");
 
-   // Wait for WiFi connection
-   while (!wifi_status()) {
-     delay(500);
-     print("Connecting to WiFi...");
-   }
-   print("Connected! IP: " + wifi_get_ip());
-
    // Create and display a label
+   let style = create_style();
+   style_set_text_font(style, 32);
+   style_set_text_color(style, 0xFFFFFF);
+
    let label = create_label(210, 100);
+   obj_add_style(label, style, 0);
    label_set_text(label, "Hello World!");
    ```
 
@@ -57,52 +58,86 @@ A collection of awesome apps, mods, and resources for WebScreen! Share your crea
 ```
 WebScreen-Awesome/
 ├── examples/               # Community WebScreen applications
+│   ├── auctions/          # Auction bid tracker
 │   ├── blink/             # Simple GIF animation display
-│   ├── timeapi_app/       # Time display with API integration
-│   ├── sd_reader/         # SD card file listing
-│   └── [your-app-here]/   # Submit your awesome app!
+│   ├── calculator/        # Basic calculator
+│   ├── clock/             # Digital clock with themes
+│   ├── dual_clock/        # Dual timezone display
+│   ├── iot/               # IoT device monitor
+│   ├── monitor/           # System performance monitor
+│   ├── music/             # Music player interface
+│   ├── notifications/     # Notification hub
+│   ├── pomodoro/          # Pomodoro focus timer
+│   ├── reminders/         # Personal reminder system
+│   ├── rss/               # RSS feed reader
+│   ├── sd_reader/         # SD card file browser
+│   ├── snake/             # Snake game with AI
+│   ├── social/            # Social media dashboard
+│   ├── steam/             # Steam profile display
+│   ├── stocks/            # Stock ticker
+│   ├── teleprompter/      # Scrolling text display
+│   ├── timeapi/           # Internet clock with animation
+│   ├── timer/             # Countdown timer & stopwatch
+│   └── weather/           # Weather display
 ├── CLAUDE.md              # AI assistant documentation
 ├── LICENSE                # MIT License
 └── README.md              # This file
 ```
 
-## 🌟 Why "WebScreen Awesome"?
+## 🌟 Example Applications
 
-This repository is inspired by the "awesome" lists tradition on GitHub - a place where the community comes together to share the best resources, tools, and creations. We want this to be THE place to discover cool WebScreen apps, learn from others' code, and showcase your own creative projects!
+### Productivity
 
-## 💡 Example Applications
+| App | Description |
+|-----|-------------|
+| [**Pomodoro**](examples/pomodoro/) | Focus timer with work and break intervals for productivity |
+| [**Timer**](examples/timer/) | Countdown timer and stopwatch for productivity |
+| [**Reminders**](examples/reminders/) | Personal reminder system with notifications and alerts |
+| [**Calculator**](examples/calculator/) | Simple calculator with basic math operations |
+| [**Teleprompter**](examples/teleprompter/) | Scrolling text display for presentations and speeches |
 
-### 1. Blink - GIF Animation Display
-Simple app that displays an animated GIF from the SD card.
+### Time & Weather
 
-**Files:**
-- `examples/blink/blink.js` - Main application
-- `examples/blink/webscreen.json` - Configuration
-- `examples/blink/blink.gif` - Animation asset
+| App | Description |
+|-----|-------------|
+| [**Clock**](examples/clock/) | Beautiful digital clock with customizable themes and timezone support |
+| [**Dual Clock**](examples/dual_clock/) | Display two time zones simultaneously with automatic sync from timeapi.io |
+| [**TimeAPI**](examples/timeapi/) | Internet clock that fetches time from an API with cute animation |
+| [**Weather**](examples/weather/) | Display current weather conditions and forecast for your location |
 
-### 2. TimeAPI App - Internet Clock
-Fetches current time from an API and displays it with a clock widget.
+### Information & News
 
-**Features:**
-- HTTPS API calls with certificate validation
-- JSON parsing
-- Dynamic UI updates with timer
-- Custom styling for labels
+| App | Description |
+|-----|-------------|
+| [**RSS Reader**](examples/rss/) | Display latest news and updates from RSS feeds |
+| [**Stocks**](examples/stocks/) | Real-time stock prices and market information |
+| [**Notifications**](examples/notifications/) | Centralized notification hub for displaying alerts and messages |
 
-**Files:**
-- `examples/timeapi_app/timeapi_app.js` - Main application
-- `examples/timeapi_app/webscreen.json` - Configuration
-- `examples/timeapi_app/timeapi.pem` - SSL certificate
-- `examples/timeapi_app/cat.gif` - Decorative animation
+### Social & Gaming
 
-**Credits:** Based on the clock example by [@nishad2m8](https://github.com/nishad2m8/WebScreen/tree/main/01-Clock)
+| App | Description |
+|-----|-------------|
+| [**Steam**](examples/steam/) | Display Steam profile, friends online, and game activity |
+| [**Social**](examples/social/) | Display your social media feeds and updates |
+| [**Snake**](examples/snake/) | Classic snake game with AI auto-play demonstration |
+| [**Auctions**](examples/auctions/) | Track auction bids and marketplace listings |
 
-### 3. SD Reader - File Browser
-Lists files on the SD card and displays WiFi connection status.
+### IoT & System
 
-**Files:**
-- `examples/sd_reader/sd_reader.js` - Main application
-- `examples/sd_reader/webscreen.json` - Configuration
+| App | Description |
+|-----|-------------|
+| [**IoT Monitor**](examples/iot/) | Monitor and control IoT devices and sensors |
+| [**Monitor**](examples/monitor/) | Monitor system performance and resource usage |
+| [**Music**](examples/music/) | Music player interface display |
+
+### Utilities
+
+| App | Description |
+|-----|-------------|
+| [**Blink**](examples/blink/) | Simple GIF animation display |
+| [**SD Reader**](examples/sd_reader/) | SD card file browser with network status |
+
+---
 
 ## 🛠️ WebScreen JavaScript API
 
@@ -110,60 +145,102 @@ Lists files on the SD card and displays WiFi connection status.
 ```javascript
 // System
 print(message)              // Console output
-delay(milliseconds)          // Blocking delay
+delay(milliseconds)         // Blocking delay
 toNumber(string)            // Convert string to number
 numberToString(number)      // Convert number to string
 
 // WiFi
-wifi_status()               // Check connection status
-wifi_get_ip()              // Get assigned IP address
+wifi_status()               // Check connection status (returns 1 or 0)
+wifi_get_ip()               // Get assigned IP address
 
 // HTTP
-http_get(url)              // GET request
+http_get(url)               // GET request
 http_set_ca_cert_from_sd(path)  // Load SSL certificate
 
 // JSON
 parse_json_value(json, key)  // Extract value from JSON
 
 // SD Card
-sd_list_dir(path)          // List directory contents
+sd_list_dir(path)           // List directory contents
 show_gif_from_sd(path, x, y)  // Display GIF at position
 
 // UI - Labels
-create_label(x, y)         // Create text label
-label_set_text(label, text)  // Update label text
+create_label(x, y)          // Create text label at position
+label_set_text(label, text) // Update label text
 obj_add_style(obj, style, selector)  // Apply style
+move_obj(obj, x, y)         // Move object to position
 
 // UI - Styling
-create_style()             // Create new style object
-style_set_text_font(style, size)  // Set font size
+create_style()              // Create new style object
+style_set_text_font(style, size)  // Set font size (number)
 style_set_text_color(style, color)  // Set text color (0xRRGGBB)
+style_set_text_align(style, align)  // Set alignment (0=left, 1=center, 2=right)
+style_set_bg_color(style, color)  // Set background color
+style_set_bg_opa(style, opacity)  // Set background opacity (0-255)
 style_set_pad_all(style, pixels)  // Set padding
-style_set_text_align(style, align)  // Set alignment
+style_set_radius(style, pixels)  // Set corner radius
+style_set_width(style, pixels)  // Set width
+style_set_height(style, pixels)  // Set height
 
 // Timers
 create_timer(function_name, interval_ms)  // Create periodic timer
 ```
 
+### Important Syntax Notes
+
+```javascript
+// Use "use strict" at the top
+"use strict";
+
+// Colors are hex integers, NOT strings
+style_set_text_color(style, 0xFF0000);  // Correct
+style_set_text_color(style, "#FF0000"); // Wrong!
+
+// Fonts are numbers, NOT strings
+style_set_text_font(style, 24);         // Correct
+style_set_text_font(style, "24");       // Wrong!
+
+// Function expressions, NOT declarations
+let myFunc = function() { };            // Correct
+function myFunc() { }                   // Wrong!
+
+// Timer callbacks use function name as string
+let update = function() { /* ... */ };
+create_timer("update", 1000);           // Pass name as string
+
+// Use 1/0 for boolean values
+let isRunning = 1;                      // true
+let isPaused = 0;                       // false
+
+// No object literals - use separate variables
+let x = 10;                             // Correct
+let y = 20;
+let pos = { x: 10, y: 20 };            // Wrong!
+```
+
 ## 📝 Configuration Reference
 
-### webscreen.json Format
+### app.json Format
 ```json
 {
+  "name": "App Name",
+  "description": "What the app does",
+  "version": "1.0.0",
+  "author": "Your Name",
   "settings": {
     "wifi": {
-      "ssid": "network_name",    // WiFi network name
-      "pass": "password"          // WiFi password
+      "ssid": "network_name",
+      "pass": "password"
     },
     "mqtt": {
-      "enabled": false            // Enable/disable MQTT
+      "enabled": false
     }
   },
   "screen": {
-    "background": "#000000",      // Background color (hex)
-    "foreground": "#FFFFFF"       // Text color (hex)
+    "background": "#000000",
+    "foreground": "#FFFFFF"
   },
-  "script": "app.js"              // JavaScript file to run
+  "script": "script.js"
 }
 ```
 
@@ -187,27 +264,25 @@ Use our web-based IDE for rapid development without SD card swapping:
    "use strict";
    ```
 
-2. **Wait for WiFi before network operations**
+2. **Use timers instead of while loops for updates**
    ```javascript
-   while (!wifi_status()) {
-     delay(500);
-   }
+   let tick = function() {
+     // Update logic here
+   };
+   create_timer("tick", 1000);
    ```
 
 3. **File paths use forward slashes**
    ```javascript
-   show_gif_from_sd("/animation.gif");
+   show_gif_from_sd("/animation.gif", 0, 0);
    ```
 
-4. **Timer callbacks use function name as string**
+4. **Wait for WiFi before network operations**
    ```javascript
-   let update = function() { /* ... */ };
-   create_timer("update", 1000);
-   ```
-
-5. **Colors use 0xRRGGBB format in styles**
-   ```javascript
-   style_set_text_color(style, 0xFF0000); // Red
+   // In init timer
+   if (wifi_status()) {
+     // Safe to make HTTP requests
+   }
    ```
 
 ## 📚 Resources
@@ -231,12 +306,15 @@ We welcome contributions of:
 
 ### How to Contribute Your App
 1. Fork this repository
-2. Add your app to the `examples/` directory with its own folder
-3. Include a README with description, screenshots/GIFs, and setup instructions
+2. Create a folder in `examples/` with your app name
+3. Include the standard files:
+   - `app.json` - App configuration
+   - `script.js` - Main application code
+   - `README.md` - Description, screenshots, setup instructions
 4. Submit a pull request with your awesome creation!
 
 ### Submission Guidelines
-- Include all necessary files (`*.js`, `webscreen.json`, assets)
+- Include all necessary files (`script.js`, `app.json`, assets)
 - Add clear documentation and comments
 - Test your app on actual WebScreen hardware
 - Include attribution/credits where appropriate
