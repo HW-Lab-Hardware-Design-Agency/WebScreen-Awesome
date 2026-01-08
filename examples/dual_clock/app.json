@@ -1,0 +1,24 @@
+{
+  "name": "Dual Clock",
+  "description": "Display two time zones simultaneously with automatic sync from timeapi.io",
+  "version": "1.0.0",
+  "author": "WebScreen",
+  "settings": {
+    "wifi": {
+      "ssid": "your_network",
+      "pass": "your_password"
+    },
+    "mqtt": {
+      "enabled": false
+    }
+  },
+  "screen": {
+    "background": "#000000",
+    "foreground": "#FFFFFF"
+  },
+  "script": "script.js",
+  "timezone1": "Asia/Tokyo",
+  "city1": "Tokyo",
+  "timezone2": "America/Argentina/Buenos_Aires",
+  "city2": "Buenos Aires"
+}
