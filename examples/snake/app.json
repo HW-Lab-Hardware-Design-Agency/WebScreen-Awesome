@@ -1,8 +1,8 @@
 {
   "settings": {
     "wifi": {
-      "ssid": "",
-      "pass": ""
+      "ssid": "your_ssid",
+      "pass": "your_password"
     },
     "mqtt": {
       "enabled": false
@@ -12,5 +12,5 @@
     "background": "#000000",
     "foreground": "#FFFFFF"
   },
-  "script": "sd_reader.js"
+  "script": "script.js"
 }

@@ -1,16 +1,16 @@
 {
   "settings": {
     "wifi": {
-      "ssid": "your_ssid",
-      "pass": "your_password"
+      "ssid": "ssid",
+      "pass": "pass"
     },
     "mqtt": {
       "enabled": false
     }
   },
   "screen": {
-    "background": "#000000",
+    "background": "#332616",
     "foreground": "#FFFFFF"
   },
-  "script": "snake_app.js"
+  "script": "script.js"
 }

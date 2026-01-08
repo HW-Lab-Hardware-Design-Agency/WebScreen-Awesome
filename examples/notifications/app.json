@@ -9,9 +9,8 @@
     }
   },
   "screen": {
-    "background": "#1a1a2e",
+    "background": "#16161d",
     "foreground": "#FFFFFF"
   },
-  "script": "weather_app.js",
-  "location": "London"
+  "script": "script.js"
 }

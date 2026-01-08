@@ -12,5 +12,5 @@
     "background": "#0f0f1a",
     "foreground": "#FFFFFF"
   },
-  "script": "timer_app.js"
+  "script": "script.js"
 }

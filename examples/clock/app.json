@@ -12,7 +12,7 @@
     "background": "#000000",
     "foreground": "#FFFFFF"
   },
-  "script": "clock_app.js",
+  "script": "script.js",
   "timezone": "America/New_York",
   "theme": 0
 }

@@ -12,5 +12,6 @@
     "background": "#1a1a2e",
     "foreground": "#FFFFFF"
   },
-  "script": "monitor_app.js"
+  "script": "script.js",
+  "location": "London"
 }
