@@ -1,0 +1,14 @@
+{
+  "name": "Bid Watcher",
+  "version": "1.0.0",
+  "description": "Track auction bids and marketplace listings",
+  "author": "WebScreen Community",
+  "script_file": "auctions_app.js",
+  "wifi": {
+    "enabled": true
+  },
+  "display": {
+    "background_color": "#fef3c7",
+    "foreground_color": "#d97706"
+  }
+}
