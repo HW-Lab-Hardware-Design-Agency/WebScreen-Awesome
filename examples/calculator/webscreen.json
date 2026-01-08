@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "wifi": {
+      "ssid": "your_ssid",
+      "pass": "your_password"
+    },
+    "mqtt": {
+      "enabled": false
+    }
+  },
+  "screen": {
+    "background": "#0d0d1a",
+    "foreground": "#FFFFFF"
+  },
+  "script": "calculator_app.js"
+}
