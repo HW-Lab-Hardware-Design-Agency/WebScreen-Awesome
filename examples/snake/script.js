@@ -127,13 +127,16 @@ obj_add_style(seg9, bodyStyle, 0); obj_set_size(seg9, GRID_SIZE - 4, GRID_SIZE -
 
 // Helper to get value from comma-separated string
 let getVal = function(str, idx) {
+  let len = str_length(str);
   let pos = 0;
   let count = 0;
   let start = 0;
-  for (;;) {
-    if (pos > 200) return 0;
-    let c = str_substring(str, pos, 1);
-    if (c === "," || c === "") {
+  while (pos <= len) {
+    let c = "";
+    if (pos < len) {
+      c = str_substring(str, pos, 1);
+    }
+    if (c === "," || pos === len) {
       if (count === idx) {
         let numStr = str_substring(str, start, pos - start);
         return toNumber(numStr);
@@ -141,7 +144,6 @@ let getVal = function(str, idx) {
       count++;
       start = pos + 1;
     }
-    if (c === "") break;
     pos++;
   }
   return 0;
@@ -149,14 +151,17 @@ let getVal = function(str, idx) {
 
 // Helper to set value in comma-separated string
 let setVal = function(str, idx, val) {
+  let len = str_length(str);
   let result = "";
   let pos = 0;
   let count = 0;
   let start = 0;
-  for (;;) {
-    if (pos > 200) break;
-    let c = str_substring(str, pos, 1);
-    if (c === "," || c === "") {
+  while (pos <= len) {
+    let c = "";
+    if (pos < len) {
+      c = str_substring(str, pos, 1);
+    }
+    if (c === "," || pos === len) {
       if (count === idx) {
         if (result !== "") result = result + ",";
         result = result + numberToString(val);
@@ -167,7 +172,6 @@ let setVal = function(str, idx, val) {
       count++;
       start = pos + 1;
     }
-    if (c === "") break;
     pos++;
   }
   return result;
@@ -241,8 +245,7 @@ let game_update = function() {
 
   // Shift body positions
   let i = snakeLength - 1;
-  for (;;) {
-    if (i <= 0) break;
+  while (i > 0) {
     let prevX = getVal(bodyX, i - 1);
     let prevY = getVal(bodyY, i - 1);
     bodyX = setVal(bodyX, i, prevX);

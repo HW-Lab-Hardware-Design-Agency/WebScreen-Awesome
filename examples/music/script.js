@@ -15,20 +15,22 @@ let durations = "180,210,240,195,225";
 
 // Get value from comma-separated string
 let getItem = function(str, idx) {
+  let len = str_length(str);
   let pos = 0;
   let count = 0;
   let start = 0;
-  for (;;) {
-    if (pos > 500) return "";
-    let c = str_substring(str, pos, 1);
-    if (c === "," || c === "") {
+  while (pos <= len) {
+    let c = "";
+    if (pos < len) {
+      c = str_substring(str, pos, 1);
+    }
+    if (c === "," || pos === len) {
       if (count === idx) {
         return str_substring(str, start, pos - start);
       }
       count++;
       start = pos + 1;
     }
-    if (c === "") break;
     pos++;
   }
   return "";
