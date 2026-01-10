@@ -15,20 +15,22 @@ let comments = "23,12,45,67,34,89";
 
 // Get value from comma-separated string
 let getItem = function(str, idx) {
+  let len = str_length(str);
   let pos = 0;
   let count = 0;
   let start = 0;
-  for (;;) {
-    if (pos > 1000) return "";
-    let c = str_substring(str, pos, 1);
-    if (c === "," || c === "") {
+  while (pos <= len) {
+    let c = "";
+    if (pos < len) {
+      c = str_substring(str, pos, 1);
+    }
+    if (c === "," || pos === len) {
       if (count === idx) {
         return str_substring(str, start, pos - start);
       }
       count++;
       start = pos + 1;
     }
-    if (c === "") break;
     pos++;
   }
   return "";
@@ -168,16 +170,7 @@ label_set_text(counterLabel, "1 of 6");
 
 // Split post text into 2 lines (max ~45 chars per line)
 let splitPost = function(text) {
-  let len = 0;
-  let i = 0;
-  // Count length
-  for (;;) {
-    if (i > 200) break;
-    let c = str_substring(text, i, 1);
-    if (c === "") break;
-    len++;
-    i++;
-  }
+  let len = str_length(text);
 
   if (len <= 45) {
     label_set_text(postLine1, text);
@@ -187,9 +180,8 @@ let splitPost = function(text) {
 
   // Find space near position 45
   let splitPos = 45;
-  i = 45;
-  for (;;) {
-    if (i < 30) break;
+  let i = 45;
+  while (i >= 30) {
     let c = str_substring(text, i, 1);
     if (c === " ") {
       splitPos = i;

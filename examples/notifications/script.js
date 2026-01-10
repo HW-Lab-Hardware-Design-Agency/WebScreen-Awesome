@@ -15,20 +15,22 @@ let demoColors = "0x00BFFF,0xFFAA00,0x00FF00,0xFF6600,0xFF4444";
 
 // Get value from comma-separated string
 let getItem = function(str, idx) {
+  let len = str_length(str);
   let pos = 0;
   let count = 0;
   let start = 0;
-  for (;;) {
-    if (pos > 500) return "";
-    let c = str_substring(str, pos, 1);
-    if (c === "," || c === "") {
+  while (pos <= len) {
+    let c = "";
+    if (pos < len) {
+      c = str_substring(str, pos, 1);
+    }
+    if (c === "," || pos === len) {
       if (count === idx) {
         return str_substring(str, start, pos - start);
       }
       count++;
       start = pos + 1;
     }
-    if (c === "") break;
     pos++;
   }
   return "";
@@ -152,14 +154,17 @@ let storedTimes = ",,,,";
 
 // Set value in comma-separated string
 let setItem = function(str, idx, val) {
+  let len = str_length(str);
   let result = "";
   let pos = 0;
   let count = 0;
   let start = 0;
-  for (;;) {
-    if (pos > 500) break;
-    let c = str_substring(str, pos, 1);
-    if (c === "," || c === "") {
+  while (pos <= len) {
+    let c = "";
+    if (pos < len) {
+      c = str_substring(str, pos, 1);
+    }
+    if (c === "," || pos === len) {
       if (count === idx) {
         if (result !== "") result = result + ",";
         result = result + val;
@@ -170,7 +175,6 @@ let setItem = function(str, idx, val) {
       count++;
       start = pos + 1;
     }
-    if (c === "") break;
     pos++;
   }
   return result;
@@ -210,8 +214,7 @@ let updateDisplay = function() {
 let addNotification = function(title, message, source) {
   // Shift existing notifications
   let i = 3;
-  for (;;) {
-    if (i < 0) break;
+  while (i >= 0) {
     storedTitles = setItem(storedTitles, i + 1, getItem(storedTitles, i));
     storedMessages = setItem(storedMessages, i + 1, getItem(storedMessages, i));
     storedSources = setItem(storedSources, i + 1, getItem(storedSources, i));

@@ -112,12 +112,11 @@ let fileList = sd_list_dir("/");
 if (fileList !== "") {
   sdOk = 1;
   // Count files (separated by newlines)
+  let len = str_length(fileList);
   let i = 0;
   fileCount = 1;
-  for (;;) {
-    if (i >= 500) break;
+  while (i < len) {
     let c = str_substring(fileList, i, 1);
-    if (c === "") break;
     if (c === "\n") {
       fileCount++;
     }
