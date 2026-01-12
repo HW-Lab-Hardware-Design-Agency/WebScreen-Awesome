@@ -2,12 +2,36 @@
 
 print("Starting RSS Reader...");
 
-// Demo news
-let news1 = "WebScreen 2.0 Released";
-let news2 = "ESP32-S3 Performance Tips";
-let news3 = "Building IoT with LVGL";
-let news4 = "Open Source Hardware Growing";
-let currentPage = 1;
+// Demo news items (8 total, showing 2 at a time)
+let allNews = "WebScreen 2.0 Released,ESP32-S3 Performance Tips,Building IoT with LVGL,Open Source Hardware Growing,JavaScript Engine for Embedded,Smart Display Projects Guide,AMOLED vs LCD Comparison,Home Automation Trends";
+let allSources = "WebScreen Blog,Tech News,Maker Weekly,OSH News,Dev Journal,DIY Weekly,Display Tech,Smart Home";
+let allTimes = "2h ago,4h ago,6h ago,8h ago,10h ago,12h ago,1d ago,2d ago";
+
+let currentPage = 0;
+let totalPages = 4;
+
+// Get value from comma-separated string
+let getItem = function(str, idx) {
+    let len = str_length(str);
+    let pos = 0;
+    let count = 0;
+    let start = 0;
+    while (pos <= len) {
+        let c = "";
+        if (pos < len) {
+            c = str_substring(str, pos, 1);
+        }
+        if (c === "," || pos === len) {
+            if (count === idx) {
+                return str_substring(str, start, pos - start);
+            }
+            count++;
+            start = pos + 1;
+        }
+        pos++;
+    }
+    return "";
+};
 
 // Colors
 let COLOR_BG = 0xfafafa;
@@ -19,7 +43,7 @@ let COLOR_TIME = 0x888888;
 
 // Styles
 let headerStyle = create_style();
-style_set_text_font(headerStyle, 24);
+style_set_text_font(headerStyle, 20);
 style_set_text_color(headerStyle, COLOR_WHITE);
 
 let titleStyle = create_style();
@@ -35,130 +59,171 @@ style_set_text_font(timeStyle, 12);
 style_set_text_color(timeStyle, COLOR_TIME);
 
 let navStyle = create_style();
-style_set_text_font(navStyle, 14);
+style_set_text_font(navStyle, 12);
 style_set_text_color(navStyle, COLOR_TIME);
 style_set_text_align(navStyle, 1);
 
 let headerBgStyle = create_style();
 style_set_bg_color(headerBgStyle, COLOR_HEADER);
 style_set_bg_opa(headerBgStyle, 255);
-style_set_width(headerBgStyle, 466);
-style_set_height(headerBgStyle, 60);
+style_set_width(headerBgStyle, 536);
+style_set_height(headerBgStyle, 45);
 
+// Card style - 2 cards side by side for 536x240 screen
 let cardStyle = create_style();
 style_set_bg_color(cardStyle, COLOR_WHITE);
 style_set_bg_opa(cardStyle, 255);
 style_set_radius(cardStyle, 8);
-style_set_width(cardStyle, 436);
-style_set_height(cardStyle, 85);
+style_set_width(cardStyle, 250);
+style_set_height(cardStyle, 140);
 
-// Header
+// Header - display is 536x240
 let headerBg = create_label(0, 0);
 obj_add_style(headerBg, headerBgStyle, 0);
 label_set_text(headerBg, "");
 
-let headerLabel = create_label(20, 18);
+let headerLabel = create_label(15, 12);
 obj_add_style(headerLabel, headerStyle, 0);
 label_set_text(headerLabel, "RSS READER");
 
-// Cards
-let card1 = create_label(15, 75);
+let navLabel = create_label(450, 15);
+obj_add_style(navLabel, navStyle, 0);
+label_set_text(navLabel, "1 / 4");
+
+// Card 1 (left) - at x=15, y=55
+let card1 = create_label(15, 55);
 obj_add_style(card1, cardStyle, 0);
 label_set_text(card1, "");
 
-let title1 = create_label(25, 87);
+let title1 = create_label(25, 65);
 obj_add_style(title1, titleStyle, 0);
-label_set_text(title1, news1);
+label_set_text(title1, "");
 
-let source1 = create_label(25, 130);
+let title1b = create_label(25, 85);
+obj_add_style(title1b, titleStyle, 0);
+label_set_text(title1b, "");
+
+let source1 = create_label(25, 155);
 obj_add_style(source1, sourceStyle, 0);
-label_set_text(source1, "WebScreen Blog");
+label_set_text(source1, "");
 
-let time1 = create_label(350, 130);
+let time1 = create_label(25, 175);
 obj_add_style(time1, timeStyle, 0);
-label_set_text(time1, "2h ago");
+label_set_text(time1, "");
 
-let card2 = create_label(15, 170);
+// Card 2 (right) - at x=275, y=55
+let card2 = create_label(275, 55);
 obj_add_style(card2, cardStyle, 0);
 label_set_text(card2, "");
 
-let title2 = create_label(25, 182);
+let title2 = create_label(285, 65);
 obj_add_style(title2, titleStyle, 0);
-label_set_text(title2, news2);
+label_set_text(title2, "");
 
-let source2 = create_label(25, 225);
+let title2b = create_label(285, 85);
+obj_add_style(title2b, titleStyle, 0);
+label_set_text(title2b, "");
+
+let source2 = create_label(285, 155);
 obj_add_style(source2, sourceStyle, 0);
-label_set_text(source2, "Tech News");
+label_set_text(source2, "");
 
-let time2 = create_label(350, 225);
+let time2 = create_label(285, 175);
 obj_add_style(time2, timeStyle, 0);
-label_set_text(time2, "4h ago");
+label_set_text(time2, "");
 
-let card3 = create_label(15, 265);
-obj_add_style(card3, cardStyle, 0);
-label_set_text(card3, "");
+// Page indicator dots
+let dotStyle = create_style();
+style_set_bg_color(dotStyle, 0xcccccc);
+style_set_bg_opa(dotStyle, 255);
+style_set_radius(dotStyle, 4);
+style_set_width(dotStyle, 8);
+style_set_height(dotStyle, 8);
 
-let title3 = create_label(25, 277);
-obj_add_style(title3, titleStyle, 0);
-label_set_text(title3, news3);
+let dotActiveStyle = create_style();
+style_set_bg_color(dotActiveStyle, COLOR_HEADER);
+style_set_bg_opa(dotActiveStyle, 255);
+style_set_radius(dotActiveStyle, 4);
+style_set_width(dotActiveStyle, 8);
+style_set_height(dotActiveStyle, 8);
 
-let source3 = create_label(25, 320);
-obj_add_style(source3, sourceStyle, 0);
-label_set_text(source3, "Maker Weekly");
+let dot0 = create_label(238, 210);
+let dot1 = create_label(254, 210);
+let dot2 = create_label(270, 210);
+let dot3 = create_label(286, 210);
 
-let time3 = create_label(350, 320);
-obj_add_style(time3, timeStyle, 0);
-label_set_text(time3, "6h ago");
+obj_add_style(dot0, dotActiveStyle, 0); label_set_text(dot0, "");
+obj_add_style(dot1, dotStyle, 0); label_set_text(dot1, "");
+obj_add_style(dot2, dotStyle, 0); label_set_text(dot2, "");
+obj_add_style(dot3, dotStyle, 0); label_set_text(dot3, "");
 
-let card4 = create_label(15, 360);
-obj_add_style(card4, cardStyle, 0);
-label_set_text(card4, "");
+// Update page display
+let updateDisplay = function() {
+    let idx1 = currentPage * 2;
+    let idx2 = currentPage * 2 + 1;
 
-let title4 = create_label(25, 372);
-obj_add_style(title4, titleStyle, 0);
-label_set_text(title4, news4);
+    // Card 1
+    let news1 = getItem(allNews, idx1);
+    let src1 = getItem(allSources, idx1);
+    let tm1 = getItem(allTimes, idx1);
+    label_set_text(title1, news1);
+    label_set_text(title1b, "");
+    label_set_text(source1, src1);
+    label_set_text(time1, tm1);
 
-let source4 = create_label(25, 415);
-obj_add_style(source4, sourceStyle, 0);
-label_set_text(source4, "OSH News");
+    // Card 2
+    let news2 = getItem(allNews, idx2);
+    let src2 = getItem(allSources, idx2);
+    let tm2 = getItem(allTimes, idx2);
+    label_set_text(title2, news2);
+    label_set_text(title2b, "");
+    label_set_text(source2, src2);
+    label_set_text(time2, tm2);
 
-let time4 = create_label(350, 415);
-obj_add_style(time4, timeStyle, 0);
-label_set_text(time4, "8h ago");
+    // Update nav
+    label_set_text(navLabel, numberToString(currentPage + 1) + " / " + numberToString(totalPages));
 
-let navLabel = create_label(210, 450);
-obj_add_style(navLabel, navStyle, 0);
-label_set_text(navLabel, "1 / 2");
+    // Update dots
+    if (currentPage === 0) {
+        obj_add_style(dot0, dotActiveStyle, 0);
+    } else {
+        obj_add_style(dot0, dotStyle, 0);
+    }
+    if (currentPage === 1) {
+        obj_add_style(dot1, dotActiveStyle, 0);
+    } else {
+        obj_add_style(dot1, dotStyle, 0);
+    }
+    if (currentPage === 2) {
+        obj_add_style(dot2, dotActiveStyle, 0);
+    } else {
+        obj_add_style(dot2, dotStyle, 0);
+    }
+    if (currentPage === 3) {
+        obj_add_style(dot3, dotActiveStyle, 0);
+    } else {
+        obj_add_style(dot3, dotStyle, 0);
+    }
+};
 
-// Demo scroll
+// Demo scroll timer
 let scrollTimer = 0;
 
 let scroll_tick = function() {
     scrollTimer = scrollTimer + 1;
 
-    if (scrollTimer >= 8) {
+    if (scrollTimer >= 5) {
         scrollTimer = 0;
         currentPage = currentPage + 1;
-        if (currentPage > 2) {
-            currentPage = 1;
+        if (currentPage >= totalPages) {
+            currentPage = 0;
         }
-
-        if (currentPage === 1) {
-            label_set_text(title1, "WebScreen 2.0 Released");
-            label_set_text(title2, "ESP32-S3 Performance Tips");
-            label_set_text(title3, "Building IoT with LVGL");
-            label_set_text(title4, "Open Source Hardware Growing");
-        } else {
-            label_set_text(title1, "JavaScript Engine for Embedded");
-            label_set_text(title2, "Smart Display Projects Guide");
-            label_set_text(title3, "AMOLED vs LCD Comparison");
-            label_set_text(title4, "Home Automation Trends");
-        }
-
-        label_set_text(navLabel, numberToString(currentPage) + " / 2");
+        updateDisplay();
     }
 };
 
+// Initialize
+updateDisplay();
 print("RSS Reader ready!");
 
 create_timer("scroll_tick", 1000);

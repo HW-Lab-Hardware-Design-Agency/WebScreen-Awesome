@@ -30,119 +30,122 @@ let COLOR_DIM = 0x484f58;
 
 // Styles
 let titleStyle = create_style();
-style_set_text_font(titleStyle, 24);
+style_set_text_font(titleStyle, 20);
 style_set_text_color(titleStyle, COLOR_WHITE);
 style_set_text_align(titleStyle, 0);
 
 let marketStyle = create_style();
-style_set_text_font(marketStyle, 14);
+style_set_text_font(marketStyle, 12);
 style_set_text_color(marketStyle, COLOR_GREEN);
 style_set_text_align(marketStyle, 2);
 
 let symbolStyle = create_style();
-style_set_text_font(symbolStyle, 24);
+style_set_text_font(symbolStyle, 18);
 style_set_text_color(symbolStyle, COLOR_BLUE);
 style_set_text_align(symbolStyle, 0);
 
 let priceStyle = create_style();
-style_set_text_font(priceStyle, 32);
+style_set_text_font(priceStyle, 24);
 style_set_text_color(priceStyle, COLOR_WHITE);
 style_set_text_align(priceStyle, 0);
 
 let changeStyle1 = create_style();
-style_set_text_font(changeStyle1, 16);
+style_set_text_font(changeStyle1, 14);
 style_set_text_color(changeStyle1, COLOR_GREEN);
 
 let changeStyle2 = create_style();
-style_set_text_font(changeStyle2, 16);
+style_set_text_font(changeStyle2, 14);
 style_set_text_color(changeStyle2, COLOR_RED);
 
 let changeStyle3 = create_style();
-style_set_text_font(changeStyle3, 16);
+style_set_text_font(changeStyle3, 14);
 style_set_text_color(changeStyle3, COLOR_GREEN);
 
 let changeStyle4 = create_style();
-style_set_text_font(changeStyle4, 16);
+style_set_text_font(changeStyle4, 14);
 style_set_text_color(changeStyle4, COLOR_RED);
 
+// Card style - 2x2 grid layout for 536x240 screen
 let cardStyle = create_style();
 style_set_bg_color(cardStyle, COLOR_CARD);
 style_set_bg_opa(cardStyle, 255);
 style_set_radius(cardStyle, 8);
-style_set_width(cardStyle, 426);
+style_set_width(cardStyle, 250);
 style_set_height(cardStyle, 85);
 
 let updateStyle = create_style();
-style_set_text_font(updateStyle, 12);
+style_set_text_font(updateStyle, 10);
 style_set_text_color(updateStyle, COLOR_DIM);
 
-// UI Elements
-let titleLabel = create_label(20, 15);
+// UI Elements - display is 536x240
+let titleLabel = create_label(15, 8);
 obj_add_style(titleLabel, titleStyle, 0);
 label_set_text(titleLabel, "STOCK TICKER");
 
-let marketLabel = create_label(350, 18);
+let marketLabel = create_label(440, 10);
 obj_add_style(marketLabel, marketStyle, 0);
 label_set_text(marketLabel, "Market Open");
 
-// Stock cards
-let card1 = create_label(20, 60);
+// Stock cards - 2x2 grid layout
+// Row 1: cards at y=35
+let card1 = create_label(15, 35);
 obj_add_style(card1, cardStyle, 0);
 label_set_text(card1, "");
 
-let symbol1 = create_label(35, 72);
+let symbol1 = create_label(25, 42);
 obj_add_style(symbol1, symbolStyle, 0);
 label_set_text(symbol1, stock1_symbol);
 
-let price1 = create_label(280, 72);
+let price1 = create_label(25, 65);
 obj_add_style(price1, priceStyle, 0);
 
-let change1 = create_label(280, 110);
+let change1 = create_label(25, 95);
 obj_add_style(change1, changeStyle1, 0);
 
-let card2 = create_label(20, 155);
+let card2 = create_label(275, 35);
 obj_add_style(card2, cardStyle, 0);
 label_set_text(card2, "");
 
-let symbol2 = create_label(35, 167);
+let symbol2 = create_label(285, 42);
 obj_add_style(symbol2, symbolStyle, 0);
 label_set_text(symbol2, stock2_symbol);
 
-let price2 = create_label(280, 167);
+let price2 = create_label(285, 65);
 obj_add_style(price2, priceStyle, 0);
 
-let change2 = create_label(280, 205);
+let change2 = create_label(285, 95);
 obj_add_style(change2, changeStyle2, 0);
 
-let card3 = create_label(20, 250);
+// Row 2: cards at y=130
+let card3 = create_label(15, 130);
 obj_add_style(card3, cardStyle, 0);
 label_set_text(card3, "");
 
-let symbol3 = create_label(35, 262);
+let symbol3 = create_label(25, 137);
 obj_add_style(symbol3, symbolStyle, 0);
 label_set_text(symbol3, stock3_symbol);
 
-let price3 = create_label(280, 262);
+let price3 = create_label(25, 160);
 obj_add_style(price3, priceStyle, 0);
 
-let change3 = create_label(280, 300);
+let change3 = create_label(25, 190);
 obj_add_style(change3, changeStyle3, 0);
 
-let card4 = create_label(20, 345);
+let card4 = create_label(275, 130);
 obj_add_style(card4, cardStyle, 0);
 label_set_text(card4, "");
 
-let symbol4 = create_label(35, 357);
+let symbol4 = create_label(285, 137);
 obj_add_style(symbol4, symbolStyle, 0);
 label_set_text(symbol4, stock4_symbol);
 
-let price4 = create_label(280, 357);
+let price4 = create_label(285, 160);
 obj_add_style(price4, priceStyle, 0);
 
-let change4 = create_label(280, 395);
+let change4 = create_label(285, 190);
 obj_add_style(change4, changeStyle4, 0);
 
-let updateLabel = create_label(20, 441);
+let updateLabel = create_label(15, 222);
 obj_add_style(updateLabel, updateStyle, 0);
 label_set_text(updateLabel, "Demo data - Configure API for live prices");
 
