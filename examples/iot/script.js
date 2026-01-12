@@ -24,7 +24,7 @@ let COLOR_DIM = 0x475569;
 
 // Styles
 let titleStyle = create_style();
-style_set_text_font(titleStyle, 24);
+style_set_text_font(titleStyle, 20);
 style_set_text_color(titleStyle, COLOR_WHITE);
 
 let connStyle = create_style();
@@ -32,101 +32,104 @@ style_set_text_font(connStyle, 12);
 style_set_text_color(connStyle, COLOR_YELLOW);
 
 let nameStyle = create_style();
-style_set_text_font(nameStyle, 14);
+style_set_text_font(nameStyle, 12);
 style_set_text_color(nameStyle, COLOR_GRAY);
 
 let valueStyle = create_style();
-style_set_text_font(valueStyle, 28);
+style_set_text_font(valueStyle, 20);
 style_set_text_color(valueStyle, COLOR_WHITE);
 
 let statusStyle = create_style();
-style_set_text_font(statusStyle, 12);
+style_set_text_font(statusStyle, 10);
 style_set_text_color(statusStyle, COLOR_DIM);
 
+// Card style - 3x2 grid for 536x240 screen
 let cardStyle = create_style();
 style_set_bg_color(cardStyle, COLOR_CARD);
 style_set_bg_opa(cardStyle, 255);
-style_set_radius(cardStyle, 12);
-style_set_width(cardStyle, 210);
-style_set_height(cardStyle, 115);
+style_set_radius(cardStyle, 10);
+style_set_width(cardStyle, 165);
+style_set_height(cardStyle, 85);
 
-// Header
-let titleLabel = create_label(20, 15);
+// Header - display is 536x240
+let titleLabel = create_label(15, 10);
 obj_add_style(titleLabel, titleStyle, 0);
 label_set_text(titleLabel, "IoT MONITOR");
 
-let connLabel = create_label(360, 18);
+let connLabel = create_label(430, 12);
 obj_add_style(connLabel, connStyle, 0);
 label_set_text(connLabel, "Demo Mode");
 
-// Sensor cards (2x3 grid)
-let card1 = create_label(15, 70);
+// Sensor cards - 3 columns x 2 rows
+// Row 1: y=45
+let card1 = create_label(10, 45);
 obj_add_style(card1, cardStyle, 0);
 label_set_text(card1, "");
 
-let name1 = create_label(27, 100);
+let name1 = create_label(20, 52);
 obj_add_style(name1, nameStyle, 0);
 label_set_text(name1, "Living Room");
 
-let value1 = create_label(27, 125);
+let value1 = create_label(20, 70);
 obj_add_style(value1, valueStyle, 0);
 
-let card2 = create_label(240, 70);
+let card2 = create_label(185, 45);
 obj_add_style(card2, cardStyle, 0);
 label_set_text(card2, "");
 
-let name2 = create_label(252, 100);
+let name2 = create_label(195, 52);
 obj_add_style(name2, nameStyle, 0);
 label_set_text(name2, "Humidity");
 
-let value2 = create_label(252, 125);
+let value2 = create_label(195, 70);
 obj_add_style(value2, valueStyle, 0);
 
-let card3 = create_label(15, 195);
+let card3 = create_label(360, 45);
 obj_add_style(card3, cardStyle, 0);
 label_set_text(card3, "");
 
-let name3 = create_label(27, 225);
+let name3 = create_label(370, 52);
 obj_add_style(name3, nameStyle, 0);
 label_set_text(name3, "Bedroom");
 
-let value3 = create_label(27, 250);
+let value3 = create_label(370, 70);
 obj_add_style(value3, valueStyle, 0);
 
-let card4 = create_label(240, 195);
+// Row 2: y=140
+let card4 = create_label(10, 140);
 obj_add_style(card4, cardStyle, 0);
 label_set_text(card4, "");
 
-let name4 = create_label(252, 225);
+let name4 = create_label(20, 147);
 obj_add_style(name4, nameStyle, 0);
 label_set_text(name4, "Motion");
 
-let value4 = create_label(252, 250);
+let value4 = create_label(20, 165);
 obj_add_style(value4, valueStyle, 0);
 
-let card5 = create_label(15, 320);
+let card5 = create_label(185, 140);
 obj_add_style(card5, cardStyle, 0);
 label_set_text(card5, "");
 
-let name5 = create_label(27, 350);
+let name5 = create_label(195, 147);
 obj_add_style(name5, nameStyle, 0);
 label_set_text(name5, "Front Door");
 
-let value5 = create_label(27, 375);
+let value5 = create_label(195, 165);
 obj_add_style(value5, valueStyle, 0);
 
-let card6 = create_label(240, 320);
+let card6 = create_label(360, 140);
 obj_add_style(card6, cardStyle, 0);
 label_set_text(card6, "");
 
-let name6 = create_label(252, 350);
+let name6 = create_label(370, 147);
 obj_add_style(name6, nameStyle, 0);
 label_set_text(name6, "Kitchen Light");
 
-let value6 = create_label(252, 375);
+let value6 = create_label(370, 165);
 obj_add_style(value6, valueStyle, 0);
 
-let statusLabel = create_label(15, 446);
+let statusLabel = create_label(15, 228);
 obj_add_style(statusLabel, statusStyle, 0);
 label_set_text(statusLabel, "Last update: just now");
 

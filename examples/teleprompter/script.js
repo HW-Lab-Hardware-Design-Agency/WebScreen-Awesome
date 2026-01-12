@@ -2,14 +2,14 @@
 
 print("Starting Teleprompter...");
 
-// Configuration
+// Configuration - display is 536x240
 let scrollSpeed = 2;
-let currentY = 466;
-let textHeight = 800;
+let currentY = 240;      // Start at bottom of 240px screen
+let textHeight = 400;    // Estimated text height
 let isPaused = 0;
 
-// Sample speech text
-let speechText = "Welcome to WebScreen Teleprompter.\n\nThis is a sample speech text that will scroll automatically on your display.\n\nYou can customize the scroll speed and load your own text from the SD card.\n\nThe teleprompter is perfect for:\n- Presentations\n- Video recordings\n- Public speaking\n- Reading scripts\n\nTo load your own text, create a file called speech.txt on your SD card.\n\nThank you for using WebScreen!";
+// Sample speech text (shorter for demo)
+let speechText = "Welcome to WebScreen Teleprompter.\n\nThis sample text will scroll automatically.\n\nCustomize the scroll speed and load your own text from the SD card.\n\nPerfect for:\n- Presentations\n- Video recordings\n- Public speaking\n\nCreate speech.txt on your SD card to load your own text.\n\nThank you for using WebScreen!";
 
 // Colors
 let COLOR_BLACK = 0x000000;
@@ -21,43 +21,41 @@ let COLOR_DIM = 0x666666;
 
 // Styles
 let titleStyle = create_style();
-style_set_text_font(titleStyle, 20);
+style_set_text_font(titleStyle, 18);
 style_set_text_color(titleStyle, COLOR_GREEN);
 style_set_text_align(titleStyle, 0);
-style_set_bg_color(titleStyle, COLOR_DARK);
-style_set_bg_opa(titleStyle, 255);
 
 let speedStyle = create_style();
-style_set_text_font(speedStyle, 14);
+style_set_text_font(speedStyle, 12);
 style_set_text_color(speedStyle, COLOR_GRAY);
 style_set_text_align(speedStyle, 2);
 
 let textStyle = create_style();
-style_set_text_font(textStyle, 24);
+style_set_text_font(textStyle, 20);
 style_set_text_color(textStyle, COLOR_WHITE);
 style_set_text_align(textStyle, 0);
 
 let statusStyle = create_style();
-style_set_text_font(statusStyle, 14);
+style_set_text_font(statusStyle, 12);
 style_set_text_color(statusStyle, COLOR_DIM);
 style_set_text_align(statusStyle, 1);
-style_set_bg_color(statusStyle, COLOR_DARK);
-style_set_bg_opa(statusStyle, 200);
 
-// UI Elements
-let titleLabel = create_label(20, 15);
+// UI Elements - display is 536x240
+let titleLabel = create_label(15, 8);
 obj_add_style(titleLabel, titleStyle, 0);
 label_set_text(titleLabel, "TELEPROMPTER");
 
-let speedLabel = create_label(380, 15);
+let speedLabel = create_label(450, 10);
 obj_add_style(speedLabel, speedStyle, 0);
 label_set_text(speedLabel, "Speed: 2");
 
-let textLabel = create_label(20, 466);
+// Text starts at bottom of screen
+let textLabel = create_label(15, currentY);
 obj_add_style(textLabel, textStyle, 0);
 label_set_text(textLabel, speechText);
 
-let statusLabel = create_label(233, 440);
+// Status at bottom
+let statusLabel = create_label(268, 220);
 obj_add_style(statusLabel, statusStyle, 0);
 label_set_text(statusLabel, "Scrolling...");
 
@@ -69,15 +67,15 @@ let scroll_tick = function() {
 
     // Reset when scrolled past
     if (currentY < -textHeight) {
-        currentY = 466;
+        currentY = 240;
     }
 
     // Move text
-    move_obj(textLabel, 20, currentY);
+    move_obj(textLabel, 15, currentY);
 
     // Calculate progress
-    let totalScroll = textHeight + 466;
-    let scrolled = 466 - currentY;
+    let totalScroll = textHeight + 240;
+    let scrolled = 240 - currentY;
     if (scrolled < 0) scrolled = 0;
     let progress = (scrolled * 100) / totalScroll;
     progress = progress - (progress % 1);

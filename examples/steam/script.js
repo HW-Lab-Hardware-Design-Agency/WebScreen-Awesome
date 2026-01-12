@@ -24,113 +24,130 @@ let COLOR_DIM = 0x4a5568;
 
 // Styles
 let titleStyle = create_style();
-style_set_text_font(titleStyle, 28);
+style_set_text_font(titleStyle, 24);
 style_set_text_color(titleStyle, COLOR_BLUE);
 style_set_text_align(titleStyle, 0);
-style_set_bg_color(titleStyle, COLOR_HEADER);
-style_set_bg_opa(titleStyle, 255);
 
 let usernameStyle = create_style();
-style_set_text_font(usernameStyle, 24);
+style_set_text_font(usernameStyle, 18);
 style_set_text_color(usernameStyle, COLOR_WHITE);
 style_set_text_align(usernameStyle, 0);
 
 let statusStyle = create_style();
-style_set_text_font(statusStyle, 16);
+style_set_text_font(statusStyle, 14);
 style_set_text_color(statusStyle, COLOR_CYAN);
 style_set_text_align(statusStyle, 0);
 
 let levelStyle = create_style();
-style_set_text_font(levelStyle, 14);
+style_set_text_font(levelStyle, 12);
 style_set_text_color(levelStyle, COLOR_LIGHT);
 style_set_text_align(levelStyle, 0);
 
 let headerStyle = create_style();
-style_set_text_font(headerStyle, 14);
+style_set_text_font(headerStyle, 12);
 style_set_text_color(headerStyle, COLOR_GRAY);
 style_set_text_align(headerStyle, 0);
 
 let gameStyle = create_style();
-style_set_text_font(gameStyle, 20);
+style_set_text_font(gameStyle, 16);
 style_set_text_color(gameStyle, COLOR_GREEN);
 style_set_text_align(gameStyle, 0);
 
 let friendsStyle = create_style();
-style_set_text_font(friendsStyle, 32);
+style_set_text_font(friendsStyle, 28);
 style_set_text_color(friendsStyle, COLOR_CYAN);
 style_set_text_align(friendsStyle, 0);
 
 let friendsTotalStyle = create_style();
-style_set_text_font(friendsTotalStyle, 14);
+style_set_text_font(friendsTotalStyle, 12);
 style_set_text_color(friendsTotalStyle, COLOR_GRAY);
 style_set_text_align(friendsTotalStyle, 0);
 
 let updateStyle = create_style();
-style_set_text_font(updateStyle, 12);
+style_set_text_font(updateStyle, 10);
 style_set_text_color(updateStyle, COLOR_DIM);
 style_set_text_align(updateStyle, 0);
 
-// Card style
-let cardStyle = create_style();
-style_set_bg_color(cardStyle, COLOR_CARD);
-style_set_bg_opa(cardStyle, 255);
-style_set_radius(cardStyle, 8);
-style_set_width(cardStyle, 426);
-style_set_height(cardStyle, 120);
+// Card styles for horizontal layout - display is 536x240
+let profileCardStyle = create_style();
+style_set_bg_color(profileCardStyle, COLOR_CARD);
+style_set_bg_opa(profileCardStyle, 255);
+style_set_radius(profileCardStyle, 8);
+style_set_width(profileCardStyle, 200);
+style_set_height(profileCardStyle, 130);
+
+let gameCardStyle = create_style();
+style_set_bg_color(gameCardStyle, COLOR_CARD);
+style_set_bg_opa(gameCardStyle, 255);
+style_set_radius(gameCardStyle, 8);
+style_set_width(gameCardStyle, 170);
+style_set_height(gameCardStyle, 130);
 
 let friendsCardStyle = create_style();
 style_set_bg_color(friendsCardStyle, COLOR_CARD);
 style_set_bg_opa(friendsCardStyle, 255);
-style_set_radius(friendsCardStyle, 6);
-style_set_width(friendsCardStyle, 426);
-style_set_height(friendsCardStyle, 80);
+style_set_radius(friendsCardStyle, 8);
+style_set_width(friendsCardStyle, 120);
+style_set_height(friendsCardStyle, 130);
 
-// UI Elements
-let titleLabel = create_label(20, 15);
+// UI Elements - Header
+let titleLabel = create_label(15, 10);
 obj_add_style(titleLabel, titleStyle, 0);
 label_set_text(titleLabel, "STEAM");
 
-let profileCard = create_label(20, 70);
-obj_add_style(profileCard, cardStyle, 0);
+// Profile card (left) - x=15, y=45
+let profileCard = create_label(15, 45);
+obj_add_style(profileCard, profileCardStyle, 0);
 label_set_text(profileCard, "");
 
-let usernameLabel = create_label(35, 85);
+let usernameLabel = create_label(25, 55);
 obj_add_style(usernameLabel, usernameStyle, 0);
 label_set_text(usernameLabel, profileName);
 
-let statusLabel = create_label(35, 120);
+let statusLabel = create_label(25, 80);
 obj_add_style(statusLabel, statusStyle, 0);
 label_set_text(statusLabel, profileStatus);
 
-let levelLabel = create_label(35, 150);
+let levelLabel = create_label(25, 105);
 obj_add_style(levelLabel, levelStyle, 0);
 label_set_text(levelLabel, "Level " + numberToString(playerLevel));
 
-let playingHeader = create_label(20, 210);
-obj_add_style(playingHeader, headerStyle, 0);
-label_set_text(playingHeader, "CURRENTLY PLAYING");
+// Game card (center) - x=225, y=45
+let gameCard = create_label(225, 45);
+obj_add_style(gameCard, gameCardStyle, 0);
+label_set_text(gameCard, "");
 
-let gameLabel = create_label(20, 235);
+let playingHeader = create_label(235, 55);
+obj_add_style(playingHeader, headerStyle, 0);
+label_set_text(playingHeader, "NOW PLAYING");
+
+let gameLabel = create_label(235, 75);
 obj_add_style(gameLabel, gameStyle, 0);
 label_set_text(gameLabel, currentGame);
 
-let friendsHeader = create_label(20, 310);
-obj_add_style(friendsHeader, headerStyle, 0);
-label_set_text(friendsHeader, "FRIENDS");
-
-let friendsCard = create_label(20, 335);
+// Friends card (right) - x=405, y=45
+let friendsCard = create_label(405, 45);
 obj_add_style(friendsCard, friendsCardStyle, 0);
 label_set_text(friendsCard, "");
 
-let friendsOnlineLabel = create_label(35, 350);
+let friendsHeader = create_label(415, 55);
+obj_add_style(friendsHeader, headerStyle, 0);
+label_set_text(friendsHeader, "FRIENDS");
+
+let friendsOnlineLabel = create_label(415, 75);
 obj_add_style(friendsOnlineLabel, friendsStyle, 0);
-label_set_text(friendsOnlineLabel, numberToString(friendsOnline) + " Online");
+label_set_text(friendsOnlineLabel, numberToString(friendsOnline));
 
-let friendsTotalLabel = create_label(35, 390);
+let friendsOnlineText = create_label(415, 110);
+obj_add_style(friendsOnlineText, levelStyle, 0);
+label_set_text(friendsOnlineText, "online");
+
+let friendsTotalLabel = create_label(415, 130);
 obj_add_style(friendsTotalLabel, friendsTotalStyle, 0);
-label_set_text(friendsTotalLabel, numberToString(friendsTotal) + " friends total");
+label_set_text(friendsTotalLabel, numberToString(friendsTotal) + " total");
 
-let updateLabel = create_label(20, 441);
+// Status bar at bottom
+let updateLabel = create_label(15, 185);
 obj_add_style(updateLabel, updateStyle, 0);
 label_set_text(updateLabel, "Demo Mode - Configure API for live data");
 
@@ -140,8 +157,8 @@ let updateDisplay = function() {
     label_set_text(statusLabel, profileStatus);
     label_set_text(levelLabel, "Level " + numberToString(playerLevel));
     label_set_text(gameLabel, currentGame);
-    label_set_text(friendsOnlineLabel, numberToString(friendsOnline) + " Online");
-    label_set_text(friendsTotalLabel, numberToString(friendsTotal) + " friends total");
+    label_set_text(friendsOnlineLabel, numberToString(friendsOnline));
+    label_set_text(friendsTotalLabel, numberToString(friendsTotal) + " total");
 };
 
 // Demo update
