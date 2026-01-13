@@ -4,7 +4,7 @@ print("Starting Digital Clock...");
 
 // Load SSL certificate for HTTPS
 let certOk = http_set_ca_cert_from_sd("/clock.pem");
-if (!certOk) {
+if (certOk === 0) {
   print("Could not load CA cert, using insecure mode");
 }
 

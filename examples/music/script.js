@@ -186,7 +186,7 @@ let updateTrackDisplay = function() {
 
 // Simulate playback
 let updatePlayback = function() {
-  if (!isPlaying) return;
+  if (isPlaying === 0) return;
 
   progress++;
   if (progress >= trackDuration) {
@@ -230,7 +230,7 @@ let auto_toggle = function() {
   }
 
   // Simulate track change every 20 seconds
-  if (toggleCounter === 3 && !isPlaying) {
+  if (toggleCounter === 3 && isPlaying === 0) {
     currentTrack++;
     if (currentTrack > 4) currentTrack = 0;
     updateTrackDisplay();

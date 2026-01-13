@@ -194,7 +194,7 @@ let updateDisplay = function() {
         } else {
             label_set_text(check1, "[ ]");
         }
-        if (currentTimeNum >= 900 && !rem1_done) {
+        if (currentTimeNum >= 900 && rem1_done === 0) {
             style_set_bg_color(badgeStyle1, COLOR_RED);
         } else {
             style_set_bg_color(badgeStyle1, COLOR_GREEN);
@@ -208,7 +208,7 @@ let updateDisplay = function() {
         } else {
             label_set_text(check2, "[ ]");
         }
-        if (currentTimeNum >= 1030 && !rem2_done) {
+        if (currentTimeNum >= 1030 && rem2_done === 0) {
             style_set_bg_color(badgeStyle2, COLOR_RED);
         } else {
             style_set_bg_color(badgeStyle2, COLOR_GREEN);
@@ -223,7 +223,7 @@ let updateDisplay = function() {
         } else {
             label_set_text(check1, "[ ]");
         }
-        if (currentTimeNum >= 1200 && !rem3_done) {
+        if (currentTimeNum >= 1200 && rem3_done === 0) {
             style_set_bg_color(badgeStyle1, COLOR_RED);
         } else {
             style_set_bg_color(badgeStyle1, COLOR_GREEN);
@@ -237,7 +237,7 @@ let updateDisplay = function() {
         } else {
             label_set_text(check2, "[ ]");
         }
-        if (currentTimeNum >= 1400 && !rem4_done) {
+        if (currentTimeNum >= 1400 && rem4_done === 0) {
             style_set_bg_color(badgeStyle2, COLOR_RED);
         } else {
             style_set_bg_color(badgeStyle2, COLOR_GREEN);
@@ -264,10 +264,15 @@ let simulate_tick = function() {
 
     // Auto-complete past reminders
     let currentTimeNum = currentHour * 100 + currentMin;
-    if (currentTimeNum > 900 && !rem1_done) rem1_done = 1;
-    if (currentTimeNum > 1030 && !rem2_done) rem2_done = 1;
-    if (currentTimeNum > 1200 && !rem3_done) rem3_done = 1;
-    if (currentTimeNum > 1400 && !rem4_done) rem4_done = 1;
+    if (currentTimeNum > 900 && rem1_done === 0) rem1_done = 1;
+    if (currentTimeNum > 1030 && rem2_done === 0) rem2_done = 1;
+    if (currentTimeNum > 1200 && rem3_done === 0) rem3_done = 1;
+    if (currentTimeNum > 1400 && rem4_done === 0) rem4_done = 1;
+
+    // Switch pages every 8 seconds
+    if (simTimer % 8 === 0) {
+        currentPage = 1 - currentPage;
+    }
 
     // Switch pages every 8 seconds
     if (simTimer % 8 === 0) {

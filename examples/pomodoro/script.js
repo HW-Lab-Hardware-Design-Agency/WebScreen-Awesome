@@ -6,7 +6,7 @@ print("Starting Pomodoro Timer...");
 let WORK_TIME = 25 * 60;      // 25 minutes
 let SHORT_BREAK = 5 * 60;     // 5 minutes
 let LONG_BREAK = 15 * 60;     // 15 minutes
-let SESSIONS_BEFORE_LONG = 4;
+let LONG_CYCLE = 4;
 
 // State
 let timeRemaining = WORK_TIME;
@@ -15,17 +15,17 @@ let isWorkSession = 1;
 let completedSessions = 0;
 let totalWorkTime = 0;
 
-// Colors
-let COLOR_BG = 0x1a1a2e;
-let COLOR_CIRCLE = 0x16213e;
-let COLOR_CIRCLE_BREAK = 0x0f3460;
+// Colors - red/tomato theme
+let COLOR_BG = 0x2e1a1a;
+let COLOR_CIRCLE = 0xc41e3a;
+let COLOR_CIRCLE_BREAK = 0x228b22;
 let COLOR_WHITE = 0xFFFFFF;
 let COLOR_TEXT = 0xeee2dc;
 let COLOR_RED = 0xe94560;
 let COLOR_GREEN = 0x22c55e;
 let COLOR_GRAY = 0x94a3b8;
-let COLOR_DARK = 0x0f3460;
-let COLOR_DIM = 0x64748b;
+let COLOR_DARK = 0x4a1515;
+let COLOR_DIM = 0x8b6464;
 
 // Create styles
 let titleStyle = create_style();
@@ -38,7 +38,7 @@ style_set_text_font(sessionStyle, 18);
 style_set_text_color(sessionStyle, COLOR_RED);
 style_set_text_align(sessionStyle, 0);
 
-// Smaller circle for horizontal layout - display is 536x240
+// Circle style for horizontal layout
 let circleStyle = create_style();
 style_set_bg_color(circleStyle, COLOR_CIRCLE);
 style_set_bg_opa(circleStyle, 255);
@@ -95,16 +95,17 @@ style_set_text_color(statsStyle, COLOR_DIM);
 style_set_text_align(statsStyle, 0);
 
 // Create UI elements - horizontal layout
-// Left side: timer circle (centered vertically at y=35, x=30)
+// Left side: timer circle
 let circleBg = create_label(30, 35);
 obj_add_style(circleBg, circleStyle, 0);
+obj_set_size(circleBg, 170, 170);
 label_set_text(circleBg, "");
 
-let timerLabel = create_label(115, 100);
+let timerLabel = create_label(60, 100);
 obj_add_style(timerLabel, timerStyle, 0);
 label_set_text(timerLabel, "25:00");
 
-let progressLabel = create_label(115, 150);
+let progressLabel = create_label(60, 150);
 obj_add_style(progressLabel, progressStyle, 0);
 label_set_text(progressLabel, "0%");
 
@@ -164,27 +165,27 @@ let formatTime = function(seconds) {
 
 // Update session dots
 let updateDots = function() {
-    let sessionsInCycle = completedSessions % SESSIONS_BEFORE_LONG;
+    let cycle = completedSessions % LONG_CYCLE;
 
-    if (sessionsInCycle >= 1) {
+    if (cycle >= 1) {
         style_set_bg_color(dotStyle1, COLOR_RED);
     } else {
         style_set_bg_color(dotStyle1, COLOR_DARK);
     }
 
-    if (sessionsInCycle >= 2) {
+    if (cycle >= 2) {
         style_set_bg_color(dotStyle2, COLOR_RED);
     } else {
         style_set_bg_color(dotStyle2, COLOR_DARK);
     }
 
-    if (sessionsInCycle >= 3) {
+    if (cycle >= 3) {
         style_set_bg_color(dotStyle3, COLOR_RED);
     } else {
         style_set_bg_color(dotStyle3, COLOR_DARK);
     }
 
-    if (sessionsInCycle >= 4) {
+    if (cycle >= 4) {
         style_set_bg_color(dotStyle4, COLOR_RED);
     } else {
         style_set_bg_color(dotStyle4, COLOR_DARK);
@@ -195,21 +196,20 @@ let updateDots = function() {
 let updateDisplay = function() {
     label_set_text(timerLabel, formatTime(timeRemaining));
 
-    // Session type styling
+    // Session type styling (circle stays red, text indicates mode)
     if (isWorkSession) {
         label_set_text(sessionLabel, "FOCUS");
         style_set_text_color(sessionStyle, COLOR_RED);
-        style_set_bg_color(circleStyle, COLOR_CIRCLE);
     } else {
         label_set_text(sessionLabel, "BREAK");
         style_set_text_color(sessionStyle, COLOR_GREEN);
-        style_set_bg_color(circleStyle, COLOR_CIRCLE_BREAK);
     }
 
     // Progress percentage
     let totalTime = WORK_TIME;
-    if (!isWorkSession) {
-        if (completedSessions % SESSIONS_BEFORE_LONG === 0) {
+    if (isWorkSession === 0) {
+        let mod = completedSessions % LONG_CYCLE;
+        if (mod === 0) {
             totalTime = LONG_BREAK;
         } else {
             totalTime = SHORT_BREAK;
@@ -218,7 +218,8 @@ let updateDisplay = function() {
     let elapsed = totalTime - timeRemaining;
     let progress = (elapsed * 100) / totalTime;
     progress = progress - (progress % 1);
-    label_set_text(progressLabel, numberToString(progress) + "%");
+    let pStr = numberToString(progress) + "%";
+    label_set_text(progressLabel, pStr);
 
     // Status text
     if (isRunning) {
@@ -237,8 +238,11 @@ let updateDisplay = function() {
     // Stats
     let totalMins = totalWorkTime / 60;
     totalMins = totalMins - (totalMins % 1);
-    label_set_text(statsLabel, "Sessions: " + numberToString(completedSessions));
-    label_set_text(focusLabel, "Focus: " + numberToString(totalMins) + " min");
+    let n = numberToString(completedSessions);
+    let sStr = "Sessions: " + n;
+    label_set_text(statsLabel, sStr);
+    let fStr = "Focus: " + numberToString(totalMins) + " min";
+    label_set_text(focusLabel, fStr);
 };
 
 // Complete current session
@@ -246,36 +250,31 @@ let completeSession = function() {
     if (isWorkSession) {
         completedSessions = completedSessions + 1;
         totalWorkTime = totalWorkTime + WORK_TIME;
-
-        // Start break
         isWorkSession = 0;
-        if (completedSessions % SESSIONS_BEFORE_LONG === 0) {
+        let mod = completedSessions % LONG_CYCLE;
+        if (mod === 0) {
             timeRemaining = LONG_BREAK;
-            print("Long break started!");
+            print("Long break!");
         } else {
             timeRemaining = SHORT_BREAK;
-            print("Short break started!");
+            print("Short break!");
         }
     } else {
-        // Start work session
         isWorkSession = 1;
         timeRemaining = WORK_TIME;
-        print("Work session started!");
+        print("Work session!");
     }
 };
 
-// Timer tick - runs every second
+// Timer tick
 let timer_tick = function() {
-    if (!isRunning) return;
-
-    if (timeRemaining > 0) {
-        timeRemaining = timeRemaining - 1;
-
-        if (timeRemaining <= 0) {
-            completeSession();
-        }
+    if (isRunning === 0) {
+        return;
     }
-
+    timeRemaining = timeRemaining - 1;
+    if (timeRemaining <= 0) {
+        completeSession();
+    }
     updateDisplay();
 };
 
@@ -285,19 +284,23 @@ let demoTimer = 0;
 
 let demo_update = function() {
     demoTimer = demoTimer + 1;
-
-    if (demoTimer === 2 && demoStep === 0) {
-        // Start timer
-        isRunning = 1;
-        print("Pomodoro started");
-        demoStep = 1;
-    } else if (demoTimer === 30 && demoStep === 1) {
-        // Simulate quick session completion for demo
-        timeRemaining = 1;
+    if (demoTimer === 2) {
+        if (demoStep === 0) {
+            isRunning = 1;
+            print("Pomodoro started");
+            demoStep = 1;
+        }
     }
-
+    if (demoTimer === 30) {
+        if (demoStep === 1) {
+            timeRemaining = 1;
+        }
+    }
     updateDisplay();
 };
+
+// GIF disabled for testing - may cause memory issues
+// show_gif_from_sd("/tomato.gif", 100,100);
 
 // Initialize
 updateDisplay();
