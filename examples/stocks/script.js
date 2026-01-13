@@ -35,17 +35,17 @@ style_set_text_color(titleStyle, COLOR_WHITE);
 style_set_text_align(titleStyle, 0);
 
 let marketStyle = create_style();
-style_set_text_font(marketStyle, 12);
+style_set_text_font(marketStyle, 14);
 style_set_text_color(marketStyle, COLOR_GREEN);
 style_set_text_align(marketStyle, 2);
 
 let symbolStyle = create_style();
-style_set_text_font(symbolStyle, 18);
+style_set_text_font(symbolStyle, 20);
 style_set_text_color(symbolStyle, COLOR_BLUE);
 style_set_text_align(symbolStyle, 0);
 
 let priceStyle = create_style();
-style_set_text_font(priceStyle, 24);
+style_set_text_font(priceStyle, 28);
 style_set_text_color(priceStyle, COLOR_WHITE);
 style_set_text_align(priceStyle, 0);
 
@@ -74,7 +74,7 @@ style_set_width(cardStyle, 250);
 style_set_height(cardStyle, 85);
 
 let updateStyle = create_style();
-style_set_text_font(updateStyle, 10);
+style_set_text_font(updateStyle, 14);
 style_set_text_color(updateStyle, COLOR_DIM);
 
 // UI Elements - display is 536x240

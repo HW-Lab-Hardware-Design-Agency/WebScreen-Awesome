@@ -4,12 +4,12 @@ print("Starting System Monitor...");
 
 // Create styles
 let titleStyle = create_style();
-style_set_text_font(titleStyle, 24);
+style_set_text_font(titleStyle, 28);
 style_set_text_color(titleStyle, 0xFFFFFF);
 style_set_text_align(titleStyle, 1);
 
 let headerStyle = create_style();
-style_set_text_font(headerStyle, 18);
+style_set_text_font(headerStyle, 20);
 style_set_text_color(headerStyle, 0x00BFFF);
 style_set_text_align(headerStyle, 0);
 
@@ -24,12 +24,12 @@ style_set_text_color(unitStyle, 0x888888);
 style_set_text_align(unitStyle, 0);
 
 let statusOnStyle = create_style();
-style_set_text_font(statusOnStyle, 18);
+style_set_text_font(statusOnStyle, 20);
 style_set_text_color(statusOnStyle, 0x00FF00);
 style_set_text_align(statusOnStyle, 0);
 
 let statusOffStyle = create_style();
-style_set_text_font(statusOffStyle, 18);
+style_set_text_font(statusOffStyle, 20);
 style_set_text_color(statusOffStyle, 0xFF4444);
 style_set_text_align(statusOffStyle, 0);
 

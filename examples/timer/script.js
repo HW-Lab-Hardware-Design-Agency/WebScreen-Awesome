@@ -18,22 +18,22 @@ let timerFinished = 0;
 
 // Create styles
 let modeStyle = create_style();
-style_set_text_font(modeStyle, 18);
+style_set_text_font(modeStyle, 20);
 style_set_text_color(modeStyle, 0x888888);
 style_set_text_align(modeStyle, 1);
 
 let modeActiveStyle = create_style();
-style_set_text_font(modeActiveStyle, 18);
+style_set_text_font(modeActiveStyle, 20);
 style_set_text_color(modeActiveStyle, 0x00BFFF);
 style_set_text_align(modeActiveStyle, 1);
 
 let timeStyle = create_style();
-style_set_text_font(timeStyle, 72);
+style_set_text_font(timeStyle, 48);
 style_set_text_color(timeStyle, 0xFFFFFF);
 style_set_text_align(timeStyle, 1);
 
 let msStyle = create_style();
-style_set_text_font(msStyle, 36);
+style_set_text_font(msStyle, 34);
 style_set_text_color(msStyle, 0x888888);
 style_set_text_align(msStyle, 0);
 
@@ -43,7 +43,7 @@ style_set_text_color(statusStyle, 0x00FF00);
 style_set_text_align(statusStyle, 1);
 
 let lapStyle = create_style();
-style_set_text_font(lapStyle, 16);
+style_set_text_font(lapStyle, 14);
 style_set_text_color(lapStyle, 0xAAAAAA);
 style_set_text_align(lapStyle, 0);
 

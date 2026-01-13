@@ -21,12 +21,12 @@ let COLOR_DIM = 0x666666;
 
 // Styles
 let titleStyle = create_style();
-style_set_text_font(titleStyle, 18);
+style_set_text_font(titleStyle, 20);
 style_set_text_color(titleStyle, COLOR_GREEN);
 style_set_text_align(titleStyle, 0);
 
 let speedStyle = create_style();
-style_set_text_font(speedStyle, 12);
+style_set_text_font(speedStyle, 14);
 style_set_text_color(speedStyle, COLOR_GRAY);
 style_set_text_align(speedStyle, 2);
 
@@ -36,7 +36,7 @@ style_set_text_color(textStyle, COLOR_WHITE);
 style_set_text_align(textStyle, 0);
 
 let statusStyle = create_style();
-style_set_text_font(statusStyle, 12);
+style_set_text_font(statusStyle, 14);
 style_set_text_color(statusStyle, COLOR_DIM);
 style_set_text_align(statusStyle, 1);
 

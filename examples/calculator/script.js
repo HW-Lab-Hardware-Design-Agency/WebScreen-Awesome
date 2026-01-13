@@ -22,7 +22,7 @@ style_set_text_color(opDisplayStyle, 0x888888);
 style_set_text_align(opDisplayStyle, 2);
 
 let buttonStyle = create_style();
-style_set_text_font(buttonStyle, 24);
+style_set_text_font(buttonStyle, 28);
 style_set_text_color(buttonStyle, 0xFFFFFF);
 style_set_text_align(buttonStyle, 1);
 style_set_bg_color(buttonStyle, 0x333344);
@@ -32,7 +32,7 @@ style_set_height(buttonStyle, 40);
 style_set_radius(buttonStyle, 8);
 
 let opButtonStyle = create_style();
-style_set_text_font(opButtonStyle, 24);
+style_set_text_font(opButtonStyle, 28);
 style_set_text_color(opButtonStyle, 0xFFFFFF);
 style_set_text_align(opButtonStyle, 1);
 style_set_bg_color(opButtonStyle, 0x0066AA);
@@ -42,7 +42,7 @@ style_set_height(opButtonStyle, 40);
 style_set_radius(opButtonStyle, 8);
 
 let eqButtonStyle = create_style();
-style_set_text_font(eqButtonStyle, 24);
+style_set_text_font(eqButtonStyle, 28);
 style_set_text_color(eqButtonStyle, 0xFFFFFF);
 style_set_text_align(eqButtonStyle, 1);
 style_set_bg_color(eqButtonStyle, 0x00AA44);
@@ -52,7 +52,7 @@ style_set_height(eqButtonStyle, 40);
 style_set_radius(eqButtonStyle, 8);
 
 let clearButtonStyle = create_style();
-style_set_text_font(clearButtonStyle, 24);
+style_set_text_font(clearButtonStyle, 28);
 style_set_text_color(clearButtonStyle, 0xFFFFFF);
 style_set_text_align(clearButtonStyle, 1);
 style_set_bg_color(clearButtonStyle, 0xAA3333);
@@ -62,7 +62,7 @@ style_set_height(clearButtonStyle, 40);
 style_set_radius(clearButtonStyle, 8);
 
 let activeButtonStyle = create_style();
-style_set_text_font(activeButtonStyle, 24);
+style_set_text_font(activeButtonStyle, 28);
 style_set_text_color(activeButtonStyle, 0x000000);
 style_set_text_align(activeButtonStyle, 1);
 style_set_bg_color(activeButtonStyle, 0x00BFFF);

@@ -37,7 +37,7 @@ style_set_text_font(headerStyle, 20);
 style_set_text_color(headerStyle, COLOR_WHITE);
 
 let statsStyle = create_style();
-style_set_text_font(statsStyle, 12);
+style_set_text_font(statsStyle, 14);
 style_set_text_color(statsStyle, COLOR_WHITE);
 
 let titleStyle = create_style();
@@ -49,21 +49,21 @@ style_set_text_font(bidStyle, 20);
 style_set_text_color(bidStyle, COLOR_GREEN);
 
 let countStyle = create_style();
-style_set_text_font(countStyle, 10);
+style_set_text_font(countStyle, 14);
 style_set_text_color(countStyle, COLOR_GRAY);
 
 let timeStyle = create_style();
-style_set_text_font(timeStyle, 12);
+style_set_text_font(timeStyle, 14);
 style_set_text_color(timeStyle, COLOR_RED);
 
 let statusStyle1 = create_style();
-style_set_text_font(statusStyle1, 10);
+style_set_text_font(statusStyle1, 14);
 style_set_text_color(statusStyle1, COLOR_WHITE);
 style_set_bg_opa(statusStyle1, 255);
 style_set_radius(statusStyle1, 4);
 
 let statusStyle2 = create_style();
-style_set_text_font(statusStyle2, 10);
+style_set_text_font(statusStyle2, 14);
 style_set_text_color(statusStyle2, COLOR_WHITE);
 style_set_bg_opa(statusStyle2, 255);
 style_set_radius(statusStyle2, 4);
@@ -141,7 +141,7 @@ obj_add_style(status2, statusStyle2, 0);
 
 // Page indicator
 let pageStyle = create_style();
-style_set_text_font(pageStyle, 12);
+style_set_text_font(pageStyle, 14);
 style_set_text_color(pageStyle, COLOR_GRAY);
 style_set_text_align(pageStyle, 1);
 

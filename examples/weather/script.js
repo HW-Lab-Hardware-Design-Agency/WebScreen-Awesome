@@ -31,12 +31,12 @@ style_set_text_color(titleStyle, 0xFFFFFF);
 style_set_text_align(titleStyle, 1);
 
 let tempStyle = create_style();
-style_set_text_font(tempStyle, 72);
+style_set_text_font(tempStyle, 48);
 style_set_text_color(tempStyle, 0x00BFFF);
 style_set_text_align(tempStyle, 1);
 
 let conditionStyle = create_style();
-style_set_text_font(conditionStyle, 24);
+style_set_text_font(conditionStyle, 28);
 style_set_text_color(conditionStyle, 0xFFD700);
 style_set_text_align(conditionStyle, 1);
 

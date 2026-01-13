@@ -24,12 +24,12 @@ let COLOR_DIM = 0x4a5568;
 
 // Styles
 let titleStyle = create_style();
-style_set_text_font(titleStyle, 24);
+style_set_text_font(titleStyle, 28);
 style_set_text_color(titleStyle, COLOR_BLUE);
 style_set_text_align(titleStyle, 0);
 
 let usernameStyle = create_style();
-style_set_text_font(usernameStyle, 18);
+style_set_text_font(usernameStyle, 20);
 style_set_text_color(usernameStyle, COLOR_WHITE);
 style_set_text_align(usernameStyle, 0);
 
@@ -39,17 +39,17 @@ style_set_text_color(statusStyle, COLOR_CYAN);
 style_set_text_align(statusStyle, 0);
 
 let levelStyle = create_style();
-style_set_text_font(levelStyle, 12);
+style_set_text_font(levelStyle, 14);
 style_set_text_color(levelStyle, COLOR_LIGHT);
 style_set_text_align(levelStyle, 0);
 
 let headerStyle = create_style();
-style_set_text_font(headerStyle, 12);
+style_set_text_font(headerStyle, 14);
 style_set_text_color(headerStyle, COLOR_GRAY);
 style_set_text_align(headerStyle, 0);
 
 let gameStyle = create_style();
-style_set_text_font(gameStyle, 16);
+style_set_text_font(gameStyle, 14);
 style_set_text_color(gameStyle, COLOR_GREEN);
 style_set_text_align(gameStyle, 0);
 
@@ -59,12 +59,12 @@ style_set_text_color(friendsStyle, COLOR_CYAN);
 style_set_text_align(friendsStyle, 0);
 
 let friendsTotalStyle = create_style();
-style_set_text_font(friendsTotalStyle, 12);
+style_set_text_font(friendsTotalStyle, 14);
 style_set_text_color(friendsTotalStyle, COLOR_GRAY);
 style_set_text_align(friendsTotalStyle, 0);
 
 let updateStyle = create_style();
-style_set_text_font(updateStyle, 10);
+style_set_text_font(updateStyle, 14);
 style_set_text_color(updateStyle, COLOR_DIM);
 style_set_text_align(updateStyle, 0);
 

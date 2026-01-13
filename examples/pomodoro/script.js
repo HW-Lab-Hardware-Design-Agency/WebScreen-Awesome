@@ -34,7 +34,7 @@ style_set_text_color(titleStyle, COLOR_TEXT);
 style_set_text_align(titleStyle, 0);
 
 let sessionStyle = create_style();
-style_set_text_font(sessionStyle, 18);
+style_set_text_font(sessionStyle, 20);
 style_set_text_color(sessionStyle, COLOR_RED);
 style_set_text_align(sessionStyle, 0);
 
@@ -90,7 +90,7 @@ style_set_width(dotStyle4, 14);
 style_set_height(dotStyle4, 14);
 
 let statsStyle = create_style();
-style_set_text_font(statsStyle, 12);
+style_set_text_font(statsStyle, 14);
 style_set_text_color(statsStyle, COLOR_DIM);
 style_set_text_align(statsStyle, 0);
 

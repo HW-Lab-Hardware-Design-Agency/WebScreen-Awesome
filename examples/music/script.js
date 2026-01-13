@@ -53,17 +53,17 @@ style_set_text_color(artistStyle, 0x00BFFF);
 style_set_text_align(artistStyle, 1);
 
 let timeStyle = create_style();
-style_set_text_font(timeStyle, 16);
+style_set_text_font(timeStyle, 14);
 style_set_text_color(timeStyle, 0xAAAAAA);
 style_set_text_align(timeStyle, 0);
 
 let controlStyle = create_style();
-style_set_text_font(controlStyle, 36);
+style_set_text_font(controlStyle, 34);
 style_set_text_color(controlStyle, 0xFFFFFF);
 style_set_text_align(controlStyle, 1);
 
 let statusStyle = create_style();
-style_set_text_font(statusStyle, 18);
+style_set_text_font(statusStyle, 20);
 style_set_text_color(statusStyle, 0x00FF00);
 style_set_text_align(statusStyle, 1);
 
@@ -80,7 +80,7 @@ label_set_text(albumArt, "");
 
 // Album icon (music note symbol using text)
 let iconStyle = create_style();
-style_set_text_font(iconStyle, 36);
+style_set_text_font(iconStyle, 34);
 style_set_text_color(iconStyle, 0x6666AA);
 style_set_text_align(iconStyle, 1);
 

@@ -38,7 +38,7 @@ let getItem = function(str, idx) {
 
 // Create styles
 let headerStyle = create_style();
-style_set_text_font(headerStyle, 18);
+style_set_text_font(headerStyle, 20);
 style_set_text_color(headerStyle, 0xFFFFFF);
 style_set_text_align(headerStyle, 0);
 
@@ -53,22 +53,22 @@ style_set_text_color(timeStyle, 0x666666);
 style_set_text_align(timeStyle, 0);
 
 let postStyle = create_style();
-style_set_text_font(postStyle, 18);
+style_set_text_font(postStyle, 20);
 style_set_text_color(postStyle, 0xFFFFFF);
 style_set_text_align(postStyle, 0);
 
 let statsStyle = create_style();
-style_set_text_font(statsStyle, 16);
+style_set_text_font(statsStyle, 14);
 style_set_text_color(statsStyle, 0x888888);
 style_set_text_align(statsStyle, 0);
 
 let navStyle = create_style();
-style_set_text_font(navStyle, 24);
+style_set_text_font(navStyle, 28);
 style_set_text_color(navStyle, 0x444444);
 style_set_text_align(navStyle, 1);
 
 let activeNavStyle = create_style();
-style_set_text_font(activeNavStyle, 24);
+style_set_text_font(activeNavStyle, 28);
 style_set_text_color(activeNavStyle, 0x00BFFF);
 style_set_text_align(activeNavStyle, 1);
 

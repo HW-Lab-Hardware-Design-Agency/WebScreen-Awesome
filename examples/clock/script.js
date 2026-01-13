@@ -69,17 +69,17 @@ let days = "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday";
 
 // Create styles
 let timeStyle = create_style();
-style_set_text_font(timeStyle, 72);
+style_set_text_font(timeStyle, 48);
 style_set_text_color(timeStyle, timeColor);
 style_set_text_align(timeStyle, 1);
 
 let secondsStyle = create_style();
-style_set_text_font(secondsStyle, 36);
+style_set_text_font(secondsStyle, 34);
 style_set_text_color(secondsStyle, accentColor);
 style_set_text_align(secondsStyle, 0);
 
 let ampmStyle = create_style();
-style_set_text_font(ampmStyle, 24);
+style_set_text_font(ampmStyle, 28);
 style_set_text_color(ampmStyle, accentColor);
 style_set_text_align(ampmStyle, 0);
 

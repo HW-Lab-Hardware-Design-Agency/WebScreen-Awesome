@@ -47,19 +47,19 @@ style_set_text_font(headerStyle, 20);
 style_set_text_color(headerStyle, COLOR_WHITE);
 
 let titleStyle = create_style();
-style_set_text_font(titleStyle, 16);
+style_set_text_font(titleStyle, 14);
 style_set_text_color(titleStyle, COLOR_TITLE);
 
 let sourceStyle = create_style();
-style_set_text_font(sourceStyle, 12);
+style_set_text_font(sourceStyle, 14);
 style_set_text_color(sourceStyle, COLOR_SOURCE);
 
 let timeStyle = create_style();
-style_set_text_font(timeStyle, 12);
+style_set_text_font(timeStyle, 14);
 style_set_text_color(timeStyle, COLOR_TIME);
 
 let navStyle = create_style();
-style_set_text_font(navStyle, 12);
+style_set_text_font(navStyle, 14);
 style_set_text_color(navStyle, COLOR_TIME);
 style_set_text_align(navStyle, 1);
 

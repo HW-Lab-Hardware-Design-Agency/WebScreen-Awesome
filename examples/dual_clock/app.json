@@ -4,7 +4,7 @@
   "description": "Display two time zones simultaneously with automatic sync from timeapi.io",
   "author": "WebScreen",
   "script": "script.js",
-  "assets": ["point.gif", "dualclock.pem"],
+  "assets": ["dualclock.pem"],
   "settings": {
     "wifi": {
       "ssid": "your_network",

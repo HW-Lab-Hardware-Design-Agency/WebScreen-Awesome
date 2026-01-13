@@ -28,11 +28,11 @@ style_set_text_font(titleStyle, 20);
 style_set_text_color(titleStyle, COLOR_WHITE);
 
 let connStyle = create_style();
-style_set_text_font(connStyle, 12);
+style_set_text_font(connStyle, 14);
 style_set_text_color(connStyle, COLOR_YELLOW);
 
 let nameStyle = create_style();
-style_set_text_font(nameStyle, 12);
+style_set_text_font(nameStyle, 14);
 style_set_text_color(nameStyle, COLOR_GRAY);
 
 let valueStyle = create_style();
@@ -40,7 +40,7 @@ style_set_text_font(valueStyle, 20);
 style_set_text_color(valueStyle, COLOR_WHITE);
 
 let statusStyle = create_style();
-style_set_text_font(statusStyle, 10);
+style_set_text_font(statusStyle, 14);
 style_set_text_color(statusStyle, COLOR_DIM);
 
 // Card style - 3x2 grid for 536x240 screen

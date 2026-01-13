@@ -43,7 +43,7 @@ style_set_text_color(headerStyle, 0xFFFFFF);
 style_set_text_align(headerStyle, 0);
 
 let countStyle = create_style();
-style_set_text_font(countStyle, 16);
+style_set_text_font(countStyle, 14);
 style_set_text_color(countStyle, 0x888888);
 style_set_text_align(countStyle, 2);
 
@@ -53,12 +53,12 @@ style_set_text_color(sourceStyle, 0x00BFFF);
 style_set_text_align(sourceStyle, 0);
 
 let titleStyle = create_style();
-style_set_text_font(titleStyle, 24);
+style_set_text_font(titleStyle, 28);
 style_set_text_color(titleStyle, 0xFFFFFF);
 style_set_text_align(titleStyle, 0);
 
 let messageStyle = create_style();
-style_set_text_font(messageStyle, 18);
+style_set_text_font(messageStyle, 20);
 style_set_text_color(messageStyle, 0xAAAAAA);
 style_set_text_align(messageStyle, 0);
 
@@ -68,7 +68,7 @@ style_set_text_color(timeStyle, 0x666666);
 style_set_text_align(timeStyle, 0);
 
 let emptyStyle = create_style();
-style_set_text_font(emptyStyle, 24);
+style_set_text_font(emptyStyle, 28);
 style_set_text_color(emptyStyle, 0x666666);
 style_set_text_align(emptyStyle, 1);
 

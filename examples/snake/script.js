@@ -26,17 +26,17 @@ let bodyY = "6,6,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 
 // Create styles
 let titleStyle = create_style();
-style_set_text_font(titleStyle, 18);
+style_set_text_font(titleStyle, 20);
 style_set_text_color(titleStyle, 0xFFFFFF);
 style_set_text_align(titleStyle, 0);
 
 let scoreStyle = create_style();
-style_set_text_font(scoreStyle, 18);
+style_set_text_font(scoreStyle, 20);
 style_set_text_color(scoreStyle, 0x00FF00);
 style_set_text_align(scoreStyle, 2);
 
 let gameOverStyle = create_style();
-style_set_text_font(gameOverStyle, 36);
+style_set_text_font(gameOverStyle, 34);
 style_set_text_color(gameOverStyle, 0xFF4444);
 style_set_text_align(gameOverStyle, 1);
 

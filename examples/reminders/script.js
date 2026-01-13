@@ -45,11 +45,11 @@ style_set_text_font(headerStyle, 20);
 style_set_text_color(headerStyle, COLOR_WHITE);
 
 let timeStyle = create_style();
-style_set_text_font(timeStyle, 16);
+style_set_text_font(timeStyle, 14);
 style_set_text_color(timeStyle, COLOR_WHITE);
 
 let statsStyle = create_style();
-style_set_text_font(statsStyle, 12);
+style_set_text_font(statsStyle, 14);
 style_set_text_color(statsStyle, COLOR_LIGHT_GREEN);
 
 let textStyle = create_style();
@@ -57,25 +57,25 @@ style_set_text_font(textStyle, 14);
 style_set_text_color(textStyle, COLOR_TITLE);
 
 let badgeStyle1 = create_style();
-style_set_text_font(badgeStyle1, 12);
+style_set_text_font(badgeStyle1, 14);
 style_set_text_color(badgeStyle1, COLOR_WHITE);
 style_set_bg_color(badgeStyle1, COLOR_GREEN);
 style_set_bg_opa(badgeStyle1, 255);
 style_set_radius(badgeStyle1, 6);
 
 let badgeStyle2 = create_style();
-style_set_text_font(badgeStyle2, 12);
+style_set_text_font(badgeStyle2, 14);
 style_set_text_color(badgeStyle2, COLOR_WHITE);
 style_set_bg_color(badgeStyle2, COLOR_GREEN);
 style_set_bg_opa(badgeStyle2, 255);
 style_set_radius(badgeStyle2, 6);
 
 let catStyle = create_style();
-style_set_text_font(catStyle, 10);
+style_set_text_font(catStyle, 14);
 style_set_text_color(catStyle, COLOR_GRAY);
 
 let checkStyle = create_style();
-style_set_text_font(checkStyle, 16);
+style_set_text_font(checkStyle, 14);
 style_set_text_color(checkStyle, COLOR_GRAY);
 
 let headerBgStyle = create_style();
@@ -153,7 +153,7 @@ label_set_text(check2, "[ ]");
 
 // Page indicator
 let pageStyle = create_style();
-style_set_text_font(pageStyle, 12);
+style_set_text_font(pageStyle, 14);
 style_set_text_color(pageStyle, COLOR_GRAY);
 style_set_text_align(pageStyle, 1);
 

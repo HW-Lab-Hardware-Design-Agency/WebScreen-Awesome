@@ -35,12 +35,12 @@ style_set_text_color(timeStyle, COLOR_WHITE);
 style_set_text_align(timeStyle, 1);
 
 let cityStyle = create_style();
-style_set_text_font(cityStyle, 24);
+style_set_text_font(cityStyle, 28);
 style_set_text_color(cityStyle, COLOR_CYAN);
 style_set_text_align(cityStyle, 1);
 
 let dateStyle = create_style();
-style_set_text_font(dateStyle, 16);
+style_set_text_font(dateStyle, 14);
 style_set_text_color(dateStyle, COLOR_GRAY);
 style_set_text_align(dateStyle, 1);
 
@@ -50,7 +50,7 @@ style_set_text_color(dividerStyle, COLOR_DIM);
 style_set_text_align(dividerStyle, 1);
 
 let statusStyle = create_style();
-style_set_text_font(statusStyle, 12);
+style_set_text_font(statusStyle, 14);
 style_set_text_color(statusStyle, COLOR_DIM);
 style_set_text_align(statusStyle, 1);
 
