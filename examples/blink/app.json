@@ -1,4 +1,10 @@
 {
+  "name": "Blink",
+  "version": "1.0.0",
+  "description": "Simple animated GIF display demo",
+  "author": "WebScreen",
+  "script": "script.js",
+  "assets": ["blink.gif"],
   "settings": {
     "wifi": {
       "ssid": "",
@@ -11,6 +17,5 @@
   "screen": {
     "background": "#332616",
     "foreground": "#FFFFFF"
-  },
-  "script": "script.js"
+  }
 }

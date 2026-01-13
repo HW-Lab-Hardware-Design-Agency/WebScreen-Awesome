@@ -3,9 +3,19 @@
   "version": "1.0.0",
   "description": "Focus timer with work and break intervals for productivity",
   "author": "WebScreen Community",
-  "script_file": "pomodoro_app.js",
-  "display": {
-    "background_color": "#1a1a2e",
-    "foreground_color": "#e94560"
+  "script": "script.js",
+  "assets": [],
+  "settings": {
+    "wifi": {
+      "ssid": "",
+      "pass": ""
+    },
+    "mqtt": {
+      "enabled": false
+    }
+  },
+  "screen": {
+    "background": "#2e1a1a",
+    "foreground": "#e94560"
   }
 }

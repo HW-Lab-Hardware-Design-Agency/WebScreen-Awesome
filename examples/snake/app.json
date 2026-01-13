@@ -1,8 +1,14 @@
 {
+  "name": "Snake Game",
+  "version": "1.0.0",
+  "description": "Classic snake game with touch controls",
+  "author": "WebScreen",
+  "script": "script.js",
+  "assets": [],
   "settings": {
     "wifi": {
-      "ssid": "your_ssid",
-      "pass": "your_password"
+      "ssid": "",
+      "pass": ""
     },
     "mqtt": {
       "enabled": false
@@ -11,6 +17,5 @@
   "screen": {
     "background": "#000000",
     "foreground": "#FFFFFF"
-  },
-  "script": "script.js"
+  }
 }

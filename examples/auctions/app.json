@@ -3,12 +3,19 @@
   "version": "1.0.0",
   "description": "Track auction bids and marketplace listings",
   "author": "WebScreen Community",
-  "script_file": "auctions_app.js",
-  "wifi": {
-    "enabled": true
+  "script": "script.js",
+  "assets": [],
+  "settings": {
+    "wifi": {
+      "ssid": "",
+      "pass": ""
+    },
+    "mqtt": {
+      "enabled": false
+    }
   },
-  "display": {
-    "background_color": "#fef3c7",
-    "foreground_color": "#d97706"
+  "screen": {
+    "background": "#fef3c7",
+    "foreground": "#d97706"
   }
 }

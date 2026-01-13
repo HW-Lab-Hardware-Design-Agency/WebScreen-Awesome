@@ -1,8 +1,14 @@
 {
+  "name": "System Monitor",
+  "version": "1.0.0",
+  "description": "Display system statistics and performance metrics",
+  "author": "WebScreen",
+  "script": "script.js",
+  "assets": [],
   "settings": {
     "wifi": {
-      "ssid": "your_ssid",
-      "pass": "your_password"
+      "ssid": "",
+      "pass": ""
     },
     "mqtt": {
       "enabled": false
@@ -11,6 +17,5 @@
   "screen": {
     "background": "#1a1a2e",
     "foreground": "#FFFFFF"
-  },
-  "script": "script.js"
+  }
 }

@@ -1,4 +1,10 @@
 {
+  "name": "SD Reader",
+  "version": "1.0.0",
+  "description": "Browse and display files from SD card",
+  "author": "WebScreen",
+  "script": "script.js",
+  "assets": [],
   "settings": {
     "wifi": {
       "ssid": "",
@@ -11,6 +17,5 @@
   "screen": {
     "background": "#000000",
     "foreground": "#FFFFFF"
-  },
-  "script": "script.js"
+  }
 }

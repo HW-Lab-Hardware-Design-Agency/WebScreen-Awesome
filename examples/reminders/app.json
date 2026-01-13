@@ -3,9 +3,19 @@
   "version": "1.0.0",
   "description": "Personal reminder system with notifications and alerts",
   "author": "WebScreen Community",
-  "script_file": "reminders_app.js",
-  "display": {
-    "background_color": "#f0fdf4",
-    "foreground_color": "#16a34a"
+  "script": "script.js",
+  "assets": [],
+  "settings": {
+    "wifi": {
+      "ssid": "",
+      "pass": ""
+    },
+    "mqtt": {
+      "enabled": false
+    }
+  },
+  "screen": {
+    "background": "#f0fdf4",
+    "foreground": "#16a34a"
   }
 }

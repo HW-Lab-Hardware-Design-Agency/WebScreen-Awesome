@@ -1,8 +1,14 @@
 {
+  "name": "Calculator",
+  "version": "1.0.0",
+  "description": "Simple calculator with basic arithmetic operations",
+  "author": "WebScreen",
+  "script": "script.js",
+  "assets": [],
   "settings": {
     "wifi": {
-      "ssid": "your_ssid",
-      "pass": "your_password"
+      "ssid": "",
+      "pass": ""
     },
     "mqtt": {
       "enabled": false
@@ -11,6 +17,5 @@
   "screen": {
     "background": "#0d0d1a",
     "foreground": "#FFFFFF"
-  },
-  "script": "script.js"
+  }
 }

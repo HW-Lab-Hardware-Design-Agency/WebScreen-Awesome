@@ -1,8 +1,14 @@
 {
+  "name": "Social Stats",
+  "version": "1.0.0",
+  "description": "Display social media statistics and follower counts",
+  "author": "WebScreen",
+  "script": "script.js",
+  "assets": [],
   "settings": {
     "wifi": {
-      "ssid": "your_ssid",
-      "pass": "your_password"
+      "ssid": "",
+      "pass": ""
     },
     "mqtt": {
       "enabled": false
@@ -11,6 +17,5 @@
   "screen": {
     "background": "#0a0a14",
     "foreground": "#FFFFFF"
-  },
-  "script": "script.js"
+  }
 }

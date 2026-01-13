@@ -1,4 +1,10 @@
 {
+  "name": "Clock",
+  "version": "1.0.0",
+  "description": "Digital clock with automatic time sync from timeapi.io",
+  "author": "WebScreen",
+  "script": "script.js",
+  "assets": ["clock.pem"],
   "settings": {
     "wifi": {
       "ssid": "your_ssid",
@@ -12,7 +18,6 @@
     "background": "#000000",
     "foreground": "#FFFFFF"
   },
-  "script": "script.js",
   "timezone": "America/New_York",
   "theme": 0
 }

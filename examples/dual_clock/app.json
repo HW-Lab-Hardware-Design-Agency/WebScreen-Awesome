@@ -1,8 +1,10 @@
 {
   "name": "Dual Clock",
-  "description": "Display two time zones simultaneously with automatic sync from timeapi.io",
   "version": "1.0.0",
+  "description": "Display two time zones simultaneously with automatic sync from timeapi.io",
   "author": "WebScreen",
+  "script": "script.js",
+  "assets": ["point.gif", "dualclock.pem"],
   "settings": {
     "wifi": {
       "ssid": "your_network",
@@ -16,7 +18,6 @@
     "background": "#000000",
     "foreground": "#FFFFFF"
   },
-  "script": "script.js",
   "timezone1": "Asia/Tokyo",
   "city1": "Tokyo",
   "timezone2": "America/Argentina/Buenos_Aires",

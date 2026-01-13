@@ -1,8 +1,14 @@
 {
+  "name": "Notifications",
+  "version": "1.0.0",
+  "description": "Display notifications and alerts from various sources",
+  "author": "WebScreen",
+  "script": "script.js",
+  "assets": [],
   "settings": {
     "wifi": {
-      "ssid": "your_ssid",
-      "pass": "your_password"
+      "ssid": "",
+      "pass": ""
     },
     "mqtt": {
       "enabled": false
@@ -11,6 +17,5 @@
   "screen": {
     "background": "#16161d",
     "foreground": "#FFFFFF"
-  },
-  "script": "script.js"
+  }
 }

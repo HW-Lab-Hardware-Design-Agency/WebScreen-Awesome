@@ -3,12 +3,19 @@
   "version": "1.0.0",
   "description": "Display Steam profile, friends online, and game activity",
   "author": "WebScreen Community",
-  "script_file": "steam_app.js",
-  "wifi": {
-    "enabled": true
+  "script": "script.js",
+  "assets": [],
+  "settings": {
+    "wifi": {
+      "ssid": "",
+      "pass": ""
+    },
+    "mqtt": {
+      "enabled": false
+    }
   },
-  "display": {
-    "background_color": "#1b2838",
-    "foreground_color": "#66c0f4"
+  "screen": {
+    "background": "#1b2838",
+    "foreground": "#66c0f4"
   }
 }

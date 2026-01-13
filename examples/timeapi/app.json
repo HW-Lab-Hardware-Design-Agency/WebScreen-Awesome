@@ -1,4 +1,10 @@
 {
+  "name": "Time API",
+  "version": "1.0.0",
+  "description": "Display current time fetched from timeapi.io with animated GIF",
+  "author": "WebScreen",
+  "script": "script.js",
+  "assets": ["cat.gif", "timeapi.pem"],
   "settings": {
     "wifi": {
       "ssid": "ssid",
@@ -11,6 +17,5 @@
   "screen": {
     "background": "#332616",
     "foreground": "#FFFFFF"
-  },
-  "script": "script.js"
+  }
 }

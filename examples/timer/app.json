@@ -1,8 +1,14 @@
 {
+  "name": "Timer",
+  "version": "1.0.0",
+  "description": "Countdown timer with customizable duration",
+  "author": "WebScreen",
+  "script": "script.js",
+  "assets": [],
   "settings": {
     "wifi": {
-      "ssid": "your_ssid",
-      "pass": "your_password"
+      "ssid": "",
+      "pass": ""
     },
     "mqtt": {
       "enabled": false
@@ -11,6 +17,5 @@
   "screen": {
     "background": "#0f0f1a",
     "foreground": "#FFFFFF"
-  },
-  "script": "script.js"
+  }
 }

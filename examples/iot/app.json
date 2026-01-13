@@ -3,15 +3,19 @@
   "version": "1.0.0",
   "description": "Monitor and control IoT devices and sensors",
   "author": "WebScreen Community",
-  "script_file": "iot_app.js",
-  "wifi": {
-    "enabled": true
+  "script": "script.js",
+  "assets": [],
+  "settings": {
+    "wifi": {
+      "ssid": "",
+      "pass": ""
+    },
+    "mqtt": {
+      "enabled": true
+    }
   },
-  "mqtt": {
-    "enabled": true
-  },
-  "display": {
-    "background_color": "#0f172a",
-    "foreground_color": "#22c55e"
+  "screen": {
+    "background": "#0f172a",
+    "foreground": "#22c55e"
   }
 }
