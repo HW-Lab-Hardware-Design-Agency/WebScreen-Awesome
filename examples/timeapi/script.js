@@ -4,7 +4,7 @@ print("Starting JavaScript execution...");
 
 // 1) Try to load CA cert from SD
 let certOk = http_set_ca_cert_from_sd("/timeapi.pem");
-if (!certOk) {
+if (certOk === 0) {
   print("Could not load CA from /timeapi.pem. We'll use 'setInsecure()' fallback.");
 }
 

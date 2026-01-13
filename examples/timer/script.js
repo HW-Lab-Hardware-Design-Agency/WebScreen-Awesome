@@ -175,7 +175,7 @@ let updateTimerDisplay = function() {
   label_set_text(timeLabel, padZero(mins) + ":" + padZero(secs));
   label_set_text(msLabel, "");
 
-  if (timerRemaining <= 0 && !timerFinished) {
+  if (timerRemaining <= 0 && timerFinished === 0) {
     timerFinished = 1;
     isRunning = 0;
     style_set_text_color(statusStyle, 0xFF4444);
@@ -188,7 +188,8 @@ let updateTimerDisplay = function() {
 
 // Stopwatch tick (every 10ms = 1 centisecond)
 let stopwatch_tick = function() {
-  if (!isRunning || mode !== 0) return;
+  if (isRunning === 0) return;
+  if (mode !== 0) return;
 
   stopwatchTime++;
   updateStopwatchDisplay();
@@ -196,7 +197,8 @@ let stopwatch_tick = function() {
 
 // Timer tick (every second)
 let timer_tick = function() {
-  if (!isRunning || mode !== 1) return;
+  if (isRunning === 0) return;
+  if (mode !== 1) return;
 
   timerRemaining--;
   if (timerRemaining < 0) timerRemaining = 0;

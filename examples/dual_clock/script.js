@@ -204,7 +204,7 @@ let syncTime = function() {
 
 // Main tick function
 let clock_tick = function() {
-    if (!isInitialized) return;
+    if (isInitialized === 0) return;
 
     incrementTime();
     updateDisplay();
@@ -228,7 +228,7 @@ let init_tick = function() {
 
         // Try to load CA cert
         let certOk = http_set_ca_cert_from_sd("/dualclock.pem");
-        if (!certOk) {
+        if (certOk === 0) {
             print("CA cert not found, using insecure mode");
         }
 
