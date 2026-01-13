@@ -47,7 +47,7 @@ style_set_width(circleStyle, 170);
 style_set_height(circleStyle, 170);
 
 let timerStyle = create_style();
-style_set_text_font(timerStyle, 48);
+style_set_text_font(timerStyle, 44);
 style_set_text_color(timerStyle, COLOR_WHITE);
 style_set_text_align(timerStyle, 1);
 

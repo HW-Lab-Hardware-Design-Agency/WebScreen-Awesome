@@ -274,6 +274,11 @@ let simulate_tick = function() {
         currentPage = 1 - currentPage;
     }
 
+    // Switch pages every 8 seconds
+    if (simTimer % 8 === 0) {
+        currentPage = 1 - currentPage;
+    }
+
     updateDisplay();
 };
 
