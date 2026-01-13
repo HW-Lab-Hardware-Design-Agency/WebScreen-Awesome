@@ -1,82 +1,102 @@
 "use strict";
 
-print("Starting JavaScript execution...");
+print("Starting Clock with Cat...");
 
-// 1) Try to load CA cert from SD
-let certOk = http_set_ca_cert_from_sd("/timeapi.pem");
-if (certOk === 0) {
-  print("Could not load CA from /timeapi.pem. We'll use 'setInsecure()' fallback.");
-}
-
-// 2) Wait until connected
-for (; ;) {
+// Wait for WiFi connection (device time will be synced)
+for (;;) {
   if (wifi_status()) break;
   delay(500);
   print("Waiting for Wi-Fi...");
 }
 print("Connected! IP: " + wifi_get_ip());
 
-// 3) Fetch JSON from timeapi.io
-let url = "https://timeapi.io/api/time/current/zone?timeZone=Asia/Tokyo";
-let jsonResponse = http_get(url);
-if (jsonResponse === "") {
-  print("HTTP GET failed, can't continue.");
-  return;
+// Read config for timezone (POSIX format, e.g., "EST5EDT,M3.2.0,M11.1.0" or "UTC0")
+let config = sd_read_file("/webscreen.json");
+let timezone = "UTC0";
+let configTz = parse_json_value(config, "timezone");
+if (configTz !== "") {
+  timezone = configTz;
+  set_timezone(timezone);
+  print("Timezone set to: " + timezone);
 }
 
-// 4) Parse date and time components
-let dateVal = parse_json_value(jsonResponse, "date");
-let hour = toNumber(parse_json_value(jsonResponse, "hour"));
-let minute = toNumber(parse_json_value(jsonResponse, "minute"));
-let seconds = toNumber(parse_json_value(jsonResponse, "seconds"));
+// Month names for date formatting
+let monthNames = "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec";
 
-// 5) Create a style for the date label
+// Get month name from index (1-12)
+let getMonthName = function(monthIndex) {
+  let start = 0;
+  let idx = 1;
+  let i = 0;
+  for (;;) {
+    if (idx === monthIndex) {
+      let end = i;
+      while (i < 40) {
+        let c = str_substring(monthNames, i, 1);
+        if (c === ",") {
+          end = i;
+          break;
+        }
+        i = i + 1;
+        end = i;
+      }
+      return str_substring(monthNames, start, end - start);
+    }
+    let c = str_substring(monthNames, i, 1);
+    if (c === ",") {
+      idx = idx + 1;
+      start = i + 1;
+    }
+    i = i + 1;
+    if (i > 40) break;
+  }
+  return "???";
+};
+
+// Create a style for the date label
 let dateStyle = create_style();
 style_set_text_font(dateStyle, 34);
 style_set_text_color(dateStyle, 0x72F749);
 style_set_pad_all(dateStyle, 5);
 style_set_text_align(dateStyle, 1);
 
-// 6) Create label for the date and set its text
+// Create label for the date
 let dateLabel = create_label(211, 132);
 obj_add_style(dateLabel, dateStyle, 0);
-label_set_text(dateLabel, dateVal);
+label_set_text(dateLabel, "Loading...");
 
-// 7) Create a second style for time
+// Create a style for time
 let timeStyle = create_style();
 style_set_text_font(timeStyle, 48);
 style_set_text_color(timeStyle, 0xFFFFFF);
 style_set_pad_all(timeStyle, 5);
 style_set_text_align(timeStyle, 1);
 
-// 8) Create label for the time
+// Create label for the time
 let timeLabel = create_label(210, 72);
 obj_add_style(timeLabel, timeStyle, 0);
+label_set_text(timeLabel, "--:--:--");
 
-// 9) Load a gif from SD card
+// Load a gif from SD card
 show_gif_from_sd("/cat.gif", 0, 0);
 
-let padZero = function (num) {
+let padZero = function(num) {
   if (num < 10) {
     return "0" + numberToString(num);
   }
   return numberToString(num);
 };
 
-let update_clock = function () {
-  seconds++;
-  if (seconds >= 60) {
-    seconds = 0;
-    minute++;
-    if (minute >= 60) {
-      minute = 0;
-      hour++;
-      if (hour >= 24) {
-        hour = 0;
-      }
-    }
-  }
+let update_clock = function() {
+  // Get time from device
+  let hour = get_hour();
+  let minute = get_minute();
+  let seconds = get_second();
+  let year = get_year();
+  let month = get_month();
+  let day = get_day();
 
+  // Convert to 12-hour format
   let displayHour = hour;
   let ampm = "AM";
 
@@ -89,14 +109,32 @@ let update_clock = function () {
     ampm = "PM";
   }
 
+  // Update time display
   let h_str = padZero(displayHour);
   let m_str = padZero(minute);
   let s_str = padZero(seconds);
   let timeString = h_str + ":" + m_str + ":" + s_str + " " + ampm;
   label_set_text(timeLabel, timeString);
+
+  // Update date display
+  let monthName = getMonthName(month);
+  let dateStr = monthName + " " + numberToString(day) + ", " + numberToString(year);
+  label_set_text(dateLabel, dateStr);
 };
 
-// Start the timer
-print("Setup complete. Clock timer is now running.");
-update_clock();
-create_timer("update_clock", 1000);
+// Wait for time to be valid (synced from browser or NTP)
+let waitForTime = function() {
+  if (time_valid()) {
+    print("Time synced successfully");
+    update_clock();
+    // Start the clock timer
+    create_timer("update_clock", 1000);
+    print("Clock with Cat ready!");
+  } else {
+    print("Waiting for time sync...");
+    label_set_text(dateLabel, "Syncing...");
+  }
+};
+
+// Check for time sync periodically until valid
+create_timer("waitForTime", 1000);

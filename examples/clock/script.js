@@ -2,13 +2,7 @@
 
 print("Starting Digital Clock...");
 
-// Load SSL certificate for HTTPS
-let certOk = http_set_ca_cert_from_sd("/clock.pem");
-if (certOk === 0) {
-  print("Could not load CA cert, using insecure mode");
-}
-
-// Wait for WiFi connection
+// Wait for WiFi connection (NTP will auto-configure)
 for (;;) {
   if (wifi_status()) break;
   delay(500);
@@ -16,12 +10,14 @@ for (;;) {
 }
 print("Connected! IP: " + wifi_get_ip());
 
-// Read config for timezone
+// Read config for timezone (POSIX format, e.g., "EST5EDT,M3.2.0,M11.1.0" or "UTC0")
 let config = sd_read_file("/webscreen.json");
-let timezone = "America/New_York";
+let timezone = "UTC0";
 let configTz = parse_json_value(config, "timezone");
 if (configTz !== "") {
   timezone = configTz;
+  set_timezone(timezone);
+  print("Timezone set to: " + timezone);
 }
 
 // Read theme from config (0=dark, 1=light, 2=blue, 3=green)
@@ -57,15 +53,9 @@ if (theme === 1) {
   accentColor = 0x88FF88;
 }
 
-// Time state
-let hour = 0;
-let minute = 0;
-let seconds = 0;
-let dateStr = "";
-let dayOfWeek = "";
-
-// Days of week
-let days = "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday";
+// Days of week names
+let dayNames = "Sun,Mon,Tue,Wed,Thu,Fri,Sat";
+let monthNames = "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec";
 
 // Create styles
 let timeStyle = create_style();
@@ -122,69 +112,76 @@ let padZero = function(num) {
   return numberToString(num);
 };
 
-// Fetch time from API
-let fetch_time = function() {
-  let url = "https://timeapi.io/api/time/current/zone?timeZone=" + timezone;
-  let response = http_get(url);
-
-  if (response === "") {
-    print("Time fetch failed");
-    return;
-  }
-
-  hour = toNumber(parse_json_value(response, "hour"));
-  minute = toNumber(parse_json_value(response, "minute"));
-  seconds = toNumber(parse_json_value(response, "seconds"));
-  dateStr = parse_json_value(response, "date");
-  let dow = toNumber(parse_json_value(response, "dayOfWeek"));
-
-  // Parse day of week from our days string
-  let dayIndex = 0;
+// Get day name from index
+let getDayName = function(dayIndex) {
   let start = 0;
+  let idx = 0;
   let i = 0;
   for (;;) {
-    if (dayIndex === dow) {
+    if (idx === dayIndex) {
       let end = i;
-      while (i < 56) {
-        let c = str_substring(days, i, 1);
+      while (i < 28) {
+        let c = str_substring(dayNames, i, 1);
         if (c === ",") {
           end = i;
           break;
         }
-        i++;
+        i = i + 1;
         end = i;
       }
-      dayOfWeek = str_substring(days, start, end - start);
-      break;
+      return str_substring(dayNames, start, end - start);
     }
-    let c = str_substring(days, i, 1);
+    let c = str_substring(dayNames, i, 1);
     if (c === ",") {
-      dayIndex++;
+      idx = idx + 1;
       start = i + 1;
     }
-    i++;
-    if (i > 56) break;
+    i = i + 1;
+    if (i > 28) break;
   }
-
-  label_set_text(dateLabel, dateStr);
-  label_set_text(dayLabel, dayOfWeek);
-  print("Time synced: " + padZero(hour) + ":" + padZero(minute));
+  return "???";
 };
 
-// Update clock display
-let update_clock = function() {
-  seconds++;
-  if (seconds >= 60) {
-    seconds = 0;
-    minute++;
-    if (minute >= 60) {
-      minute = 0;
-      hour++;
-      if (hour >= 24) {
-        hour = 0;
+// Get month name from index (1-12)
+let getMonthName = function(monthIndex) {
+  let start = 0;
+  let idx = 1;
+  let i = 0;
+  for (;;) {
+    if (idx === monthIndex) {
+      let end = i;
+      while (i < 40) {
+        let c = str_substring(monthNames, i, 1);
+        if (c === ",") {
+          end = i;
+          break;
+        }
+        i = i + 1;
+        end = i;
       }
+      return str_substring(monthNames, start, end - start);
     }
+    let c = str_substring(monthNames, i, 1);
+    if (c === ",") {
+      idx = idx + 1;
+      start = i + 1;
+    }
+    i = i + 1;
+    if (i > 40) break;
   }
+  return "???";
+};
+
+// Update clock display using local time
+let update_clock = function() {
+  // Get time from device (NTP synced)
+  let hour = get_hour();
+  let minute = get_minute();
+  let seconds = get_second();
+  let year = get_year();
+  let month = get_month();
+  let day = get_day();
+  let weekday = get_weekday();
 
   // Convert to 12-hour format
   let displayHour = hour;
@@ -199,29 +196,34 @@ let update_clock = function() {
     ampm = "PM";
   }
 
+  // Update time display
   label_set_text(timeLabel, padZero(displayHour) + ":" + padZero(minute));
   label_set_text(secondsLabel, padZero(seconds));
   label_set_text(ampmLabel, ampm);
+
+  // Update date display
+  let monthName = getMonthName(month);
+  let dateStr = monthName + " " + numberToString(day) + ", " + numberToString(year);
+  label_set_text(dateLabel, dateStr);
+
+  // Update day of week
+  let dayName = getDayName(weekday);
+  label_set_text(dayLabel, dayName);
 };
 
-// Resync counter
-let resyncCounter = 0;
-
-let check_resync = function() {
-  resyncCounter++;
-  // Resync every 10 minutes (600 seconds)
-  if (resyncCounter >= 600) {
-    resyncCounter = 0;
-    fetch_time();
+// Wait for time to be valid (NTP sync)
+let waitForTime = function() {
+  if (time_valid()) {
+    print("Time synced successfully");
+    update_clock();
+    // Start the clock timer
+    create_timer("update_clock", 1000);
+    print("Digital Clock ready!");
+  } else {
+    print("Waiting for NTP sync...");
+    label_set_text(dateLabel, "Syncing...");
   }
 };
 
-// Initial fetch
-fetch_time();
-update_clock();
-
-// Update every second
-create_timer("update_clock", 1000);
-create_timer("check_resync", 1000);
-
-print("Digital Clock ready!");
+// Check for time sync periodically until valid
+create_timer("waitForTime", 1000);
