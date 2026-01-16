@@ -2,7 +2,7 @@
 
 print("Starting Dual Clock...");
 
-// Wait for WiFi connection (device time will be synced)
+// Wait for WiFi connection
 for (;;) {
   if (wifi_status()) break;
   delay(500);
@@ -13,30 +13,25 @@ print("Connected! IP: " + wifi_get_ip());
 // Read configuration
 let config = sd_read_file("/webscreen.json");
 
-// Default timezones (POSIX format)
-// Examples: "JST-9" for Tokyo, "ART3" for Buenos Aires
-let timezone1 = "UTC0";
-let city1 = "UTC";
-let timezone2 = "UTC0";
-let city2 = "UTC";
+// Default timezones (IANA format for worldtimeapi.org)
+let timezone1 = "America/New_York";
+let city1 = "New York";
+let timezone2 = "Europe/London";
+let city2 = "London";
 
 // Try to read from config
-let configTz1 = parse_json_value(config, "timezone1");
-let configCity1 = parse_json_value(config, "city1");
-let configTz2 = parse_json_value(config, "timezone2");
-let configCity2 = parse_json_value(config, "city2");
+if (config) {
+  if (config !== "") {
+    let configTz1 = parse_json_value(config, "timezone1");
+    let configCity1 = parse_json_value(config, "city1");
+    let configTz2 = parse_json_value(config, "timezone2");
+    let configCity2 = parse_json_value(config, "city2");
 
-if (configTz1 !== "") {
-  timezone1 = configTz1;
-}
-if (configCity1 !== "") {
-  city1 = configCity1;
-}
-if (configTz2 !== "") {
-  timezone2 = configTz2;
-}
-if (configCity2 !== "") {
-  city2 = configCity2;
+    if (configTz1 !== "") timezone1 = configTz1;
+    if (configCity1 !== "") city1 = configCity1;
+    if (configTz2 !== "") timezone2 = configTz2;
+    if (configCity2 !== "") city2 = configCity2;
+  }
 }
 
 print("Zone 1: " + city1 + " (" + timezone1 + ")");
@@ -46,12 +41,16 @@ print("Zone 2: " + city2 + " (" + timezone2 + ")");
 let hour1 = 0;
 let minute1 = 0;
 let seconds1 = 0;
-let date1 = "";
+let year1 = 2026;
+let month1 = 1;
+let day1 = 1;
 
 let hour2 = 0;
 let minute2 = 0;
 let seconds2 = 0;
-let date2 = "";
+let year2 = 2026;
+let month2 = 1;
+let day2 = 1;
 
 // Colors
 let COLOR_WHITE = 0xFFFFFF;
@@ -59,36 +58,20 @@ let COLOR_CYAN = 0x00BFFF;
 let COLOR_GRAY = 0x888888;
 let COLOR_DIM = 0x444444;
 
-// Month names for date formatting
-let monthNames = "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec";
-
-// Get month name from index (1-12)
-let getMonthName = function(monthIndex) {
-  let start = 0;
-  let idx = 1;
-  let i = 0;
-  for (;;) {
-    if (idx === monthIndex) {
-      let end = i;
-      while (i < 40) {
-        let c = str_substring(monthNames, i, 1);
-        if (c === ",") {
-          end = i;
-          break;
-        }
-        i = i + 1;
-        end = i;
-      }
-      return str_substring(monthNames, start, end - start);
-    }
-    let c = str_substring(monthNames, i, 1);
-    if (c === ",") {
-      idx = idx + 1;
-      start = i + 1;
-    }
-    i = i + 1;
-    if (i > 40) break;
-  }
+// Month name helper (simple if-based)
+let getMonthName = function(m) {
+  if (m === 1) return "Jan";
+  if (m === 2) return "Feb";
+  if (m === 3) return "Mar";
+  if (m === 4) return "Apr";
+  if (m === 5) return "May";
+  if (m === 6) return "Jun";
+  if (m === 7) return "Jul";
+  if (m === 8) return "Aug";
+  if (m === 9) return "Sep";
+  if (m === 10) return "Oct";
+  if (m === 11) return "Nov";
+  if (m === 12) return "Dec";
   return "???";
 };
 
@@ -180,74 +163,108 @@ let formatTime = function(h, m, s) {
 };
 
 // Format date as "Mon DD, YYYY"
-let formatDate = function(year, month, day) {
-  let monthName = getMonthName(month);
-  return monthName + " " + numberToString(day) + ", " + numberToString(year);
+let formatDate = function(y, m, d) {
+  let monthName = getMonthName(m);
+  return monthName + " " + numberToString(d) + ", " + numberToString(y);
 };
 
-// Get time for a specific timezone
-let getTimeForZone = function(tz, zoneNum) {
-  // Set the timezone
-  set_timezone(tz);
+// Fetch time for a timezone from worldtimeapi.org
+let fetchTime = function(tz, zoneNum) {
+  let url = "http://worldtimeapi.org/api/timezone/" + tz;
+  print("Fetching: " + url);
+  let json = http_get(url);
+  if (json === "") {
+    print("Failed to fetch time for " + tz);
+    return 0;
+  }
 
-  // Get the time components
-  let h = get_hour();
-  let m = get_minute();
-  let s = get_second();
-  let y = get_year();
-  let mo = get_month();
-  let d = get_day();
+  let datetime = parse_json_value(json, "datetime");
+  if (datetime === "") {
+    print("Failed to parse datetime");
+    return 0;
+  }
+
+  // Parse datetime: "2026-01-16T12:45:10.662556-05:00"
+  let y = toNumber(str_substring(datetime, 0, 4));
+  let mo = toNumber(str_substring(datetime, 5, 2));
+  let d = toNumber(str_substring(datetime, 8, 2));
+  let h = toNumber(str_substring(datetime, 11, 2));
+  let mi = toNumber(str_substring(datetime, 14, 2));
+  let s = toNumber(str_substring(datetime, 17, 2));
 
   if (zoneNum === 1) {
     hour1 = h;
-    minute1 = m;
+    minute1 = mi;
     seconds1 = s;
-    date1 = formatDate(y, mo, d);
+    year1 = y;
+    month1 = mo;
+    day1 = d;
   } else {
     hour2 = h;
-    minute2 = m;
+    minute2 = mi;
     seconds2 = s;
-    date2 = formatDate(y, mo, d);
+    year2 = y;
+    month2 = mo;
+    day2 = d;
   }
+
+  return 1;
 };
 
 // Update display
 let updateDisplay = function() {
   label_set_text(time1Label, formatTime(hour1, minute1, seconds1));
-  label_set_text(date1Label, date1);
+  label_set_text(date1Label, formatDate(year1, month1, day1));
   label_set_text(time2Label, formatTime(hour2, minute2, seconds2));
-  label_set_text(date2Label, date2);
+  label_set_text(date2Label, formatDate(year2, month2, day2));
 };
 
-// Main update function - reads current time for both zones
+// Update clock - increment time locally
 let update_clock = function() {
-  // Get time for zone 1
-  getTimeForZone(timezone1, 1);
+  // Increment zone 1
+  seconds1 = seconds1 + 1;
+  if (seconds1 >= 60) {
+    seconds1 = 0;
+    minute1 = minute1 + 1;
+    if (minute1 >= 60) {
+      minute1 = 0;
+      hour1 = hour1 + 1;
+      if (hour1 >= 24) {
+        hour1 = 0;
+      }
+    }
+  }
 
-  // Get time for zone 2
-  getTimeForZone(timezone2, 2);
+  // Increment zone 2
+  seconds2 = seconds2 + 1;
+  if (seconds2 >= 60) {
+    seconds2 = 0;
+    minute2 = minute2 + 1;
+    if (minute2 >= 60) {
+      minute2 = 0;
+      hour2 = hour2 + 1;
+      if (hour2 >= 24) {
+        hour2 = 0;
+      }
+    }
+  }
 
-  // Update the display
   updateDisplay();
 };
 
-// Wait for time to be valid (synced from browser or NTP)
-let waitForTime = function() {
-  if (time_valid()) {
-    print("Time is valid");
-    label_set_text(statusLabel, "Ready");
+// Fetch initial time for both zones
+print("Fetching time for zone 1...");
+let ok1 = fetchTime(timezone1, 1);
 
-    // Do initial update
-    update_clock();
+print("Fetching time for zone 2...");
+let ok2 = fetchTime(timezone2, 2);
 
-    // Start the clock timer (update every second)
-    create_timer("update_clock", 1000);
-    print("Dual Clock ready!");
-  } else {
-    print("Waiting for time sync...");
-    label_set_text(statusLabel, "Syncing...");
-  }
-};
-
-// Check for time sync periodically until valid
-create_timer("waitForTime", 1000);
+if (ok1 === 1 && ok2 === 1) {
+  label_set_text(statusLabel, "Ready");
+  updateDisplay();
+  create_timer("update_clock", 1000);
+  print("Dual Clock ready!");
+} else {
+  label_set_text(statusLabel, "Fetch failed");
+  print("Failed to fetch time");
+}

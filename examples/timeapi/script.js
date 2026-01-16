@@ -2,7 +2,7 @@
 
 print("Starting Clock with Cat...");
 
-// Wait for WiFi connection (device time will be synced)
+// Wait for WiFi connection
 for (;;) {
   if (wifi_status()) break;
   delay(500);
@@ -10,46 +10,55 @@ for (;;) {
 }
 print("Connected! IP: " + wifi_get_ip());
 
-// Read config for timezone (POSIX format, e.g., "EST5EDT,M3.2.0,M11.1.0" or "UTC0")
+// Read config for timezone (IANA format, e.g., "America/New_York")
 let config = sd_read_file("/webscreen.json");
-let timezone = "UTC0";
-let configTz = parse_json_value(config, "timezone");
-if (configTz !== "") {
-  timezone = configTz;
-  set_timezone(timezone);
-  print("Timezone set to: " + timezone);
+let timezone = "America/New_York";
+
+if (config) {
+  if (config !== "") {
+    let configTz = parse_json_value(config, "timezone");
+    if (configTz !== "") {
+      timezone = configTz;
+    }
+  }
+}
+print("Timezone: " + timezone);
+
+// Fetch time from worldtimeapi.org
+let url = "http://worldtimeapi.org/api/timezone/" + timezone;
+print("Fetching: " + url);
+let jsonResponse = http_get(url);
+if (jsonResponse === "") {
+  print("HTTP GET failed!");
 }
 
-// Month names for date formatting
-let monthNames = "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec";
+// Parse response - datetime format: "2026-01-16T12:45:10.662556-05:00"
+let datetime = parse_json_value(jsonResponse, "datetime");
 
-// Get month name from index (1-12)
-let getMonthName = function(monthIndex) {
-  let start = 0;
-  let idx = 1;
-  let i = 0;
-  for (;;) {
-    if (idx === monthIndex) {
-      let end = i;
-      while (i < 40) {
-        let c = str_substring(monthNames, i, 1);
-        if (c === ",") {
-          end = i;
-          break;
-        }
-        i = i + 1;
-        end = i;
-      }
-      return str_substring(monthNames, start, end - start);
-    }
-    let c = str_substring(monthNames, i, 1);
-    if (c === ",") {
-      idx = idx + 1;
-      start = i + 1;
-    }
-    i = i + 1;
-    if (i > 40) break;
-  }
+// Extract time from datetime string
+let year = toNumber(str_substring(datetime, 0, 4));
+let month = toNumber(str_substring(datetime, 5, 2));
+let day = toNumber(str_substring(datetime, 8, 2));
+let hour = toNumber(str_substring(datetime, 11, 2));
+let minute = toNumber(str_substring(datetime, 14, 2));
+let seconds = toNumber(str_substring(datetime, 17, 2));
+
+print("Time: " + numberToString(hour) + ":" + numberToString(minute) + ":" + numberToString(seconds));
+
+// Month name helper (simple if-based)
+let getMonthName = function(m) {
+  if (m === 1) return "Jan";
+  if (m === 2) return "Feb";
+  if (m === 3) return "Mar";
+  if (m === 4) return "Apr";
+  if (m === 5) return "May";
+  if (m === 6) return "Jun";
+  if (m === 7) return "Jul";
+  if (m === 8) return "Aug";
+  if (m === 9) return "Sep";
+  if (m === 10) return "Oct";
+  if (m === 11) return "Nov";
+  if (m === 12) return "Dec";
   return "???";
 };
 
@@ -63,7 +72,11 @@ style_set_text_align(dateStyle, 1);
 // Create label for the date
 let dateLabel = create_label(211, 132);
 obj_add_style(dateLabel, dateStyle, 0);
-label_set_text(dateLabel, "Loading...");
+
+// Set initial date
+let monthName = getMonthName(month);
+let dateStr = monthName + " " + numberToString(day) + ", " + numberToString(year);
+label_set_text(dateLabel, dateStr);
 
 // Create a style for time
 let timeStyle = create_style();
@@ -75,7 +88,6 @@ style_set_text_align(timeStyle, 1);
 // Create label for the time
 let timeLabel = create_label(210, 72);
 obj_add_style(timeLabel, timeStyle, 0);
-label_set_text(timeLabel, "--:--:--");
 
 // Load a gif from SD card
 show_gif_from_sd("/cat.gif", 0, 0);
@@ -88,13 +100,18 @@ let padZero = function(num) {
 };
 
 let update_clock = function() {
-  // Get time from device
-  let hour = get_hour();
-  let minute = get_minute();
-  let seconds = get_second();
-  let year = get_year();
-  let month = get_month();
-  let day = get_day();
+  seconds = seconds + 1;
+  if (seconds >= 60) {
+    seconds = 0;
+    minute = minute + 1;
+    if (minute >= 60) {
+      minute = 0;
+      hour = hour + 1;
+      if (hour >= 24) {
+        hour = 0;
+      }
+    }
+  }
 
   // Convert to 12-hour format
   let displayHour = hour;
@@ -115,26 +132,11 @@ let update_clock = function() {
   let s_str = padZero(seconds);
   let timeString = h_str + ":" + m_str + ":" + s_str + " " + ampm;
   label_set_text(timeLabel, timeString);
-
-  // Update date display
-  let monthName = getMonthName(month);
-  let dateStr = monthName + " " + numberToString(day) + ", " + numberToString(year);
-  label_set_text(dateLabel, dateStr);
 };
 
-// Wait for time to be valid (synced from browser or NTP)
-let waitForTime = function() {
-  if (time_valid()) {
-    print("Time synced successfully");
-    update_clock();
-    // Start the clock timer
-    create_timer("update_clock", 1000);
-    print("Clock with Cat ready!");
-  } else {
-    print("Waiting for time sync...");
-    label_set_text(dateLabel, "Syncing...");
-  }
-};
+// Initial display
+update_clock();
 
-// Check for time sync periodically until valid
-create_timer("waitForTime", 1000);
+// Start timer
+print("Clock with Cat ready!");
+create_timer("update_clock", 1000);
