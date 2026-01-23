@@ -148,6 +148,7 @@ print(message)              // Console output
 delay(milliseconds)         // Blocking delay
 toNumber(string)            // Convert string to number
 numberToString(number)      // Convert number to string
+mem_stats()                 // Print memory stats, returns free heap bytes
 
 // WiFi
 wifi_status()               // Check connection status (returns 1 or 0)
@@ -162,13 +163,17 @@ parse_json_value(json, key)  // Extract value from JSON
 
 // SD Card
 sd_list_dir(path)           // List directory contents
-show_gif_from_sd(path, x, y)  // Display GIF at position
+show_gif_from_sd(filepath)  // Display animated GIF from SD card
 
 // UI - Labels
 create_label(x, y)          // Create text label at position
 label_set_text(label, text) // Update label text
 obj_add_style(obj, style, selector)  // Apply style
 move_obj(obj, x, y)         // Move object to position
+
+// UI - Drawing
+draw_rect(x, y, w, h)       // Draw rectangle, returns handle
+draw_rect(x, y, w, h, color) // Draw colored rectangle (0xRRGGBB)
 
 // UI - Styling
 create_style()              // Create new style object
@@ -274,7 +279,7 @@ Use our web-based IDE for rapid development without SD card swapping:
 
 3. **File paths use forward slashes**
    ```javascript
-   show_gif_from_sd("/animation.gif", 0, 0);
+   show_gif_from_sd("/animation.gif");
    ```
 
 4. **Wait for WiFi before network operations**
