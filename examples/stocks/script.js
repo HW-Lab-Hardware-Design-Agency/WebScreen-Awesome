@@ -18,7 +18,6 @@ let stock4_symbol = "TSLA";
 let stock4_price = 24850;
 let stock4_change = -375;
 
-let COLOR_BG = 0x0d1117;
 let COLOR_CARD = 0x21262d;
 let COLOR_WHITE = 0xFFFFFF;
 let COLOR_BLUE = 0x58a6ff;
@@ -29,7 +28,6 @@ let COLOR_DIM = 0x484f58;
 let titleStyle = create_style();
 style_set_text_font(titleStyle, 20);
 style_set_text_color(titleStyle, COLOR_WHITE);
-style_set_text_align(titleStyle, 0);
 
 let marketStyle = create_style();
 style_set_text_font(marketStyle, 14);
@@ -39,12 +37,10 @@ style_set_text_align(marketStyle, 2);
 let symbolStyle = create_style();
 style_set_text_font(symbolStyle, 20);
 style_set_text_color(symbolStyle, COLOR_BLUE);
-style_set_text_align(symbolStyle, 0);
 
 let priceStyle = create_style();
 style_set_text_font(priceStyle, 28);
 style_set_text_color(priceStyle, COLOR_WHITE);
-style_set_text_align(priceStyle, 0);
 
 let changeStyle1 = create_style();
 style_set_text_font(changeStyle1, 14);
@@ -139,30 +135,13 @@ obj_add_style(change4, changeStyle4, 0);
 
 let updateLabel = create_label(15, 222);
 obj_add_style(updateLabel, updateStyle, 0);
-label_set_text(updateLabel, "Demo data - Configure API for live prices");
-
-let dollars = 0;
-let remaining = 0;
-let centStr = "";
-let sign = "+";
-let absCents = 0;
-let d = 0;
-let c = 0;
-let cStr = "";
-let priceStr1 = "";
-let priceStr2 = "";
-let priceStr3 = "";
-let priceStr4 = "";
-let changeStr1 = "";
-let changeStr2 = "";
-let changeStr3 = "";
-let changeStr4 = "";
+label_set_text(updateLabel, "Demo data");
 
 let formatPrice = function(cents) {
-    dollars = cents / 100;
+    let dollars = cents / 100;
     dollars = dollars - (dollars % 1);
-    remaining = cents % 100;
-    centStr = numberToString(remaining);
+    let remaining = cents % 100;
+    let centStr = numberToString(remaining);
     if (remaining < 10) {
         centStr = "0" + centStr;
     }
@@ -170,16 +149,16 @@ let formatPrice = function(cents) {
 };
 
 let formatChange = function(cents) {
-    sign = "+";
-    absCents = cents;
+    let sign = "+";
+    let absCents = cents;
     if (cents < 0) {
         sign = "-";
         absCents = 0 - cents;
     }
-    d = absCents / 100;
+    let d = absCents / 100;
     d = d - (d % 1);
-    c = absCents % 100;
-    cStr = numberToString(c);
+    let c = absCents % 100;
+    let cStr = numberToString(c);
     if (c < 10) {
         cStr = "0" + cStr;
     }

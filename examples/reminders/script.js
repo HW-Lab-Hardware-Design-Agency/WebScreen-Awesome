@@ -5,34 +5,28 @@ print("Starting Reminders...");
 let rem1_text = "Team standup meeting";
 let rem1_time = "09:00";
 let rem1_done = 0;
-let rem1_priority = 2;
 
 let rem2_text = "Review pull requests";
 let rem2_time = "10:30";
 let rem2_done = 0;
-let rem2_priority = 1;
 
 let rem3_text = "Lunch break";
 let rem3_time = "12:00";
 let rem3_done = 0;
-let rem3_priority = 0;
 
 let rem4_text = "Call with client";
 let rem4_time = "14:00";
 let rem4_done = 0;
-let rem4_priority = 2;
 
 let currentHour = 8;
 let currentMin = 45;
 let currentPage = 0;
 
-let COLOR_BG = 0xf0fdf4;
 let COLOR_HEADER = 0x16a34a;
 let COLOR_WHITE = 0xFFFFFF;
 let COLOR_CARD = 0xFFFFFF;
 let COLOR_TITLE = 0x1f2937;
 let COLOR_GREEN = 0x16a34a;
-let COLOR_YELLOW = 0xf59e0b;
 let COLOR_RED = 0xdc2626;
 let COLOR_GRAY = 0x6b7280;
 let COLOR_LIGHT_GREEN = 0xdcfce7;
@@ -70,10 +64,6 @@ style_set_radius(badgeStyle2, 6);
 let catStyle = create_style();
 style_set_text_font(catStyle, 14);
 style_set_text_color(catStyle, COLOR_GRAY);
-
-let checkStyle = create_style();
-style_set_text_font(checkStyle, 14);
-style_set_text_color(checkStyle, COLOR_GRAY);
 
 let headerBgStyle = create_style();
 style_set_bg_color(headerBgStyle, COLOR_HEADER);
@@ -121,7 +111,7 @@ obj_add_style(cat1, catStyle, 0);
 label_set_text(cat1, "WORK");
 
 let check1 = create_label(225, 70);
-obj_add_style(check1, checkStyle, 0);
+obj_add_style(check1, catStyle, 0);
 label_set_text(check1, "[ ]");
 
 let card2 = create_label(275, 60);
@@ -141,7 +131,7 @@ obj_add_style(cat2, catStyle, 0);
 label_set_text(cat2, "WORK");
 
 let check2 = create_label(485, 70);
-obj_add_style(check2, checkStyle, 0);
+obj_add_style(check2, catStyle, 0);
 label_set_text(check2, "[ ]");
 
 let pageStyle = create_style();
@@ -153,26 +143,21 @@ let pageLabel = create_label(268, 210);
 obj_add_style(pageLabel, pageStyle, 0);
 label_set_text(pageLabel, "1 / 2");
 
-let h = "";
-let m = "";
 let done = 0;
 let pending = 0;
 let currentTimeNum = 0;
-let clockStr = "";
-let statsStr = "";
-let pageStr = "";
+let simTimer = 0;
 
 let formatClock = function() {
-    h = numberToString(currentHour);
-    m = numberToString(currentMin);
+    let h = numberToString(currentHour);
+    let m = numberToString(currentMin);
     if (currentHour < 10) h = "0" + h;
     if (currentMin < 10) m = "0" + m;
     return h + ":" + m;
 };
 
 let updateDisplay = function() {
-    clockStr = formatClock();
-    label_set_text(clockLabel, clockStr);
+    label_set_text(clockLabel, formatClock());
 
     done = 0;
     if (rem1_done) done = done + 1;
@@ -180,8 +165,7 @@ let updateDisplay = function() {
     if (rem3_done) done = done + 1;
     if (rem4_done) done = done + 1;
     pending = 4 - done;
-    statsStr = numberToString(pending) + " pending | " + numberToString(done) + " done";
-    label_set_text(statsLabel, statsStr);
+    label_set_text(statsLabel, numberToString(pending) + " pending | " + numberToString(done) + " done");
 
     currentTimeNum = currentHour * 100 + currentMin;
 
@@ -243,11 +227,8 @@ let updateDisplay = function() {
         }
     }
 
-    pageStr = numberToString(currentPage + 1) + " / 2";
-    label_set_text(pageLabel, pageStr);
+    label_set_text(pageLabel, numberToString(currentPage + 1) + " / 2");
 };
-
-let simTimer = 0;
 
 let simulate_tick = function() {
     simTimer = simTimer + 1;
@@ -260,11 +241,11 @@ let simulate_tick = function() {
         }
     }
 
-    let currentTimeNum = currentHour * 100 + currentMin;
-    if (currentTimeNum > 900 && rem1_done === 0) rem1_done = 1;
-    if (currentTimeNum > 1030 && rem2_done === 0) rem2_done = 1;
-    if (currentTimeNum > 1200 && rem3_done === 0) rem3_done = 1;
-    if (currentTimeNum > 1400 && rem4_done === 0) rem4_done = 1;
+    let timeNum = currentHour * 100 + currentMin;
+    if (timeNum > 900 && rem1_done === 0) rem1_done = 1;
+    if (timeNum > 1030 && rem2_done === 0) rem2_done = 1;
+    if (timeNum > 1200 && rem3_done === 0) rem3_done = 1;
+    if (timeNum > 1400 && rem4_done === 0) rem4_done = 1;
 
     if (simTimer % 8 === 0) {
         currentPage = 1 - currentPage;
