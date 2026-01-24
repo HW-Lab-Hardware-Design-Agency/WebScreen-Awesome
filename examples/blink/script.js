@@ -2,6 +2,5 @@
 
 print("Starting JavaScript execution...");
 
-// Simple GIF display - show_gif_from_sd(filepath)
-// Note: GIF is displayed at screen origin
-show_gif_from_sd("/blink.gif");
+// Simple GIF display - show_gif_from_sd(filepath, x, y)
+show_gif_from_sd("/blink.gif", 0, 0);

@@ -163,7 +163,7 @@ parse_json_value(json, key)  // Extract value from JSON
 
 // SD Card
 sd_list_dir(path)           // List directory contents
-show_gif_from_sd(filepath)  // Display animated GIF from SD card
+show_gif_from_sd(filepath, x, y)  // Display animated GIF from SD card at position
 
 // UI - Labels
 create_label(x, y)          // Create text label at position
@@ -279,7 +279,7 @@ Use our web-based IDE for rapid development without SD card swapping:
 
 3. **File paths use forward slashes**
    ```javascript
-   show_gif_from_sd("/animation.gif");
+   show_gif_from_sd("/animation.gif", 0, 0);
    ```
 
 4. **Wait for WiFi before network operations**

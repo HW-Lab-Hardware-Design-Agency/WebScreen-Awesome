@@ -90,7 +90,7 @@ let timeLabel = create_label(210, 72);
 obj_add_style(timeLabel, timeStyle, 0);
 
 // Load a gif from SD card
-show_gif_from_sd("/cat.gif");
+show_gif_from_sd("/cat.gif", 0, 0);
 
 // Pre-allocated variables for timer callback (reduces memory churn)
 let displayHour = 0;
