@@ -2,259 +2,100 @@
 
 print("Starting Reminders...");
 
-let rem1_text = "Team standup meeting";
-let rem1_time = "09:00";
-let rem1_done = 0;
+let rem1 = "09:00 Team standup";
+let rem2 = "10:30 Review PRs";
+let rem3 = "12:00 Lunch break";
+let rem4 = "14:00 Client call";
 
-let rem2_text = "Review pull requests";
-let rem2_time = "10:30";
-let rem2_done = 0;
+let done1 = 0;
+let done2 = 0;
+let done3 = 0;
+let done4 = 0;
 
-let rem3_text = "Lunch break";
-let rem3_time = "12:00";
-let rem3_done = 0;
+let hour = 8;
+let minute = 45;
 
-let rem4_text = "Call with client";
-let rem4_time = "14:00";
-let rem4_done = 0;
+let titleStyle = create_style();
+style_set_text_font(titleStyle, 20);
+style_set_text_color(titleStyle, 0x16a34a);
 
-let currentHour = 8;
-let currentMin = 45;
-let currentPage = 0;
-
-let COLOR_HEADER = 0x16a34a;
-let COLOR_WHITE = 0xFFFFFF;
-let COLOR_CARD = 0xFFFFFF;
-let COLOR_TITLE = 0x1f2937;
-let COLOR_GREEN = 0x16a34a;
-let COLOR_RED = 0xdc2626;
-let COLOR_GRAY = 0x6b7280;
-let COLOR_LIGHT_GREEN = 0xdcfce7;
-
-let headerStyle = create_style();
-style_set_text_font(headerStyle, 20);
-style_set_text_color(headerStyle, COLOR_WHITE);
+let itemStyle = create_style();
+style_set_text_font(itemStyle, 20);
+style_set_text_color(itemStyle, 0xFFFFFF);
 
 let timeStyle = create_style();
 style_set_text_font(timeStyle, 14);
-style_set_text_color(timeStyle, COLOR_WHITE);
+style_set_text_color(timeStyle, 0x888888);
 
-let statsStyle = create_style();
-style_set_text_font(statsStyle, 14);
-style_set_text_color(statsStyle, COLOR_LIGHT_GREEN);
+let title = create_label(30, 15);
+obj_add_style(title, titleStyle, 0);
+label_set_text(title, "REMINDERS");
 
-let textStyle = create_style();
-style_set_text_font(textStyle, 14);
-style_set_text_color(textStyle, COLOR_TITLE);
+let clock = create_label(430, 15);
+obj_add_style(clock, timeStyle, 0);
+label_set_text(clock, "08:45");
 
-let badgeStyle1 = create_style();
-style_set_text_font(badgeStyle1, 14);
-style_set_text_color(badgeStyle1, COLOR_WHITE);
-style_set_bg_color(badgeStyle1, COLOR_GREEN);
-style_set_bg_opa(badgeStyle1, 255);
-style_set_radius(badgeStyle1, 6);
+let line1 = create_label(30, 50);
+obj_add_style(line1, itemStyle, 0);
+label_set_text(line1, "[ ] " + rem1);
 
-let badgeStyle2 = create_style();
-style_set_text_font(badgeStyle2, 14);
-style_set_text_color(badgeStyle2, COLOR_WHITE);
-style_set_bg_color(badgeStyle2, COLOR_GREEN);
-style_set_bg_opa(badgeStyle2, 255);
-style_set_radius(badgeStyle2, 6);
+let line2 = create_label(30, 85);
+obj_add_style(line2, itemStyle, 0);
+label_set_text(line2, "[ ] " + rem2);
 
-let catStyle = create_style();
-style_set_text_font(catStyle, 14);
-style_set_text_color(catStyle, COLOR_GRAY);
+let line3 = create_label(30, 120);
+obj_add_style(line3, itemStyle, 0);
+label_set_text(line3, "[ ] " + rem3);
 
-let headerBgStyle = create_style();
-style_set_bg_color(headerBgStyle, COLOR_HEADER);
-style_set_bg_opa(headerBgStyle, 255);
-style_set_width(headerBgStyle, 536);
-style_set_height(headerBgStyle, 50);
+let line4 = create_label(30, 155);
+obj_add_style(line4, itemStyle, 0);
+label_set_text(line4, "[ ] " + rem4);
 
-let cardStyle = create_style();
-style_set_bg_color(cardStyle, COLOR_CARD);
-style_set_bg_opa(cardStyle, 255);
-style_set_radius(cardStyle, 10);
-style_set_width(cardStyle, 250);
-style_set_height(cardStyle, 130);
+let status = create_label(30, 200);
+obj_add_style(status, timeStyle, 0);
+label_set_text(status, "4 pending");
 
-let headerBg = create_label(0, 0);
-obj_add_style(headerBg, headerBgStyle, 0);
-label_set_text(headerBg, "");
-
-let headerLabel = create_label(15, 12);
-obj_add_style(headerLabel, headerStyle, 0);
-label_set_text(headerLabel, "REMINDERS");
-
-let clockLabel = create_label(420, 12);
-obj_add_style(clockLabel, timeStyle, 0);
-label_set_text(clockLabel, "08:45");
-
-let statsLabel = create_label(15, 32);
-obj_add_style(statsLabel, statsStyle, 0);
-label_set_text(statsLabel, "4 pending | 0 done");
-
-let card1 = create_label(15, 60);
-obj_add_style(card1, cardStyle, 0);
-label_set_text(card1, "");
-
-let badge1 = create_label(25, 70);
-obj_add_style(badge1, badgeStyle1, 0);
-label_set_text(badge1, " 09:00 ");
-
-let text1 = create_label(25, 95);
-obj_add_style(text1, textStyle, 0);
-label_set_text(text1, rem1_text);
-
-let cat1 = create_label(25, 125);
-obj_add_style(cat1, catStyle, 0);
-label_set_text(cat1, "WORK");
-
-let check1 = create_label(225, 70);
-obj_add_style(check1, catStyle, 0);
-label_set_text(check1, "[ ]");
-
-let card2 = create_label(275, 60);
-obj_add_style(card2, cardStyle, 0);
-label_set_text(card2, "");
-
-let badge2 = create_label(285, 70);
-obj_add_style(badge2, badgeStyle2, 0);
-label_set_text(badge2, " 10:30 ");
-
-let text2 = create_label(285, 95);
-obj_add_style(text2, textStyle, 0);
-label_set_text(text2, rem2_text);
-
-let cat2 = create_label(285, 125);
-obj_add_style(cat2, catStyle, 0);
-label_set_text(cat2, "WORK");
-
-let check2 = create_label(485, 70);
-obj_add_style(check2, catStyle, 0);
-label_set_text(check2, "[ ]");
-
-let pageStyle = create_style();
-style_set_text_font(pageStyle, 14);
-style_set_text_color(pageStyle, COLOR_GRAY);
-style_set_text_align(pageStyle, 1);
-
-let pageLabel = create_label(268, 210);
-obj_add_style(pageLabel, pageStyle, 0);
-label_set_text(pageLabel, "1 / 2");
-
-let done = 0;
-let pending = 0;
-let currentTimeNum = 0;
-let simTimer = 0;
-
-let formatClock = function() {
-    let h = numberToString(currentHour);
-    let m = numberToString(currentMin);
-    if (currentHour < 10) h = "0" + h;
-    if (currentMin < 10) m = "0" + m;
-    return h + ":" + m;
+let padZero = function(n) {
+    if (n < 10) return "0" + numberToString(n);
+    return numberToString(n);
 };
 
-let updateDisplay = function() {
-    label_set_text(clockLabel, formatClock());
+let tick = 0;
 
-    done = 0;
-    if (rem1_done) done = done + 1;
-    if (rem2_done) done = done + 1;
-    if (rem3_done) done = done + 1;
-    if (rem4_done) done = done + 1;
-    pending = 4 - done;
-    label_set_text(statsLabel, numberToString(pending) + " pending | " + numberToString(done) + " done");
+let update_tick = function() {
+    tick = tick + 1;
 
-    currentTimeNum = currentHour * 100 + currentMin;
-
-    if (currentPage === 0) {
-        label_set_text(badge1, " " + rem1_time + " ");
-        label_set_text(text1, rem1_text);
-        label_set_text(cat1, "WORK");
-        if (rem1_done) {
-            label_set_text(check1, "[X]");
-        } else {
-            label_set_text(check1, "[ ]");
-        }
-        if (currentTimeNum >= 900 && rem1_done === 0) {
-            style_set_bg_color(badgeStyle1, COLOR_RED);
-        } else {
-            style_set_bg_color(badgeStyle1, COLOR_GREEN);
-        }
-
-        label_set_text(badge2, " " + rem2_time + " ");
-        label_set_text(text2, rem2_text);
-        label_set_text(cat2, "WORK");
-        if (rem2_done) {
-            label_set_text(check2, "[X]");
-        } else {
-            label_set_text(check2, "[ ]");
-        }
-        if (currentTimeNum >= 1030 && rem2_done === 0) {
-            style_set_bg_color(badgeStyle2, COLOR_RED);
-        } else {
-            style_set_bg_color(badgeStyle2, COLOR_GREEN);
-        }
-    } else {
-        label_set_text(badge1, " " + rem3_time + " ");
-        label_set_text(text1, rem3_text);
-        label_set_text(cat1, "LIFE");
-        if (rem3_done) {
-            label_set_text(check1, "[X]");
-        } else {
-            label_set_text(check1, "[ ]");
-        }
-        if (currentTimeNum >= 1200 && rem3_done === 0) {
-            style_set_bg_color(badgeStyle1, COLOR_RED);
-        } else {
-            style_set_bg_color(badgeStyle1, COLOR_GREEN);
-        }
-
-        label_set_text(badge2, " " + rem4_time + " ");
-        label_set_text(text2, rem4_text);
-        label_set_text(cat2, "WORK");
-        if (rem4_done) {
-            label_set_text(check2, "[X]");
-        } else {
-            label_set_text(check2, "[ ]");
-        }
-        if (currentTimeNum >= 1400 && rem4_done === 0) {
-            style_set_bg_color(badgeStyle2, COLOR_RED);
-        } else {
-            style_set_bg_color(badgeStyle2, COLOR_GREEN);
+    if (tick % 5 === 0) {
+        minute = minute + 15;
+        if (minute >= 60) {
+            minute = minute - 60;
+            hour = hour + 1;
         }
     }
 
-    label_set_text(pageLabel, numberToString(currentPage + 1) + " / 2");
-};
+    label_set_text(clock, padZero(hour) + ":" + padZero(minute));
 
-let simulate_tick = function() {
-    simTimer = simTimer + 1;
-
-    if (simTimer % 5 === 0) {
-        currentMin = currentMin + 15;
-        if (currentMin >= 60) {
-            currentMin = currentMin - 60;
-            currentHour = currentHour + 1;
-        }
+    let t = hour * 100 + minute;
+    if (t > 900 && done1 === 0) {
+        done1 = 1;
+        label_set_text(line1, "[X] " + rem1);
+    }
+    if (t > 1030 && done2 === 0) {
+        done2 = 1;
+        label_set_text(line2, "[X] " + rem2);
+    }
+    if (t > 1200 && done3 === 0) {
+        done3 = 1;
+        label_set_text(line3, "[X] " + rem3);
+    }
+    if (t > 1400 && done4 === 0) {
+        done4 = 1;
+        label_set_text(line4, "[X] " + rem4);
     }
 
-    let timeNum = currentHour * 100 + currentMin;
-    if (timeNum > 900 && rem1_done === 0) rem1_done = 1;
-    if (timeNum > 1030 && rem2_done === 0) rem2_done = 1;
-    if (timeNum > 1200 && rem3_done === 0) rem3_done = 1;
-    if (timeNum > 1400 && rem4_done === 0) rem4_done = 1;
-
-    if (simTimer % 8 === 0) {
-        currentPage = 1 - currentPage;
-    }
-
-    updateDisplay();
+    let pending = 4 - done1 - done2 - done3 - done4;
+    label_set_text(status, numberToString(pending) + " pending");
 };
 
-updateDisplay();
 print("Reminders ready!");
-
-create_timer("simulate_tick", 1000);
+create_timer("update_tick", 1000);
