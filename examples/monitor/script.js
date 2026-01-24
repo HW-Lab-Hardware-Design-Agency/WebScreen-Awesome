@@ -136,6 +136,13 @@ if (sdOk) {
 // Uptime tracking
 let uptimeSeconds = 0;
 
+// Pre-allocated variables for timer callbacks (reduces memory churn)
+let hours = 0;
+let mins = 0;
+let secs = 0;
+let uptimeStr = "";
+let ipStr = "";
+
 let padZero = function(num) {
   if (num < 10) {
     return "0" + numberToString(num);
@@ -143,9 +150,10 @@ let padZero = function(num) {
   return numberToString(num);
 };
 
-let formatUptime = function(secs) {
-  let hours = 0;
-  let mins = 0;
+let formatUptime = function(s) {
+  hours = 0;
+  mins = 0;
+  secs = s;
 
   if (secs >= 3600) {
     hours = secs / 3600;
@@ -172,13 +180,15 @@ let update_stats = function() {
   uptimeSeconds++;
 
   // Update uptime display
-  label_set_text(uptimeLabel, formatUptime(uptimeSeconds));
+  uptimeStr = formatUptime(uptimeSeconds);
+  label_set_text(uptimeLabel, uptimeStr);
 
   // Update WiFi status
   if (wifi_status()) {
     obj_add_style(wifiStatusLabel, statusOnStyle, 0);
     label_set_text(wifiStatusLabel, "Connected");
-    label_set_text(ipLabel, wifi_get_ip());
+    ipStr = wifi_get_ip();
+    label_set_text(ipLabel, ipStr);
   } else {
     obj_add_style(wifiStatusLabel, statusOffStyle, 0);
     label_set_text(wifiStatusLabel, "Disconnected");

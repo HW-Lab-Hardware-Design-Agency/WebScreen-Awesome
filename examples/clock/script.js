@@ -153,7 +153,13 @@ if (month === 12) monthName = "Dec";
 label_set_text(dateLabel, monthName + " " + numberToString(day) + ", " + numberToString(year));
 label_set_text(dayLabel, dayName);
 
-// Helper function
+// Pre-allocate variables to reduce memory churn in timer callback
+let displayHour = 0;
+let ampm = "AM";
+let timeStr = "";
+let secStr = "";
+
+// Helper function - returns padded string
 let padZero = function(num) {
   if (num < 10) {
     return "0" + numberToString(num);
@@ -161,7 +167,7 @@ let padZero = function(num) {
   return numberToString(num);
 };
 
-// Simple timer callback - just increment and display
+// Timer callback - optimized to minimize string allocations
 let update_clock = function() {
   seconds = seconds + 1;
   if (seconds >= 60) {
@@ -176,8 +182,8 @@ let update_clock = function() {
     }
   }
 
-  let displayHour = hour;
-  let ampm = "AM";
+  displayHour = hour;
+  ampm = "AM";
 
   if (hour === 0) {
     displayHour = 12;
@@ -188,8 +194,12 @@ let update_clock = function() {
     ampm = "PM";
   }
 
-  label_set_text(timeLabel, padZero(displayHour) + ":" + padZero(minute));
-  label_set_text(secondsLabel, padZero(seconds));
+  // Build strings and update labels
+  timeStr = padZero(displayHour) + ":" + padZero(minute);
+  secStr = padZero(seconds);
+
+  label_set_text(timeLabel, timeStr);
+  label_set_text(secondsLabel, secStr);
   label_set_text(ampmLabel, ampm);
 };
 

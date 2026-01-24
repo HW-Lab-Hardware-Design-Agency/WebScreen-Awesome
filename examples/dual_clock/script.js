@@ -137,6 +137,15 @@ let statusLabel = create_label(233, 170);
 obj_add_style(statusLabel, statusStyle, 0);
 label_set_text(statusLabel, "Syncing...");
 
+// Pre-allocated variables for timer callbacks (reduces memory churn)
+let displayHour = 0;
+let ampm = "AM";
+let timeStr1 = "";
+let timeStr2 = "";
+let dateStr1 = "";
+let dateStr2 = "";
+let monthName = "";
+
 // Helper function to pad numbers
 let padZero = function(num) {
   if (num < 10) {
@@ -147,8 +156,8 @@ let padZero = function(num) {
 
 // Format time in 12-hour format
 let formatTime = function(h, m, s) {
-  let displayHour = h;
-  let ampm = "AM";
+  displayHour = h;
+  ampm = "AM";
 
   if (h === 0) {
     displayHour = 12;
@@ -164,7 +173,7 @@ let formatTime = function(h, m, s) {
 
 // Format date as "Mon DD, YYYY"
 let formatDate = function(y, m, d) {
-  let monthName = getMonthName(m);
+  monthName = getMonthName(m);
   return monthName + " " + numberToString(d) + ", " + numberToString(y);
 };
 
@@ -213,10 +222,15 @@ let fetchTime = function(tz, zoneNum) {
 
 // Update display
 let updateDisplay = function() {
-  label_set_text(time1Label, formatTime(hour1, minute1, seconds1));
-  label_set_text(date1Label, formatDate(year1, month1, day1));
-  label_set_text(time2Label, formatTime(hour2, minute2, seconds2));
-  label_set_text(date2Label, formatDate(year2, month2, day2));
+  timeStr1 = formatTime(hour1, minute1, seconds1);
+  dateStr1 = formatDate(year1, month1, day1);
+  timeStr2 = formatTime(hour2, minute2, seconds2);
+  dateStr2 = formatDate(year2, month2, day2);
+
+  label_set_text(time1Label, timeStr1);
+  label_set_text(date1Label, dateStr1);
+  label_set_text(time2Label, timeStr2);
+  label_set_text(date2Label, dateStr2);
 };
 
 // Update clock - increment time locally

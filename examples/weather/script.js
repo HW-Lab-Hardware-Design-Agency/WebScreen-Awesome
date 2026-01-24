@@ -121,13 +121,15 @@ let fetch_weather = function() {
 
 // Update counter for "last updated" display
 let updateMinutes = 0;
+let updateStr = "";  // Pre-allocated for timer callback
 
 let update_time_display = function() {
   updateMinutes++;
   if (updateMinutes === 1) {
     label_set_text(updateLabel, "Updated 1 min ago");
   } else {
-    label_set_text(updateLabel, "Updated " + numberToString(updateMinutes) + " mins ago");
+    updateStr = "Updated " + numberToString(updateMinutes) + " mins ago";
+    label_set_text(updateLabel, updateStr);
   }
 };
 

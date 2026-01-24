@@ -161,10 +161,20 @@ let pageLabel = create_label(268, 210);
 obj_add_style(pageLabel, pageStyle, 0);
 label_set_text(pageLabel, "1 / 2");
 
+// Pre-allocated variables for timer callbacks (reduces memory churn)
+let h = "";
+let m = "";
+let done = 0;
+let pending = 0;
+let currentTimeNum = 0;
+let clockStr = "";
+let statsStr = "";
+let pageStr = "";
+
 // Format time
 let formatClock = function() {
-    let h = numberToString(currentHour);
-    let m = numberToString(currentMin);
+    h = numberToString(currentHour);
+    m = numberToString(currentMin);
     if (currentHour < 10) h = "0" + h;
     if (currentMin < 10) m = "0" + m;
     return h + ":" + m;
@@ -172,17 +182,19 @@ let formatClock = function() {
 
 // Update display based on current page
 let updateDisplay = function() {
-    label_set_text(clockLabel, formatClock());
+    clockStr = formatClock();
+    label_set_text(clockLabel, clockStr);
 
-    let done = 0;
+    done = 0;
     if (rem1_done) done = done + 1;
     if (rem2_done) done = done + 1;
     if (rem3_done) done = done + 1;
     if (rem4_done) done = done + 1;
-    let pending = 4 - done;
-    label_set_text(statsLabel, numberToString(pending) + " pending | " + numberToString(done) + " done");
+    pending = 4 - done;
+    statsStr = numberToString(pending) + " pending | " + numberToString(done) + " done";
+    label_set_text(statsLabel, statsStr);
 
-    let currentTimeNum = currentHour * 100 + currentMin;
+    currentTimeNum = currentHour * 100 + currentMin;
 
     if (currentPage === 0) {
         // Show reminders 1 and 2
@@ -244,7 +256,8 @@ let updateDisplay = function() {
         }
     }
 
-    label_set_text(pageLabel, numberToString(currentPage + 1) + " / 2");
+    pageStr = numberToString(currentPage + 1) + " / 2";
+    label_set_text(pageLabel, pageStr);
 };
 
 // Simulate time passing

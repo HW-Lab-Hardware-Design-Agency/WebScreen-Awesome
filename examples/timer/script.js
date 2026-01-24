@@ -118,6 +118,14 @@ let lapButton = create_label(358, 200);
 obj_add_style(lapButton, buttonStyle, 0);
 label_set_text(lapButton, "Lap");
 
+// Pre-allocated variables for timer callbacks (reduces memory churn)
+let totalSecs = 0;
+let mins = 0;
+let secs = 0;
+let centis = 0;
+let timeStr = "";
+let msStr = "";
+
 // Helper functions
 let padZero = function(num) {
   if (num < 10) {
@@ -127,52 +135,45 @@ let padZero = function(num) {
 };
 
 let formatStopwatch = function(cs) {
-  let totalSecs = cs / 100;
+  totalSecs = cs / 100;
   totalSecs = totalSecs - (totalSecs % 1);
-
-  let mins = totalSecs / 60;
+  mins = totalSecs / 60;
   mins = mins - (mins % 1);
-
-  let secs = totalSecs - (mins * 60);
-
-  let centis = cs % 100;
-
+  secs = totalSecs - (mins * 60);
+  centis = cs % 100;
   return padZero(mins) + ":" + padZero(secs) + "." + padZero(centis);
 };
 
-let formatTimer = function(secs) {
-  let mins = secs / 60;
+let formatTimer = function(s) {
+  mins = s / 60;
   mins = mins - (mins % 1);
-
-  let s = secs - (mins * 60);
-
-  return padZero(mins) + ":" + padZero(s);
+  secs = s - (mins * 60);
+  return padZero(mins) + ":" + padZero(secs);
 };
 
 // Update stopwatch display
 let updateStopwatchDisplay = function() {
-  let totalSecs = stopwatchTime / 100;
+  totalSecs = stopwatchTime / 100;
   totalSecs = totalSecs - (totalSecs % 1);
-
-  let mins = totalSecs / 60;
+  mins = totalSecs / 60;
   mins = mins - (mins % 1);
+  secs = totalSecs - (mins * 60);
+  centis = stopwatchTime % 100;
 
-  let secs = totalSecs - (mins * 60);
-
-  let centis = stopwatchTime % 100;
-
-  label_set_text(timeLabel, padZero(mins) + ":" + padZero(secs));
-  label_set_text(msLabel, "." + padZero(centis));
+  timeStr = padZero(mins) + ":" + padZero(secs);
+  msStr = "." + padZero(centis);
+  label_set_text(timeLabel, timeStr);
+  label_set_text(msLabel, msStr);
 };
 
 // Update timer display
 let updateTimerDisplay = function() {
-  let mins = timerRemaining / 60;
+  mins = timerRemaining / 60;
   mins = mins - (mins % 1);
+  secs = timerRemaining - (mins * 60);
 
-  let secs = timerRemaining - (mins * 60);
-
-  label_set_text(timeLabel, padZero(mins) + ":" + padZero(secs));
+  timeStr = padZero(mins) + ":" + padZero(secs);
+  label_set_text(timeLabel, timeStr);
   label_set_text(msLabel, "");
 
   if (timerRemaining <= 0 && timerFinished === 0) {

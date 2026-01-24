@@ -147,6 +147,19 @@ let focusLabel = create_label(230, 180);
 obj_add_style(focusLabel, statsStyle, 0);
 label_set_text(focusLabel, "Focus: 0 min");
 
+// Pre-allocated variables for timer callbacks (reduces memory churn)
+let mins = 0;
+let secs = 0;
+let totalTime = 0;
+let elapsed = 0;
+let progress = 0;
+let totalMins = 0;
+let mod = 0;
+let timeStr = "";
+let pStr = "";
+let sStr = "";
+let fStr = "";
+
 // Helper: pad number with zero
 let padZero = function(num) {
     if (num < 10) {
@@ -157,9 +170,9 @@ let padZero = function(num) {
 
 // Format time as MM:SS
 let formatTime = function(seconds) {
-    let mins = seconds / 60;
+    mins = seconds / 60;
     mins = mins - (mins % 1);
-    let secs = seconds % 60;
+    secs = seconds % 60;
     return padZero(mins) + ":" + padZero(secs);
 };
 
@@ -194,7 +207,8 @@ let updateDots = function() {
 
 // Update display
 let updateDisplay = function() {
-    label_set_text(timerLabel, formatTime(timeRemaining));
+    timeStr = formatTime(timeRemaining);
+    label_set_text(timerLabel, timeStr);
 
     // Session type styling (circle stays red, text indicates mode)
     if (isWorkSession) {
@@ -206,19 +220,19 @@ let updateDisplay = function() {
     }
 
     // Progress percentage
-    let totalTime = WORK_TIME;
+    totalTime = WORK_TIME;
     if (isWorkSession === 0) {
-        let mod = completedSessions % LONG_CYCLE;
+        mod = completedSessions % LONG_CYCLE;
         if (mod === 0) {
             totalTime = LONG_BREAK;
         } else {
             totalTime = SHORT_BREAK;
         }
     }
-    let elapsed = totalTime - timeRemaining;
-    let progress = (elapsed * 100) / totalTime;
+    elapsed = totalTime - timeRemaining;
+    progress = (elapsed * 100) / totalTime;
     progress = progress - (progress % 1);
-    let pStr = numberToString(progress) + "%";
+    pStr = numberToString(progress) + "%";
     label_set_text(progressLabel, pStr);
 
     // Status text
@@ -236,12 +250,11 @@ let updateDisplay = function() {
     updateDots();
 
     // Stats
-    let totalMins = totalWorkTime / 60;
+    totalMins = totalWorkTime / 60;
     totalMins = totalMins - (totalMins % 1);
-    let n = numberToString(completedSessions);
-    let sStr = "Sessions: " + n;
+    sStr = "Sessions: " + numberToString(completedSessions);
     label_set_text(statsLabel, sStr);
-    let fStr = "Focus: " + numberToString(totalMins) + " min";
+    fStr = "Focus: " + numberToString(totalMins) + " min";
     label_set_text(focusLabel, fStr);
 };
 

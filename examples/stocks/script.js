@@ -149,12 +149,30 @@ let updateLabel = create_label(15, 222);
 obj_add_style(updateLabel, updateStyle, 0);
 label_set_text(updateLabel, "Demo data - Configure API for live prices");
 
+// Pre-allocated variables for timer callbacks (reduces memory churn)
+let dollars = 0;
+let remaining = 0;
+let centStr = "";
+let sign = "+";
+let absCents = 0;
+let d = 0;
+let c = 0;
+let cStr = "";
+let priceStr1 = "";
+let priceStr2 = "";
+let priceStr3 = "";
+let priceStr4 = "";
+let changeStr1 = "";
+let changeStr2 = "";
+let changeStr3 = "";
+let changeStr4 = "";
+
 // Format price from cents
 let formatPrice = function(cents) {
-    let dollars = cents / 100;
+    dollars = cents / 100;
     dollars = dollars - (dollars % 1);
-    let remaining = cents % 100;
-    let centStr = numberToString(remaining);
+    remaining = cents % 100;
+    centStr = numberToString(remaining);
     if (remaining < 10) {
         centStr = "0" + centStr;
     }
@@ -163,16 +181,16 @@ let formatPrice = function(cents) {
 
 // Format change
 let formatChange = function(cents) {
-    let sign = "+";
-    let absCents = cents;
+    sign = "+";
+    absCents = cents;
     if (cents < 0) {
         sign = "-";
         absCents = 0 - cents;
     }
-    let d = absCents / 100;
+    d = absCents / 100;
     d = d - (d % 1);
-    let c = absCents % 100;
-    let cStr = numberToString(c);
+    c = absCents % 100;
+    cStr = numberToString(c);
     if (c < 10) {
         cStr = "0" + cStr;
     }

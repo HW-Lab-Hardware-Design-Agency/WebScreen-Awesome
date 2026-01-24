@@ -90,7 +90,15 @@ let timeLabel = create_label(210, 72);
 obj_add_style(timeLabel, timeStyle, 0);
 
 // Load a gif from SD card
-show_gif_from_sd("/cat.gif", 0, 0);
+show_gif_from_sd("/cat.gif");
+
+// Pre-allocated variables for timer callback (reduces memory churn)
+let displayHour = 0;
+let ampm = "AM";
+let h_str = "";
+let m_str = "";
+let s_str = "";
+let timeString = "";
 
 let padZero = function(num) {
   if (num < 10) {
@@ -114,8 +122,8 @@ let update_clock = function() {
   }
 
   // Convert to 12-hour format
-  let displayHour = hour;
-  let ampm = "AM";
+  displayHour = hour;
+  ampm = "AM";
 
   if (hour === 0) {
     displayHour = 12;
@@ -127,10 +135,10 @@ let update_clock = function() {
   }
 
   // Update time display
-  let h_str = padZero(displayHour);
-  let m_str = padZero(minute);
-  let s_str = padZero(seconds);
-  let timeString = h_str + ":" + m_str + ":" + s_str + " " + ampm;
+  h_str = padZero(displayHour);
+  m_str = padZero(minute);
+  s_str = padZero(seconds);
+  timeString = h_str + ":" + m_str + ":" + s_str + " " + ampm;
   label_set_text(timeLabel, timeString);
 };
 
