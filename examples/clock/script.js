@@ -2,7 +2,6 @@
 
 print("Starting Digital Clock...");
 
-// Wait for WiFi connection
 for (;;) {
   if (wifi_status()) break;
   delay(500);
@@ -10,7 +9,6 @@ for (;;) {
 }
 print("Connected! IP: " + wifi_get_ip());
 
-// Read config
 let timezone = "America/New_York";
 let theme = 0;
 let config = sd_read_file("/webscreen.json");
@@ -28,32 +26,25 @@ if (config) {
 }
 print("Timezone: " + timezone);
 
-// Fetch time from worldtimeapi.org (use HTTP - their HTTPS is broken)
 let url = "http://worldtimeapi.org/api/timezone/" + timezone;
 print("Fetching: " + url);
 let jsonResponse = http_get(url);
 if (jsonResponse === "") {
   print("HTTP GET failed! Showing error.");
-  // Create error label and stop
   let errStyle = create_style();
   style_set_text_font(errStyle, 24);
   style_set_text_color(errStyle, 0xFF0000);
   let errLabel = create_label(150, 100);
   obj_add_style(errLabel, errStyle, 0);
   label_set_text(errLabel, "Failed to fetch time");
-  // Stop execution - don't create timer
   for (;;) {
     delay(10000);
   }
 }
 
-// Parse response - datetime format: "2024-01-15T10:30:45.123456+00:00"
 let datetime = parse_json_value(jsonResponse, "datetime");
 let dayOfWeek = toNumber(parse_json_value(jsonResponse, "day_of_week"));
 
-// Extract time from datetime string (format: YYYY-MM-DDTHH:MM:SS...)
-// Position: 0123456789012345678
-//           2024-01-15T10:30:45
 let year = toNumber(str_substring(datetime, 0, 4));
 let month = toNumber(str_substring(datetime, 5, 2));
 let day = toNumber(str_substring(datetime, 8, 2));
@@ -63,7 +54,6 @@ let seconds = toNumber(str_substring(datetime, 17, 2));
 
 print("Time: " + numberToString(hour) + ":" + numberToString(minute) + ":" + numberToString(seconds));
 
-// Theme colors
 let timeColor = 0xFFFFFF;
 let dateColor = 0x888888;
 let accentColor = 0x00BFFF;
@@ -82,7 +72,6 @@ if (theme === 1) {
   accentColor = 0x88FF88;
 }
 
-// Create styles
 let timeStyle = create_style();
 style_set_text_font(timeStyle, 48);
 style_set_text_color(timeStyle, timeColor);
@@ -108,7 +97,6 @@ style_set_text_font(dayStyle, 20);
 style_set_text_color(dayStyle, accentColor);
 style_set_text_align(dayStyle, 1);
 
-// Create labels
 let timeLabel = create_label(220, 80);
 obj_add_style(timeLabel, timeStyle, 0);
 
@@ -124,7 +112,6 @@ obj_add_style(dateLabel, dateStyle, 0);
 let dayLabel = create_label(268, 205);
 obj_add_style(dayLabel, dayStyle, 0);
 
-// Day name (worldtimeapi: 1=Monday, 7=Sunday)
 let dayName = "???";
 if (dayOfWeek === 1) dayName = "Mon";
 if (dayOfWeek === 2) dayName = "Tue";
@@ -134,7 +121,6 @@ if (dayOfWeek === 5) dayName = "Fri";
 if (dayOfWeek === 6) dayName = "Sat";
 if (dayOfWeek === 7) dayName = "Sun";
 
-// Month name
 let monthName = "???";
 if (month === 1) monthName = "Jan";
 if (month === 2) monthName = "Feb";
@@ -149,17 +135,14 @@ if (month === 10) monthName = "Oct";
 if (month === 11) monthName = "Nov";
 if (month === 12) monthName = "Dec";
 
-// Set date labels
 label_set_text(dateLabel, monthName + " " + numberToString(day) + ", " + numberToString(year));
 label_set_text(dayLabel, dayName);
 
-// Pre-allocate variables to reduce memory churn in timer callback
 let displayHour = 0;
 let ampm = "AM";
 let timeStr = "";
 let secStr = "";
 
-// Helper function - returns padded string
 let padZero = function(num) {
   if (num < 10) {
     return "0" + numberToString(num);
@@ -167,7 +150,6 @@ let padZero = function(num) {
   return numberToString(num);
 };
 
-// Timer callback - optimized to minimize string allocations
 let update_clock = function() {
   seconds = seconds + 1;
   if (seconds >= 60) {
@@ -194,7 +176,6 @@ let update_clock = function() {
     ampm = "PM";
   }
 
-  // Build strings and update labels
   timeStr = padZero(displayHour) + ":" + padZero(minute);
   secStr = padZero(seconds);
 
@@ -203,9 +184,7 @@ let update_clock = function() {
   label_set_text(ampmLabel, ampm);
 };
 
-// Initial display
 update_clock();
 
-// Start timer
 print("Clock ready!");
 create_timer("update_clock", 1000);

@@ -2,20 +2,17 @@
 
 print("Starting Pomodoro Timer...");
 
-// Timer configuration (in seconds)
-let WORK_TIME = 25 * 60;      // 25 minutes
-let SHORT_BREAK = 5 * 60;     // 5 minutes
-let LONG_BREAK = 15 * 60;     // 15 minutes
+let WORK_TIME = 25 * 60;
+let SHORT_BREAK = 5 * 60;
+let LONG_BREAK = 15 * 60;
 let LONG_CYCLE = 4;
 
-// State
 let timeRemaining = WORK_TIME;
 let isRunning = 0;
 let isWorkSession = 1;
 let completedSessions = 0;
 let totalWorkTime = 0;
 
-// Colors - red/tomato theme
 let COLOR_BG = 0x2e1a1a;
 let COLOR_CIRCLE = 0xc41e3a;
 let COLOR_CIRCLE_BREAK = 0x228b22;
@@ -27,7 +24,6 @@ let COLOR_GRAY = 0x94a3b8;
 let COLOR_DARK = 0x4a1515;
 let COLOR_DIM = 0x8b6464;
 
-// Create styles
 let titleStyle = create_style();
 style_set_text_font(titleStyle, 20);
 style_set_text_color(titleStyle, COLOR_TEXT);
@@ -38,7 +34,6 @@ style_set_text_font(sessionStyle, 20);
 style_set_text_color(sessionStyle, COLOR_RED);
 style_set_text_align(sessionStyle, 0);
 
-// Circle style for horizontal layout
 let circleStyle = create_style();
 style_set_bg_color(circleStyle, COLOR_CIRCLE);
 style_set_bg_opa(circleStyle, 255);
@@ -94,8 +89,6 @@ style_set_text_font(statsStyle, 14);
 style_set_text_color(statsStyle, COLOR_DIM);
 style_set_text_align(statsStyle, 0);
 
-// Create UI elements - horizontal layout
-// Left side: timer circle
 let circleBg = create_label(30, 35);
 obj_add_style(circleBg, circleStyle, 0);
 obj_set_size(circleBg, 170, 170);
@@ -109,7 +102,6 @@ let progressLabel = create_label(60, 150);
 obj_add_style(progressLabel, progressStyle, 0);
 label_set_text(progressLabel, "0%");
 
-// Right side: info panel (x starting at 230)
 let titleLabel = create_label(230, 25);
 obj_add_style(titleLabel, titleStyle, 0);
 label_set_text(titleLabel, "POMODORO");
@@ -122,7 +114,6 @@ let statusLabel = create_label(230, 90);
 obj_add_style(statusLabel, statusStyle, 0);
 label_set_text(statusLabel, "Tap to start");
 
-// Session dots - horizontal row
 let dot1 = create_label(230, 125);
 obj_add_style(dot1, dotStyle1, 0);
 label_set_text(dot1, "");
@@ -147,7 +138,6 @@ let focusLabel = create_label(230, 180);
 obj_add_style(focusLabel, statsStyle, 0);
 label_set_text(focusLabel, "Focus: 0 min");
 
-// Pre-allocated variables for timer callbacks (reduces memory churn)
 let mins = 0;
 let secs = 0;
 let totalTime = 0;
@@ -160,7 +150,6 @@ let pStr = "";
 let sStr = "";
 let fStr = "";
 
-// Helper: pad number with zero
 let padZero = function(num) {
     if (num < 10) {
         return "0" + numberToString(num);
@@ -168,7 +157,6 @@ let padZero = function(num) {
     return numberToString(num);
 };
 
-// Format time as MM:SS
 let formatTime = function(seconds) {
     mins = seconds / 60;
     mins = mins - (mins % 1);
@@ -176,7 +164,6 @@ let formatTime = function(seconds) {
     return padZero(mins) + ":" + padZero(secs);
 };
 
-// Update session dots
 let updateDots = function() {
     let cycle = completedSessions % LONG_CYCLE;
 
@@ -205,12 +192,10 @@ let updateDots = function() {
     }
 };
 
-// Update display
 let updateDisplay = function() {
     timeStr = formatTime(timeRemaining);
     label_set_text(timerLabel, timeStr);
 
-    // Session type styling (circle stays red, text indicates mode)
     if (isWorkSession) {
         label_set_text(sessionLabel, "FOCUS");
         style_set_text_color(sessionStyle, COLOR_RED);
@@ -219,7 +204,6 @@ let updateDisplay = function() {
         style_set_text_color(sessionStyle, COLOR_GREEN);
     }
 
-    // Progress percentage
     totalTime = WORK_TIME;
     if (isWorkSession === 0) {
         mod = completedSessions % LONG_CYCLE;
@@ -235,7 +219,6 @@ let updateDisplay = function() {
     pStr = numberToString(progress) + "%";
     label_set_text(progressLabel, pStr);
 
-    // Status text
     if (isRunning) {
         if (isWorkSession) {
             label_set_text(statusLabel, "Stay focused!");
@@ -246,10 +229,8 @@ let updateDisplay = function() {
         label_set_text(statusLabel, "Tap to start");
     }
 
-    // Update dots
     updateDots();
 
-    // Stats
     totalMins = totalWorkTime / 60;
     totalMins = totalMins - (totalMins % 1);
     sStr = "Sessions: " + numberToString(completedSessions);
@@ -258,7 +239,6 @@ let updateDisplay = function() {
     label_set_text(focusLabel, fStr);
 };
 
-// Complete current session
 let completeSession = function() {
     if (isWorkSession) {
         completedSessions = completedSessions + 1;
@@ -279,7 +259,6 @@ let completeSession = function() {
     }
 };
 
-// Timer tick
 let timer_tick = function() {
     if (isRunning === 0) {
         return;
@@ -291,7 +270,6 @@ let timer_tick = function() {
     updateDisplay();
 };
 
-// Demo automation
 let demoStep = 0;
 let demoTimer = 0;
 
@@ -312,13 +290,8 @@ let demo_update = function() {
     updateDisplay();
 };
 
-// GIF disabled for testing - may cause memory issues
-// show_gif_from_sd("/tomato.gif", 100,100);
-
-// Initialize
 updateDisplay();
 print("Pomodoro Timer ready!");
 
-// Start timers
 create_timer("timer_tick", 1000);
 create_timer("demo_update", 1000);

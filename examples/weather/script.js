@@ -2,7 +2,6 @@
 
 print("Starting Weather Display...");
 
-// Wait for WiFi connection
 for (;;) {
   if (wifi_status()) break;
   delay(500);
@@ -10,7 +9,6 @@ for (;;) {
 }
 print("Connected! IP: " + wifi_get_ip());
 
-// Read config for location (default: London)
 let config = sd_read_file("/webscreen.json");
 let location = "London";
 let configLoc = parse_json_value(config, "location");
@@ -18,13 +16,11 @@ if (configLoc !== "") {
   location = configLoc;
 }
 
-// Weather state
 let temperature = "--";
 let condition = "Loading...";
 let humidity = "--";
 let wind = "--";
 
-// Create styles
 let titleStyle = create_style();
 style_set_text_font(titleStyle, 28);
 style_set_text_color(titleStyle, 0xFFFFFF);
@@ -50,7 +46,6 @@ style_set_text_font(lastUpdateStyle, 14);
 style_set_text_color(lastUpdateStyle, 0x666666);
 style_set_text_align(lastUpdateStyle, 1);
 
-// Create labels - display is 536x240
 let locationLabel = create_label(268, 15);
 obj_add_style(locationLabel, titleStyle, 0);
 label_set_text(locationLabel, location);
@@ -75,11 +70,9 @@ let updateLabel = create_label(268, 220);
 obj_add_style(updateLabel, lastUpdateStyle, 0);
 label_set_text(updateLabel, "Updating...");
 
-// Fetch weather data using wttr.in (no API key needed)
 let fetch_weather = function() {
   print("Fetching weather for " + location + "...");
 
-  // wttr.in returns simple JSON format
   let url = "http://wttr.in/" + location + "?format=j1";
   let response = http_get(url);
 
@@ -89,7 +82,6 @@ let fetch_weather = function() {
     return;
   }
 
-  // Parse the JSON response
   let temp = parse_json_value(response, "current_condition.0.temp_C");
   let desc = parse_json_value(response, "current_condition.0.weatherDesc.0.value");
   let hum = parse_json_value(response, "current_condition.0.humidity");
@@ -119,9 +111,8 @@ let fetch_weather = function() {
   print("Weather updated: " + temp + "C, " + desc);
 };
 
-// Update counter for "last updated" display
 let updateMinutes = 0;
-let updateStr = "";  // Pre-allocated for timer callback
+let updateStr = "";
 
 let update_time_display = function() {
   updateMinutes++;
@@ -138,13 +129,10 @@ let refresh_weather = function() {
   fetch_weather();
 };
 
-// Initial fetch
 fetch_weather();
 
-// Update time display every minute
 create_timer("update_time_display", 60000);
 
-// Refresh weather every 10 minutes
 create_timer("refresh_weather", 600000);
 
 print("Weather Display ready!");

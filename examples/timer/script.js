@@ -2,21 +2,17 @@
 
 print("Starting Timer & Stopwatch...");
 
-// Mode: 0 = Stopwatch, 1 = Timer
 let mode = 0;
 let isRunning = 0;
 
-// Stopwatch state (in centiseconds)
 let stopwatchTime = 0;
 let lapCount = 0;
 let lastLapTime = 0;
 
-// Timer state (in seconds)
-let timerTotal = 300; // 5 minutes default
+let timerTotal = 300;
 let timerRemaining = 300;
 let timerFinished = 0;
 
-// Create styles
 let modeStyle = create_style();
 style_set_text_font(modeStyle, 20);
 style_set_text_color(modeStyle, 0x888888);
@@ -77,7 +73,6 @@ style_set_width(stopButtonStyle, 80);
 style_set_height(stopButtonStyle, 36);
 style_set_radius(stopButtonStyle, 18);
 
-// Mode tabs
 let stopwatchTab = create_label(180, 15);
 obj_add_style(stopwatchTab, modeActiveStyle, 0);
 label_set_text(stopwatchTab, "STOPWATCH");
@@ -86,7 +81,6 @@ let timerTab = create_label(356, 15);
 obj_add_style(timerTab, modeStyle, 0);
 label_set_text(timerTab, "TIMER");
 
-// Main time display
 let timeLabel = create_label(220, 70);
 obj_add_style(timeLabel, timeStyle, 0);
 label_set_text(timeLabel, "00:00");
@@ -95,17 +89,14 @@ let msLabel = create_label(355, 100);
 obj_add_style(msLabel, msStyle, 0);
 label_set_text(msLabel, ".00");
 
-// Status label
 let statusLabel = create_label(268, 150);
 obj_add_style(statusLabel, statusStyle, 0);
 label_set_text(statusLabel, "Ready");
 
-// Lap display
 let lapLabel = create_label(40, 180);
 obj_add_style(lapLabel, lapStyle, 0);
 label_set_text(lapLabel, "");
 
-// Control buttons
 let startButton = create_label(178, 200);
 obj_add_style(startButton, startButtonStyle, 0);
 label_set_text(startButton, "Start");
@@ -118,7 +109,6 @@ let lapButton = create_label(358, 200);
 obj_add_style(lapButton, buttonStyle, 0);
 label_set_text(lapButton, "Lap");
 
-// Pre-allocated variables for timer callbacks (reduces memory churn)
 let totalSecs = 0;
 let mins = 0;
 let secs = 0;
@@ -126,7 +116,6 @@ let centis = 0;
 let timeStr = "";
 let msStr = "";
 
-// Helper functions
 let padZero = function(num) {
   if (num < 10) {
     return "0" + numberToString(num);
@@ -151,7 +140,6 @@ let formatTimer = function(s) {
   return padZero(mins) + ":" + padZero(secs);
 };
 
-// Update stopwatch display
 let updateStopwatchDisplay = function() {
   totalSecs = stopwatchTime / 100;
   totalSecs = totalSecs - (totalSecs % 1);
@@ -166,7 +154,6 @@ let updateStopwatchDisplay = function() {
   label_set_text(msLabel, msStr);
 };
 
-// Update timer display
 let updateTimerDisplay = function() {
   mins = timerRemaining / 60;
   mins = mins - (mins % 1);
@@ -187,7 +174,6 @@ let updateTimerDisplay = function() {
   }
 };
 
-// Stopwatch tick (every 10ms = 1 centisecond)
 let stopwatch_tick = function() {
   if (isRunning === 0) return;
   if (mode !== 0) return;
@@ -196,7 +182,6 @@ let stopwatch_tick = function() {
   updateStopwatchDisplay();
 };
 
-// Timer tick (every second)
 let timer_tick = function() {
   if (isRunning === 0) return;
   if (mode !== 1) return;
@@ -206,16 +191,13 @@ let timer_tick = function() {
   updateTimerDisplay();
 };
 
-// Demo automation
 let demoStep = 0;
 let demoTimer = 0;
 
 let demo_update = function() {
   demoTimer++;
 
-  // Demo sequence
   if (demoTimer === 2 && demoStep === 0) {
-    // Start stopwatch
     isRunning = 1;
     style_set_text_color(statusStyle, 0x00FF00);
     label_set_text(statusLabel, "Running");
@@ -224,14 +206,12 @@ let demo_update = function() {
     demoStep = 1;
     print("Stopwatch started");
   } else if (demoTimer === 5 && demoStep === 1) {
-    // Record lap
     lapCount++;
     let lapTime = stopwatchTime - lastLapTime;
     lastLapTime = stopwatchTime;
     label_set_text(lapLabel, "Lap " + numberToString(lapCount) + ": " + formatStopwatch(lapTime));
     print("Lap recorded");
   } else if (demoTimer === 8 && demoStep === 1) {
-    // Stop stopwatch
     isRunning = 0;
     style_set_text_color(statusStyle, 0xFFAA00);
     label_set_text(statusLabel, "Paused");
@@ -240,15 +220,13 @@ let demo_update = function() {
     demoStep = 2;
     print("Stopwatch paused");
   } else if (demoTimer === 11 && demoStep === 2) {
-    // Switch to timer mode
     mode = 1;
     obj_add_style(stopwatchTab, modeStyle, 0);
     obj_add_style(timerTab, modeActiveStyle, 0);
     label_set_text(lapButton, "+1m");
     label_set_text(lapLabel, "");
 
-    // Reset timer
-    timerRemaining = 10; // 10 seconds for demo
+    timerRemaining = 10;
     timerFinished = 0;
     updateTimerDisplay();
     label_set_text(statusLabel, "Ready");
@@ -256,7 +234,6 @@ let demo_update = function() {
     demoStep = 3;
     print("Switched to Timer mode");
   } else if (demoTimer === 13 && demoStep === 3) {
-    // Start timer
     isRunning = 1;
     style_set_text_color(statusStyle, 0x00FF00);
     label_set_text(statusLabel, "Running");
@@ -265,7 +242,6 @@ let demo_update = function() {
     demoStep = 4;
     print("Timer started");
   } else if (demoTimer === 25 && demoStep === 4) {
-    // Reset and switch back to stopwatch
     demoTimer = 0;
     demoStep = 0;
     mode = 0;
@@ -275,7 +251,6 @@ let demo_update = function() {
     obj_add_style(timerTab, modeStyle, 0);
     label_set_text(lapButton, "Lap");
 
-    // Reset stopwatch
     stopwatchTime = 0;
     lapCount = 0;
     lastLapTime = 0;
@@ -291,10 +266,8 @@ let demo_update = function() {
   }
 };
 
-// Initialize display
 updateStopwatchDisplay();
 
-// Start timers
 create_timer("stopwatch_tick", 10);
 create_timer("timer_tick", 1000);
 create_timer("demo_update", 1000);

@@ -2,7 +2,6 @@
 
 print("Starting Stock Ticker...");
 
-// Stock data (prices in cents for integer math)
 let stock1_symbol = "AAPL";
 let stock1_price = 17852;
 let stock1_change = 234;
@@ -19,7 +18,6 @@ let stock4_symbol = "TSLA";
 let stock4_price = 24850;
 let stock4_change = -375;
 
-// Colors
 let COLOR_BG = 0x0d1117;
 let COLOR_CARD = 0x21262d;
 let COLOR_WHITE = 0xFFFFFF;
@@ -28,7 +26,6 @@ let COLOR_GREEN = 0x7ee787;
 let COLOR_RED = 0xf85149;
 let COLOR_DIM = 0x484f58;
 
-// Styles
 let titleStyle = create_style();
 style_set_text_font(titleStyle, 20);
 style_set_text_color(titleStyle, COLOR_WHITE);
@@ -65,7 +62,6 @@ let changeStyle4 = create_style();
 style_set_text_font(changeStyle4, 14);
 style_set_text_color(changeStyle4, COLOR_RED);
 
-// Card style - 2x2 grid layout for 536x240 screen
 let cardStyle = create_style();
 style_set_bg_color(cardStyle, COLOR_CARD);
 style_set_bg_opa(cardStyle, 255);
@@ -77,7 +73,6 @@ let updateStyle = create_style();
 style_set_text_font(updateStyle, 14);
 style_set_text_color(updateStyle, COLOR_DIM);
 
-// UI Elements - display is 536x240
 let titleLabel = create_label(15, 8);
 obj_add_style(titleLabel, titleStyle, 0);
 label_set_text(titleLabel, "STOCK TICKER");
@@ -86,8 +81,6 @@ let marketLabel = create_label(440, 10);
 obj_add_style(marketLabel, marketStyle, 0);
 label_set_text(marketLabel, "Market Open");
 
-// Stock cards - 2x2 grid layout
-// Row 1: cards at y=35
 let card1 = create_label(15, 35);
 obj_add_style(card1, cardStyle, 0);
 label_set_text(card1, "");
@@ -116,7 +109,6 @@ obj_add_style(price2, priceStyle, 0);
 let change2 = create_label(285, 95);
 obj_add_style(change2, changeStyle2, 0);
 
-// Row 2: cards at y=130
 let card3 = create_label(15, 130);
 obj_add_style(card3, cardStyle, 0);
 label_set_text(card3, "");
@@ -149,7 +141,6 @@ let updateLabel = create_label(15, 222);
 obj_add_style(updateLabel, updateStyle, 0);
 label_set_text(updateLabel, "Demo data - Configure API for live prices");
 
-// Pre-allocated variables for timer callbacks (reduces memory churn)
 let dollars = 0;
 let remaining = 0;
 let centStr = "";
@@ -167,7 +158,6 @@ let changeStr2 = "";
 let changeStr3 = "";
 let changeStr4 = "";
 
-// Format price from cents
 let formatPrice = function(cents) {
     dollars = cents / 100;
     dollars = dollars - (dollars % 1);
@@ -179,7 +169,6 @@ let formatPrice = function(cents) {
     return "$" + numberToString(dollars) + "." + centStr;
 };
 
-// Format change
 let formatChange = function(cents) {
     sign = "+";
     absCents = cents;
@@ -197,7 +186,6 @@ let formatChange = function(cents) {
     return sign + numberToString(d) + "." + cStr;
 };
 
-// Update display
 let updateDisplay = function() {
     label_set_text(price1, formatPrice(stock1_price));
     label_set_text(change1, formatChange(stock1_change));
@@ -232,7 +220,6 @@ let updateDisplay = function() {
     }
 };
 
-// Simulate price changes
 let simTimer = 0;
 
 let simulate_tick = function() {
@@ -258,7 +245,6 @@ let simulate_tick = function() {
     updateDisplay();
 };
 
-// Initialize
 updateDisplay();
 print("Stock Ticker ready!");
 

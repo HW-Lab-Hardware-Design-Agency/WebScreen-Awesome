@@ -2,11 +2,10 @@
 
 print("Starting Reminders...");
 
-// Reminder data
 let rem1_text = "Team standup meeting";
 let rem1_time = "09:00";
 let rem1_done = 0;
-let rem1_priority = 2;  // 0=low, 1=med, 2=high
+let rem1_priority = 2;
 
 let rem2_text = "Review pull requests";
 let rem2_time = "10:30";
@@ -27,7 +26,6 @@ let currentHour = 8;
 let currentMin = 45;
 let currentPage = 0;
 
-// Colors
 let COLOR_BG = 0xf0fdf4;
 let COLOR_HEADER = 0x16a34a;
 let COLOR_WHITE = 0xFFFFFF;
@@ -39,7 +37,6 @@ let COLOR_RED = 0xdc2626;
 let COLOR_GRAY = 0x6b7280;
 let COLOR_LIGHT_GREEN = 0xdcfce7;
 
-// Styles
 let headerStyle = create_style();
 style_set_text_font(headerStyle, 20);
 style_set_text_color(headerStyle, COLOR_WHITE);
@@ -84,7 +81,6 @@ style_set_bg_opa(headerBgStyle, 255);
 style_set_width(headerBgStyle, 536);
 style_set_height(headerBgStyle, 50);
 
-// Card style - 2 cards side by side for 536x240 screen
 let cardStyle = create_style();
 style_set_bg_color(cardStyle, COLOR_CARD);
 style_set_bg_opa(cardStyle, 255);
@@ -92,7 +88,6 @@ style_set_radius(cardStyle, 10);
 style_set_width(cardStyle, 250);
 style_set_height(cardStyle, 130);
 
-// Header - display is 536x240
 let headerBg = create_label(0, 0);
 obj_add_style(headerBg, headerBgStyle, 0);
 label_set_text(headerBg, "");
@@ -109,7 +104,6 @@ let statsLabel = create_label(15, 32);
 obj_add_style(statsLabel, statsStyle, 0);
 label_set_text(statsLabel, "4 pending | 0 done");
 
-// Card 1 (left) - at x=15, y=60
 let card1 = create_label(15, 60);
 obj_add_style(card1, cardStyle, 0);
 label_set_text(card1, "");
@@ -130,7 +124,6 @@ let check1 = create_label(225, 70);
 obj_add_style(check1, checkStyle, 0);
 label_set_text(check1, "[ ]");
 
-// Card 2 (right) - at x=275, y=60
 let card2 = create_label(275, 60);
 obj_add_style(card2, cardStyle, 0);
 label_set_text(card2, "");
@@ -151,7 +144,6 @@ let check2 = create_label(485, 70);
 obj_add_style(check2, checkStyle, 0);
 label_set_text(check2, "[ ]");
 
-// Page indicator
 let pageStyle = create_style();
 style_set_text_font(pageStyle, 14);
 style_set_text_color(pageStyle, COLOR_GRAY);
@@ -161,7 +153,6 @@ let pageLabel = create_label(268, 210);
 obj_add_style(pageLabel, pageStyle, 0);
 label_set_text(pageLabel, "1 / 2");
 
-// Pre-allocated variables for timer callbacks (reduces memory churn)
 let h = "";
 let m = "";
 let done = 0;
@@ -171,7 +162,6 @@ let clockStr = "";
 let statsStr = "";
 let pageStr = "";
 
-// Format time
 let formatClock = function() {
     h = numberToString(currentHour);
     m = numberToString(currentMin);
@@ -180,7 +170,6 @@ let formatClock = function() {
     return h + ":" + m;
 };
 
-// Update display based on current page
 let updateDisplay = function() {
     clockStr = formatClock();
     label_set_text(clockLabel, clockStr);
@@ -197,7 +186,6 @@ let updateDisplay = function() {
     currentTimeNum = currentHour * 100 + currentMin;
 
     if (currentPage === 0) {
-        // Show reminders 1 and 2
         label_set_text(badge1, " " + rem1_time + " ");
         label_set_text(text1, rem1_text);
         label_set_text(cat1, "WORK");
@@ -226,7 +214,6 @@ let updateDisplay = function() {
             style_set_bg_color(badgeStyle2, COLOR_GREEN);
         }
     } else {
-        // Show reminders 3 and 4
         label_set_text(badge1, " " + rem3_time + " ");
         label_set_text(text1, rem3_text);
         label_set_text(cat1, "LIFE");
@@ -260,13 +247,11 @@ let updateDisplay = function() {
     label_set_text(pageLabel, pageStr);
 };
 
-// Simulate time passing
 let simTimer = 0;
 
 let simulate_tick = function() {
     simTimer = simTimer + 1;
 
-    // Advance time every 5 seconds
     if (simTimer % 5 === 0) {
         currentMin = currentMin + 15;
         if (currentMin >= 60) {
@@ -275,19 +260,12 @@ let simulate_tick = function() {
         }
     }
 
-    // Auto-complete past reminders
     let currentTimeNum = currentHour * 100 + currentMin;
     if (currentTimeNum > 900 && rem1_done === 0) rem1_done = 1;
     if (currentTimeNum > 1030 && rem2_done === 0) rem2_done = 1;
     if (currentTimeNum > 1200 && rem3_done === 0) rem3_done = 1;
     if (currentTimeNum > 1400 && rem4_done === 0) rem4_done = 1;
 
-    // Switch pages every 8 seconds
-    if (simTimer % 8 === 0) {
-        currentPage = 1 - currentPage;
-    }
-
-    // Switch pages every 8 seconds
     if (simTimer % 8 === 0) {
         currentPage = 1 - currentPage;
     }
@@ -295,7 +273,6 @@ let simulate_tick = function() {
     updateDisplay();
 };
 
-// Initialize
 updateDisplay();
 print("Reminders ready!");
 

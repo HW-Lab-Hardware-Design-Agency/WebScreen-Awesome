@@ -2,7 +2,6 @@
 
 print("Starting System Monitor...");
 
-// Create styles
 let titleStyle = create_style();
 style_set_text_font(titleStyle, 28);
 style_set_text_color(titleStyle, 0xFFFFFF);
@@ -33,12 +32,10 @@ style_set_text_font(statusOffStyle, 20);
 style_set_text_color(statusOffStyle, 0xFF4444);
 style_set_text_align(statusOffStyle, 0);
 
-// Title - display is 536x240
 let titleLabel = create_label(268, 15);
 obj_add_style(titleLabel, titleStyle, 0);
 label_set_text(titleLabel, "System Monitor");
 
-// Left column - WiFi info
 let wifiHeader = create_label(30, 50);
 obj_add_style(wifiHeader, headerStyle, 0);
 label_set_text(wifiHeader, "WiFi Status");
@@ -55,7 +52,6 @@ let ipLabel = create_label(30, 130);
 obj_add_style(ipLabel, valueStyle, 0);
 label_set_text(ipLabel, "...");
 
-// Middle column - Uptime
 let uptimeHeader = create_label(200, 50);
 obj_add_style(uptimeHeader, headerStyle, 0);
 label_set_text(uptimeHeader, "Uptime");
@@ -72,7 +68,6 @@ let refreshLabel = create_label(200, 130);
 obj_add_style(refreshLabel, valueStyle, 0);
 label_set_text(refreshLabel, "1s");
 
-// Right column - SD Card
 let sdHeader = create_label(370, 50);
 obj_add_style(sdHeader, headerStyle, 0);
 label_set_text(sdHeader, "SD Card");
@@ -89,7 +84,6 @@ let filesLabel = create_label(370, 130);
 obj_add_style(filesLabel, valueStyle, 0);
 label_set_text(filesLabel, "...");
 
-// Bottom row - Script info
 let scriptHeader = create_label(30, 170);
 obj_add_style(scriptHeader, headerStyle, 0);
 label_set_text(scriptHeader, "Running Script");
@@ -97,7 +91,6 @@ label_set_text(scriptHeader, "Running Script");
 let scriptLabel = create_label(30, 195);
 obj_add_style(scriptLabel, valueStyle, 0);
 
-// Read current script from config
 let config = sd_read_file("/webscreen.json");
 let scriptName = parse_json_value(config, "script");
 if (scriptName === "") {
@@ -105,13 +98,11 @@ if (scriptName === "") {
 }
 label_set_text(scriptLabel, scriptName);
 
-// Check SD card and count files
 let sdOk = 0;
 let fileCount = 0;
 let fileList = sd_list_dir("/");
 if (fileList !== "") {
   sdOk = 1;
-  // Count files (separated by newlines)
   let len = str_length(fileList);
   let i = 0;
   fileCount = 1;
@@ -133,10 +124,8 @@ if (sdOk) {
   label_set_text(filesLabel, "-");
 }
 
-// Uptime tracking
 let uptimeSeconds = 0;
 
-// Pre-allocated variables for timer callbacks (reduces memory churn)
 let hours = 0;
 let mins = 0;
 let secs = 0;
@@ -157,13 +146,13 @@ let formatUptime = function(s) {
 
   if (secs >= 3600) {
     hours = secs / 3600;
-    hours = hours - (hours % 1); // floor
+    hours = hours - (hours % 1);
     secs = secs - (hours * 3600);
   }
 
   if (secs >= 60) {
     mins = secs / 60;
-    mins = mins - (mins % 1); // floor
+    mins = mins - (mins % 1);
     secs = secs - (mins * 60);
   }
 
@@ -179,11 +168,9 @@ let formatUptime = function(s) {
 let update_stats = function() {
   uptimeSeconds++;
 
-  // Update uptime display
   uptimeStr = formatUptime(uptimeSeconds);
   label_set_text(uptimeLabel, uptimeStr);
 
-  // Update WiFi status
   if (wifi_status()) {
     obj_add_style(wifiStatusLabel, statusOnStyle, 0);
     label_set_text(wifiStatusLabel, "Connected");
@@ -196,10 +183,8 @@ let update_stats = function() {
   }
 };
 
-// Initial update
 update_stats();
 
-// Update every second
 create_timer("update_stats", 1000);
 
 print("System Monitor ready!");
