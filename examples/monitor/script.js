@@ -1,190 +1,73 @@
 "use strict";
 
-print("Starting System Monitor...");
+print("Starting Monitor...");
 
 let titleStyle = create_style();
-style_set_text_font(titleStyle, 28);
+style_set_text_font(titleStyle, 24);
 style_set_text_color(titleStyle, 0xFFFFFF);
 style_set_text_align(titleStyle, 1);
 
-let headerStyle = create_style();
-style_set_text_font(headerStyle, 20);
-style_set_text_color(headerStyle, 0x00BFFF);
-style_set_text_align(headerStyle, 0);
+let labelStyle = create_style();
+style_set_text_font(labelStyle, 18);
+style_set_text_color(labelStyle, 0x00BFFF);
 
 let valueStyle = create_style();
-style_set_text_font(valueStyle, 20);
+style_set_text_font(valueStyle, 18);
 style_set_text_color(valueStyle, 0xFFFFFF);
-style_set_text_align(valueStyle, 0);
 
-let unitStyle = create_style();
-style_set_text_font(unitStyle, 14);
-style_set_text_color(unitStyle, 0x888888);
-style_set_text_align(unitStyle, 0);
+let title = create_label(268, 15);
+obj_add_style(title, titleStyle, 0);
+label_set_text(title, "System Monitor");
 
-let statusOnStyle = create_style();
-style_set_text_font(statusOnStyle, 20);
-style_set_text_color(statusOnStyle, 0x00FF00);
-style_set_text_align(statusOnStyle, 0);
+let wifiLbl = create_label(30, 60);
+obj_add_style(wifiLbl, labelStyle, 0);
+label_set_text(wifiLbl, "WiFi:");
 
-let statusOffStyle = create_style();
-style_set_text_font(statusOffStyle, 20);
-style_set_text_color(statusOffStyle, 0xFF4444);
-style_set_text_align(statusOffStyle, 0);
+let wifiVal = create_label(120, 60);
+obj_add_style(wifiVal, valueStyle, 0);
 
-let titleLabel = create_label(268, 15);
-obj_add_style(titleLabel, titleStyle, 0);
-label_set_text(titleLabel, "System Monitor");
+let ipLbl = create_label(30, 90);
+obj_add_style(ipLbl, labelStyle, 0);
+label_set_text(ipLbl, "IP:");
 
-let wifiHeader = create_label(30, 50);
-obj_add_style(wifiHeader, headerStyle, 0);
-label_set_text(wifiHeader, "WiFi Status");
+let ipVal = create_label(120, 90);
+obj_add_style(ipVal, valueStyle, 0);
 
-let wifiStatusLabel = create_label(30, 75);
-obj_add_style(wifiStatusLabel, statusOnStyle, 0);
-label_set_text(wifiStatusLabel, "Checking...");
+let uptimeLbl = create_label(30, 120);
+obj_add_style(uptimeLbl, labelStyle, 0);
+label_set_text(uptimeLbl, "Uptime:");
 
-let ipHeader = create_label(30, 105);
-obj_add_style(ipHeader, headerStyle, 0);
-label_set_text(ipHeader, "IP Address");
+let uptimeVal = create_label(120, 120);
+obj_add_style(uptimeVal, valueStyle, 0);
 
-let ipLabel = create_label(30, 130);
-obj_add_style(ipLabel, valueStyle, 0);
-label_set_text(ipLabel, "...");
-
-let uptimeHeader = create_label(200, 50);
-obj_add_style(uptimeHeader, headerStyle, 0);
-label_set_text(uptimeHeader, "Uptime");
-
-let uptimeLabel = create_label(200, 75);
-obj_add_style(uptimeLabel, valueStyle, 0);
-label_set_text(uptimeLabel, "0s");
-
-let refreshHeader = create_label(200, 105);
-obj_add_style(refreshHeader, headerStyle, 0);
-label_set_text(refreshHeader, "Refresh Rate");
-
-let refreshLabel = create_label(200, 130);
-obj_add_style(refreshLabel, valueStyle, 0);
-label_set_text(refreshLabel, "1s");
-
-let sdHeader = create_label(370, 50);
-obj_add_style(sdHeader, headerStyle, 0);
-label_set_text(sdHeader, "SD Card");
-
-let sdStatusLabel = create_label(370, 75);
-obj_add_style(sdStatusLabel, statusOnStyle, 0);
-label_set_text(sdStatusLabel, "Checking...");
-
-let filesHeader = create_label(370, 105);
-obj_add_style(filesHeader, headerStyle, 0);
-label_set_text(filesHeader, "Root Files");
-
-let filesLabel = create_label(370, 130);
-obj_add_style(filesLabel, valueStyle, 0);
-label_set_text(filesLabel, "...");
-
-let scriptHeader = create_label(30, 170);
-obj_add_style(scriptHeader, headerStyle, 0);
-label_set_text(scriptHeader, "Running Script");
-
-let scriptLabel = create_label(30, 195);
-obj_add_style(scriptLabel, valueStyle, 0);
-
-let config = sd_read_file("/webscreen.json");
-let scriptName = parse_json_value(config, "script");
-if (scriptName === "") {
-  scriptName = "monitor_app.js";
-}
-label_set_text(scriptLabel, scriptName);
-
-let sdOk = 0;
-let fileCount = 0;
-let fileList = sd_list_dir("/");
-if (fileList !== "") {
-  sdOk = 1;
-  let len = str_length(fileList);
-  let i = 0;
-  fileCount = 1;
-  while (i < len) {
-    let c = str_substring(fileList, i, 1);
-    if (c === "\n") {
-      fileCount++;
-    }
-    i++;
-  }
-}
-
-if (sdOk) {
-  label_set_text(sdStatusLabel, "OK");
-  label_set_text(filesLabel, numberToString(fileCount) + " items");
-} else {
-  obj_add_style(sdStatusLabel, statusOffStyle, 0);
-  label_set_text(sdStatusLabel, "Not Found");
-  label_set_text(filesLabel, "-");
-}
-
-let uptimeSeconds = 0;
-
-let hours = 0;
-let mins = 0;
-let secs = 0;
-let uptimeStr = "";
-let ipStr = "";
-
-let padZero = function(num) {
-  if (num < 10) {
-    return "0" + numberToString(num);
-  }
-  return numberToString(num);
-};
-
-let formatUptime = function(s) {
-  hours = 0;
-  mins = 0;
-  secs = s;
-
-  if (secs >= 3600) {
-    hours = secs / 3600;
-    hours = hours - (hours % 1);
-    secs = secs - (hours * 3600);
-  }
-
-  if (secs >= 60) {
-    mins = secs / 60;
-    mins = mins - (mins % 1);
-    secs = secs - (mins * 60);
-  }
-
-  if (hours > 0) {
-    return numberToString(hours) + "h " + padZero(mins) + "m";
-  } else if (mins > 0) {
-    return numberToString(mins) + "m " + padZero(secs) + "s";
-  } else {
-    return numberToString(secs) + "s";
-  }
-};
+let uptime = 0;
 
 let update_stats = function() {
-  uptimeSeconds++;
-
-  uptimeStr = formatUptime(uptimeSeconds);
-  label_set_text(uptimeLabel, uptimeStr);
+  uptime = uptime + 1;
 
   if (wifi_status()) {
-    obj_add_style(wifiStatusLabel, statusOnStyle, 0);
-    label_set_text(wifiStatusLabel, "Connected");
-    ipStr = wifi_get_ip();
-    label_set_text(ipLabel, ipStr);
+    label_set_text(wifiVal, "Connected");
+    label_set_text(ipVal, wifi_get_ip());
   } else {
-    obj_add_style(wifiStatusLabel, statusOffStyle, 0);
-    label_set_text(wifiStatusLabel, "Disconnected");
-    label_set_text(ipLabel, "-");
+    label_set_text(wifiVal, "Disconnected");
+    label_set_text(ipVal, "-");
+  }
+
+  let h = uptime / 3600;
+  h = h - (h % 1);
+  let m = (uptime - h * 3600) / 60;
+  m = m - (m % 1);
+  let s = uptime % 60;
+
+  if (h > 0) {
+    label_set_text(uptimeVal, numberToString(h) + "h " + numberToString(m) + "m");
+  } else if (m > 0) {
+    label_set_text(uptimeVal, numberToString(m) + "m " + numberToString(s) + "s");
+  } else {
+    label_set_text(uptimeVal, numberToString(s) + "s");
   }
 };
 
 update_stats();
-
+print("Monitor ready!");
 create_timer("update_stats", 1000);
-
-print("System Monitor ready!");
