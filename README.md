@@ -154,8 +154,10 @@ mem_stats()                 // Print memory stats, returns free heap bytes
 wifi_status()               // Check connection status (returns 1 or 0)
 wifi_get_ip()               // Get assigned IP address
 
-// HTTP
-http_get(url)               // GET request
+// HTTP (supports custom ports)
+http_get(url)               // GET request (http://host:port/path)
+http_post(url, data)        // POST request with JSON data
+http_delete(url)            // DELETE request
 http_set_ca_cert_from_sd(path)  // Load SSL certificate
 
 // JSON
@@ -190,6 +192,47 @@ style_set_height(style, pixels)  // Set height
 // Timers
 create_timer(function_name, interval_ms)  // Create periodic timer
 ```
+
+### Available Font Sizes
+
+Only these Montserrat font sizes are enabled:
+
+| Size | Usage |
+|------|-------|
+| `14` | Default, small text |
+| `20` | Body text |
+| `28` | Subheadings |
+| `34` | Medium headings |
+| `40` | Large headings |
+| `44` | Extra large |
+| `48` | Display text |
+
+```javascript
+style_set_text_font(style, 48);  // Largest available
+style_set_text_font(style, 14);  // Smallest available
+```
+
+**Note:** Sizes like 16, 24, 32 are NOT available.
+
+### Enabled LVGL Widgets
+
+| Widget | Available | Notes |
+|--------|-----------|-------|
+| Label | ✅ | Text display |
+| Image | ✅ | PNG, GIF, SJPG |
+| Arc | ✅ | Circular gauges |
+| Line | ✅ | Line drawing |
+| Button | ✅ | Clickable |
+| Chart | ✅ | Data visualization |
+| Meter | ✅ | Speedometer/gauge |
+| Span | ✅ | Rich text |
+
+### Supported Image Formats
+
+- **PNG**: ✅ Recommended for icons
+- **GIF**: ✅ Animated (keep under 50KB)
+- **SJPG**: ✅ Split JPG for large images
+- **BMP**: ❌ Not supported
 
 ### Important Syntax Notes
 
@@ -288,6 +331,17 @@ Use our web-based IDE for rapid development without SD card swapping:
    if (wifi_status()) {
      // Safe to make HTTP requests
    }
+   ```
+
+5. **HTTP with custom ports**
+   ```javascript
+   // Standard ports (80 for HTTP, 443 for HTTPS)
+   http_get("http://api.example.com/data");
+   http_get("https://api.example.com/data");
+
+   // Custom ports
+   http_get("http://192.168.1.20:2000/api");
+   http_post("http://localhost:3000/api", '{"key":"value"}');
    ```
 
 ## 📚 Resources
