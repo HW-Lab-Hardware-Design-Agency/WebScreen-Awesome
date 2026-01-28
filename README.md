@@ -31,6 +31,9 @@ A collection of awesome apps, mods, and resources for WebScreen! Share your crea
        "background": "#000000",
        "foreground": "#FFFFFF"
      },
+     "display": {
+       "brightness": 200
+     },
      "script": "script.js"
    }
    ```
@@ -149,6 +152,10 @@ delay(milliseconds)         // Blocking delay
 toNumber(string)            // Convert string to number
 numberToString(number)      // Convert number to string
 mem_stats()                 // Print memory stats, returns free heap bytes
+
+// Display
+set_brightness(value)       // Set display brightness (0-255)
+get_brightness()            // Get current display brightness
 
 // WiFi
 wifi_status()               // Check connection status (returns 1 or 0)
@@ -287,6 +294,9 @@ let pos = { x: 10, y: 20 };            // Wrong!
   "screen": {
     "background": "#000000",
     "foreground": "#FFFFFF"
+  },
+  "display": {
+    "brightness": 200
   },
   "script": "script.js"
 }
