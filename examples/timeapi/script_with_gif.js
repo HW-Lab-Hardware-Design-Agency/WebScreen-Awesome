@@ -2,41 +2,26 @@
 
 print("Starting Clock with Cat...");
 
-for (;;) {
-  if (wifi_status()) break;
-  delay(500);
-  print("Waiting for Wi-Fi...");
-}
-print("Connected! IP: " + wifi_get_ip());
-
-let config = sd_read_file("/webscreen.json");
-let timezone = "America/New_York";
-
-if (config !== "") {
-  let configTz = parse_json_value(config, "timezone");
-  if (configTz !== "") {
-    timezone = configTz;
+// Wait for WiFi first, then NTP sync
+let syncAttempts = 0;
+if (wifi_status()) {
+  for (;;) {
+    if (ntp_synced()) break;
+    delay(500);
+    syncAttempts = syncAttempts + 1;
+    print("Waiting for NTP sync...");
+    if (syncAttempts > 20) {
+      print("NTP sync timeout");
+      break;
+    }
   }
-}
-print("Timezone: " + timezone);
-
-let url = "http://worldtimeapi.org/api/timezone/" + timezone;
-print("Fetching: " + url);
-let jsonResponse = http_get(url);
-if (jsonResponse === "") {
-  print("HTTP GET failed!");
+} else {
+  print("No WiFi - NTP unavailable");
 }
 
-let datetime = parse_json_value(jsonResponse, "datetime");
-
-let year = toNumber(str_substring(datetime, 0, 4));
-let month = toNumber(str_substring(datetime, 5, 2));
-let day = toNumber(str_substring(datetime, 8, 2));
-let hour = toNumber(str_substring(datetime, 11, 2));
-let minute = toNumber(str_substring(datetime, 14, 2));
-let seconds = toNumber(str_substring(datetime, 17, 2));
-
-print("Time: " + numberToString(hour) + ":" + numberToString(minute));
+if (ntp_synced()) {
+  print("NTP synced! Time: " + numberToString(get_hours()) + ":" + numberToString(get_minutes()));
+}
 
 let months = "JanFebMarAprMayJunJulAugSepOctNovDec";
 
@@ -47,9 +32,6 @@ style_set_text_align(dateStyle, 1);
 
 let dateLabel = create_label(211, 132);
 obj_add_style(dateLabel, dateStyle, 0);
-
-let monthName = str_substring(months, (month - 1) * 3, 3);
-label_set_text(dateLabel, monthName + " " + numberToString(day) + ", " + numberToString(year));
 
 let timeStyle = create_style();
 style_set_text_font(timeStyle, 48);
@@ -69,18 +51,14 @@ let padZero = function(num) {
 };
 
 let update_clock = function() {
-  seconds = seconds + 1;
-  if (seconds >= 60) {
-    seconds = 0;
-    minute = minute + 1;
-    if (minute >= 60) {
-      minute = 0;
-      hour = hour + 1;
-      if (hour >= 24) {
-        hour = 0;
-      }
-    }
-  }
+  let hour = get_hours();
+  let minute = get_minutes();
+  let seconds = get_seconds();
+  let year = get_year();
+  let month = get_month();
+  let day = get_day();
+
+  if (hour < 0) return;
 
   let displayHour = hour;
   let ampm = "AM";
@@ -95,6 +73,9 @@ let update_clock = function() {
   }
 
   label_set_text(timeLabel, padZero(displayHour) + ":" + padZero(minute) + ":" + padZero(seconds) + " " + ampm);
+
+  let monthName = str_substring(months, (month - 1) * 3, 3);
+  label_set_text(dateLabel, monthName + " " + numberToString(day) + ", " + numberToString(year));
 };
 
 update_clock();

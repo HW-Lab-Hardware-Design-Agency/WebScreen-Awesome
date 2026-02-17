@@ -1,7 +1,7 @@
 {
   "name": "Dual Clock",
   "version": "1.0.0",
-  "description": "Display two time zones simultaneously with automatic sync from timeapi.io",
+  "description": "Display two time zones simultaneously using NTP",
   "author": "WebScreen",
   "script": "script.js",
   "assets": ["dualclock.pem"],
@@ -18,8 +18,10 @@
     "background": "#000000",
     "foreground": "#FFFFFF"
   },
-  "timezone1": "Asia/Tokyo",
+  "system": {
+    "timezone": "9"
+  },
   "city1": "Tokyo",
-  "timezone2": "America/Argentina/Buenos_Aires",
-  "city2": "Buenos Aires"
+  "city2": "Buenos Aires",
+  "offset_diff": "-12"
 }

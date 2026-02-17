@@ -2,36 +2,36 @@
 
 print("Starting Dual Clock...");
 
-for (;;) {
-  if (wifi_status()) break;
-  delay(500);
-  print("Waiting for Wi-Fi...");
+// Wait for WiFi first, then NTP sync
+let syncAttempts = 0;
+if (wifi_status()) {
+  for (;;) {
+    if (ntp_synced()) break;
+    delay(500);
+    syncAttempts = syncAttempts + 1;
+    print("Waiting for NTP sync...");
+    if (syncAttempts > 20) {
+      print("NTP sync timeout");
+      break;
+    }
+  }
+} else {
+  print("No WiFi - NTP unavailable");
 }
-print("Connected! IP: " + wifi_get_ip());
 
 let config = sd_read_file("/webscreen.json");
-let tz1 = "America/New_York";
-let tz2 = "Europe/London";
-let city1 = "New York";
-let city2 = "London";
+let city1 = "Local";
+let city2 = "UTC";
+let offsetDiff = 0;
 
 if (config !== "") {
-  let t1 = parse_json_value(config, "timezone1");
-  let t2 = parse_json_value(config, "timezone2");
   let c1 = parse_json_value(config, "city1");
   let c2 = parse_json_value(config, "city2");
-  if (t1 !== "") tz1 = t1;
-  if (t2 !== "") tz2 = t2;
+  let od = parse_json_value(config, "offset_diff");
   if (c1 !== "") city1 = c1;
   if (c2 !== "") city2 = c2;
+  if (od !== "") offsetDiff = toNumber(od);
 }
-
-let h1 = 0;
-let m1 = 0;
-let s1 = 0;
-let h2 = 0;
-let m2 = 0;
-let s2 = 0;
 
 let timeStyle = create_style();
 style_set_text_font(timeStyle, 34);
@@ -62,41 +62,20 @@ let padZero = function(n) {
   return numberToString(n);
 };
 
-let fetchTime = function(tz, zone) {
-  let url = "http://worldtimeapi.org/api/timezone/" + tz;
-  let json = http_get(url);
-  if (json === "") return;
-  let dt = parse_json_value(json, "datetime");
-  let hh = toNumber(str_substring(dt, 11, 2));
-  let mm = toNumber(str_substring(dt, 14, 2));
-  let ss = toNumber(str_substring(dt, 17, 2));
-  if (zone === 1) {
-    h1 = hh;
-    m1 = mm;
-    s1 = ss;
-  } else {
-    h2 = hh;
-    m2 = mm;
-    s2 = ss;
-  }
-};
-
-fetchTime(tz1, 1);
-fetchTime(tz2, 2);
-
 let update_clock = function() {
-  s1 = s1 + 1;
-  if (s1 >= 60) { s1 = 0; m1 = m1 + 1; }
-  if (m1 >= 60) { m1 = 0; h1 = h1 + 1; }
-  if (h1 >= 24) h1 = 0;
+  let h1 = get_hours();
+  let m1 = get_minutes();
+  let s1 = get_seconds();
 
-  s2 = s2 + 1;
-  if (s2 >= 60) { s2 = 0; m2 = m2 + 1; }
-  if (m2 >= 60) { m2 = 0; h2 = h2 + 1; }
-  if (h2 >= 24) h2 = 0;
+  if (h1 < 0) return;
+
+  // Calculate second timezone
+  let h2 = h1 + offsetDiff;
+  if (h2 >= 24) h2 = h2 - 24;
+  if (h2 < 0) h2 = h2 + 24;
 
   label_set_text(time1, padZero(h1) + ":" + padZero(m1) + ":" + padZero(s1));
-  label_set_text(time2, padZero(h2) + ":" + padZero(m2) + ":" + padZero(s2));
+  label_set_text(time2, padZero(h2) + ":" + padZero(m1) + ":" + padZero(s1));
 };
 
 update_clock();

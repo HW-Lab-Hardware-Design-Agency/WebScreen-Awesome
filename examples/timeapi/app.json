@@ -1,7 +1,7 @@
 {
   "name": "Time API",
   "version": "1.0.0",
-  "description": "Display current time fetched from timeapi.io with animated GIF",
+  "description": "Display current time using NTP with animated GIF",
   "author": "WebScreen",
   "script": "script.js",
   "assets": ["cat.gif", "timeapi.pem"],
@@ -17,5 +17,8 @@
   "screen": {
     "background": "#332616",
     "foreground": "#FFFFFF"
+  },
+  "system": {
+    "timezone": "-5"
   }
 }

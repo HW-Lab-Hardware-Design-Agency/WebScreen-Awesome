@@ -2,34 +2,26 @@
 
 print("Starting Digital Clock...");
 
-for (;;) {
-  if (wifi_status()) break;
-  delay(500);
-  print("Waiting for Wi-Fi...");
-}
-print("Connected! IP: " + wifi_get_ip());
-
-let config = sd_read_file("/webscreen.json");
-let timezone = "America/New_York";
-if (config !== "") {
-  let tz = parse_json_value(config, "timezone");
-  if (tz !== "") timezone = tz;
-}
-print("Timezone: " + timezone);
-
-let url = "http://worldtimeapi.org/api/timezone/" + timezone;
-print("Fetching: " + url);
-let json = http_get(url);
-if (json === "") {
-  print("HTTP GET failed!");
+// Wait for WiFi first, then NTP sync
+let syncAttempts = 0;
+if (wifi_status()) {
+  for (;;) {
+    if (ntp_synced()) break;
+    delay(500);
+    syncAttempts = syncAttempts + 1;
+    print("Waiting for NTP sync...");
+    if (syncAttempts > 20) {
+      print("NTP sync timeout");
+      break;
+    }
+  }
+} else {
+  print("No WiFi - NTP unavailable");
 }
 
-let dt = parse_json_value(json, "datetime");
-let hour = toNumber(str_substring(dt, 11, 2));
-let minute = toNumber(str_substring(dt, 14, 2));
-let seconds = toNumber(str_substring(dt, 17, 2));
-
-print("Time: " + numberToString(hour) + ":" + numberToString(minute));
+if (ntp_synced()) {
+  print("NTP synced! Time: " + numberToString(get_hours()) + ":" + numberToString(get_minutes()));
+}
 
 let timeStyle = create_style();
 style_set_text_font(timeStyle, 48);
@@ -53,16 +45,11 @@ let padZero = function(n) {
 };
 
 let update_clock = function() {
-  seconds = seconds + 1;
-  if (seconds >= 60) {
-    seconds = 0;
-    minute = minute + 1;
-    if (minute >= 60) {
-      minute = 0;
-      hour = hour + 1;
-      if (hour >= 24) hour = 0;
-    }
-  }
+  let hour = get_hours();
+  let minute = get_minutes();
+  let seconds = get_seconds();
+
+  if (hour < 0) return;
 
   let h = hour;
   let ap = "AM";
