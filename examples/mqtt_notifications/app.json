@@ -1,0 +1,27 @@
+{
+  "name": "MQTT Notifications",
+  "version": "1.0.0",
+  "description": "Display real-time notifications from MQTT topics on the screen",
+  "author": "WebScreen",
+  "script": "script.js",
+  "assets": [],
+  "config": {
+    "mqtt_broker": "broker.hivemq.com",
+    "mqtt_port": 1883,
+    "mqtt_topic": "webscreen/notifications",
+    "client_id": "webscreen01"
+  },
+  "settings": {
+    "wifi": {
+      "ssid": "",
+      "pass": ""
+    },
+    "mqtt": {
+      "enabled": true
+    }
+  },
+  "screen": {
+    "background": "#0d1117",
+    "foreground": "#FFFFFF"
+  }
+}
