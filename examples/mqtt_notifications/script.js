@@ -10,10 +10,10 @@ let topic = "webscreen/notifications";
 let clientId = "webscreen01";
 
 if (config !== "") {
-  let b = parse_json_value(config, "config.mqtt_broker");
-  let p = parse_json_value(config, "config.mqtt_port");
-  let t = parse_json_value(config, "config.mqtt_topic");
-  let c = parse_json_value(config, "config.client_id");
+  let b = parse_json_value(config, "mqtt_broker");
+  let p = parse_json_value(config, "mqtt_port");
+  let t = parse_json_value(config, "mqtt_topic");
+  let c = parse_json_value(config, "mqtt_client_id");
   if (b !== "") broker = b;
   if (p !== "") port = toNumber(p);
   if (t !== "") topic = t;
@@ -36,10 +36,9 @@ let storedSources = ",,,,";
 // String helpers
 let getItem = function(str, idx) {
   let len = str_length(str);
-  let pos = 0;
   let count = 0;
   let start = 0;
-  while (pos <= len) {
+  for (let pos = 0; pos <= len; pos++) {
     let c = "";
     if (pos < len) c = str_substring(str, pos, 1);
     if (c === "," || pos === len) {
@@ -47,7 +46,6 @@ let getItem = function(str, idx) {
       count++;
       start = pos + 1;
     }
-    pos++;
   }
   return "";
 };
@@ -55,10 +53,9 @@ let getItem = function(str, idx) {
 let setItem = function(str, idx, val) {
   let len = str_length(str);
   let result = "";
-  let pos = 0;
   let count = 0;
   let start = 0;
-  while (pos <= len) {
+  for (let pos = 0; pos <= len; pos++) {
     let c = "";
     if (pos < len) c = str_substring(str, pos, 1);
     if (c === "," || pos === len) {
@@ -71,7 +68,6 @@ let setItem = function(str, idx, val) {
       count++;
       start = pos + 1;
     }
-    pos++;
   }
   return result;
 };
@@ -159,12 +155,10 @@ let updateDisplay = function() {
 
 // Add notification (newest first)
 let addNotif = function(title, message, source) {
-  let i = 3;
-  while (i >= 0) {
+  for (let i = 3; i >= 0; i--) {
     storedTitles = setItem(storedTitles, i + 1, getItem(storedTitles, i));
     storedMessages = setItem(storedMessages, i + 1, getItem(storedMessages, i));
     storedSources = setItem(storedSources, i + 1, getItem(storedSources, i));
-    i--;
   }
   storedTitles = setItem(storedTitles, 0, title);
   storedMessages = setItem(storedMessages, 0, message);
