@@ -28,49 +28,10 @@ let notifCount = 0;
 let currentNotif = 0;
 let mqttConnected = 0;
 
-// Comma-separated storage (max 5 notifications)
-let storedTitles = ",,,,";
-let storedMessages = ",,,,";
-let storedSources = ",,,,";
-
-// String helpers
-let getItem = function(str, idx) {
-  let len = str_length(str);
-  let count = 0;
-  let start = 0;
-  for (let pos = 0; pos <= len; pos++) {
-    let c = "";
-    if (pos < len) c = str_substring(str, pos, 1);
-    if (c === "," || pos === len) {
-      if (count === idx) return str_substring(str, start, pos - start);
-      count++;
-      start = pos + 1;
-    }
-  }
-  return "";
-};
-
-let setItem = function(str, idx, val) {
-  let len = str_length(str);
-  let result = "";
-  let count = 0;
-  let start = 0;
-  for (let pos = 0; pos <= len; pos++) {
-    let c = "";
-    if (pos < len) c = str_substring(str, pos, 1);
-    if (c === "," || pos === len) {
-      if (result !== "") result = result + ",";
-      if (count === idx) {
-        result = result + val;
-      } else {
-        result = result + str_substring(str, start, pos - start);
-      }
-      count++;
-      start = pos + 1;
-    }
-  }
-  return result;
-};
+// Notification storage — 5 slots, individual variables (no string parsing needed)
+let t0 = ""; let t1 = ""; let t2 = ""; let t3 = ""; let t4 = "";
+let m0 = ""; let m1 = ""; let m2 = ""; let m3 = ""; let m4 = "";
+let s0 = ""; let s1 = ""; let s2 = ""; let s3 = ""; let s4 = "";
 
 // Styles (max 5)
 let headerStyle = create_style();
@@ -134,6 +95,29 @@ let topicLabel = create_label(20, 215);
 obj_add_style(topicLabel, statusStyle, 0);
 label_set_text(topicLabel, topic);
 
+// Get title/message/source by index
+let getTitle = function(i) {
+  if (i === 0) return t0;
+  if (i === 1) return t1;
+  if (i === 2) return t2;
+  if (i === 3) return t3;
+  return t4;
+};
+let getMsg = function(i) {
+  if (i === 0) return m0;
+  if (i === 1) return m1;
+  if (i === 2) return m2;
+  if (i === 3) return m3;
+  return m4;
+};
+let getSrc = function(i) {
+  if (i === 0) return s0;
+  if (i === 1) return s1;
+  if (i === 2) return s2;
+  if (i === 3) return s3;
+  return s4;
+};
+
 // Update display
 let updateDisplay = function() {
   if (notifCount === 0) {
@@ -143,47 +127,23 @@ let updateDisplay = function() {
     label_set_text(pageLabel, "");
     return;
   }
-  let t = getItem(storedTitles, currentNotif);
-  let m = getItem(storedMessages, currentNotif);
-  let s = getItem(storedSources, currentNotif);
-  label_set_text(sourceLabel, s);
-  label_set_text(notifTitle, t);
-  label_set_text(notifMsg, m);
+  label_set_text(sourceLabel, getSrc(currentNotif));
+  label_set_text(notifTitle, getTitle(currentNotif));
+  label_set_text(notifMsg, getMsg(currentNotif));
   let pg = numberToString(currentNotif + 1) + " / " + numberToString(notifCount);
   label_set_text(pageLabel, pg);
 };
 
-// Add notification (newest first)
+// Add notification (newest first) — shift slots right, insert at 0
 let addNotif = function(title, message, source) {
-  for (let i = 3; i >= 0; i--) {
-    storedTitles = setItem(storedTitles, i + 1, getItem(storedTitles, i));
-    storedMessages = setItem(storedMessages, i + 1, getItem(storedMessages, i));
-    storedSources = setItem(storedSources, i + 1, getItem(storedSources, i));
-  }
-  storedTitles = setItem(storedTitles, 0, title);
-  storedMessages = setItem(storedMessages, 0, message);
-  storedSources = setItem(storedSources, 0, source);
+  t4 = t3; t3 = t2; t2 = t1; t1 = t0; t0 = title;
+  m4 = m3; m3 = m2; m2 = m1; m1 = m0; m0 = message;
+  s4 = s3; s3 = s2; s2 = s1; s1 = s0; s0 = source;
   notifCount++;
   if (notifCount > 5) notifCount = 5;
   currentNotif = 0;
   updateDisplay();
   print("Notification: " + title + " - " + message);
-};
-
-// MQTT message callback
-// Accepts plain text or JSON: {"title":"...","message":"...","source":"..."}
-let on_mqtt_msg = function(t, msg) {
-  print("MQTT [" + t + "]: " + msg);
-  let title = parse_json_value(msg, "title");
-  if (title !== "") {
-    let message = parse_json_value(msg, "message");
-    let source = parse_json_value(msg, "source");
-    if (source === "") source = "MQTT";
-    if (message === "") message = msg;
-    addNotif(title, message, source);
-  } else {
-    addNotif("New Message", msg, "MQTT");
-  }
 };
 
 // Wait for WiFi
@@ -213,6 +173,11 @@ let check_wifi = function() {
   }
 };
 
+// MQTT message callback
+let on_mqtt_msg = function(t, msg) {
+  print("MQTT [" + t + "]: " + msg);
+};
+
 // Main loop - process MQTT and cycle notifications
 let cycleCount = 0;
 
@@ -224,6 +189,20 @@ let main_loop = function() {
 
   if (mqttConnected) {
     mqtt_loop();
+    if (mqtt_has_message()) {
+      let payload = mqtt_get_payload();
+      mqtt_msg_clear();
+      let title = parse_json_value(payload, "title");
+      if (title !== "") {
+        let message = parse_json_value(payload, "message");
+        let source = parse_json_value(payload, "source");
+        if (source === "") source = "MQTT";
+        if (message === "") message = payload;
+        addNotif(title, message, source);
+      } else {
+        addNotif("New Message", payload, "MQTT");
+      }
+    }
   }
 
   // Auto-cycle notifications every 6 seconds
