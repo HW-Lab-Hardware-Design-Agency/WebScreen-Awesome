@@ -25,7 +25,7 @@ Return promptly from startup and callbacks. Register timers by name with `create
 
 Allocate objects/styles once and update them. The current firmware exposes 32 style slots and 256 object handles. Labels accept at most 255 bytes. Enabled fonts are 14, 20, 28, 34, 40, 44, and 48. The display is 536 × 240. LVGL text alignment values are 0=auto, 1=left, 2=center, 3=right; set label widths for alignment to be visible.
 
-`on_button("handler")` delivers a short hardware-button press and replaces the default display toggle. Screen labels are not touch buttons. MQTT applications must enable `settings.mqtt.enabled` and poll `mqtt_has_message` / `mqtt_get_payload` / `mqtt_msg_clear`; `mqtt_on_message` is not a JS event dispatcher.
+`on_button("handler")` delivers each click of the BOOT button. The same press can be sent from a computer with **Press Button** in WebScreen Admin or the Serial IDE, or with the `/button` serial command. The power button cannot be used by apps: a press powers the device off until RST or a power cycle. Screen labels are not touch buttons. MQTT applications must enable `settings.mqtt.enabled` and poll `mqtt_has_message` / `mqtt_get_payload` / `mqtt_msg_clear`; `mqtt_on_message` is not a JS event dispatcher.
 
 ## Tests
 

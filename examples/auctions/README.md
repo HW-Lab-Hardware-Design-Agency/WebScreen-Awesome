@@ -4,7 +4,7 @@ Offline auction dashboard demo with three sample listings. Two cards show bids, 
 
 ## Usage
 
-The view changes every eight seconds. Press the hardware button to change pages immediately. Countdown values use elapsed device time and stop at zero. Bids stop increasing when a listing ends.
+The view changes every eight seconds. Press the BOOT button to change pages immediately. Countdown values use elapsed device time and stop at zero. Bids stop increasing when a listing ends.
 
 ## Behavior and Limits
 

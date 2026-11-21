@@ -4,7 +4,7 @@ Offline countdown with pause/resume and restart.
 
 ## Usage
 
-The default is five minutes. Set the top-level `duration_seconds` in `/webscreen.json` to an integer from 1 to 86400. Press the hardware button to pause/resume; when finished, press to restart.
+The default is five minutes. Set the top-level `duration_seconds` in `/webscreen.json` to an integer from 1 to 86400. Press the BOOT button to pause/resume; when finished, press to restart.
 
 ## Behavior and Limits
 

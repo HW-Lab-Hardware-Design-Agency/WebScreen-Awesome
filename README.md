@@ -92,7 +92,7 @@ WebScreen-Awesome/
 
 ### LVGL 9.5 Demos
 
-**All five demos require firmware 4.0 (LVGL 9.5 compatible).** They run offline without extra assets. Find them in [WebScreen Admin](https://admin.webscreen.cc) by searching for `LVGL` or `firmware 4.0`. Short-press the hardware button to cycle modes or pause; long-press still powers off.
+**All five demos require firmware 4.0 (LVGL 9.5 compatible).** They run offline without extra assets. Find them in [WebScreen Admin](https://admin.webscreen.cc) by searching for `LVGL` or `firmware 4.0`. Click the BOOT button to cycle modes or pause. The power button powers the device off.
 
 | App | What it demonstrates |
 | --- | --- |

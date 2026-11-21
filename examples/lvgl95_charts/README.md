@@ -20,8 +20,8 @@ Wait for `DEMO READY:` before sending another command. Keep your existing `websc
 
 ## Controls and checks
 
-- **Short press:** Curve → line → bar → scatter → paused.
-- **Long press:** power off, as usual.
-- In the serial console, `/eval demo_button(1);` also advances the mode.
+- **BOOT click:** Curve → line → bar → scatter → paused.
+- **Power button:** powers the device off.
+- **Press Button** in WebScreen Admin, or `/button` in the serial console, also advances the mode.
 
 Compare all four chart types. Scatter points should remain unconnected when the data wraps. Use `/errors` and `/stats` to inspect runtime health; `/screenshot` captures the display. The animation uses one timer and reuses its objects and styles.

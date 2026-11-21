@@ -4,7 +4,7 @@ Offline player interface with a five-track sample playlist and elapsed-time prog
 
 ## Usage
 
-Press the hardware button to pause/resume simulated playback. Use `/eval next_track();` to advance immediately. Playback automatically advances at the end of a track.
+Press the BOOT button to pause/resume simulated playback. Use `/eval next_track();` to advance immediately. Playback automatically advances at the end of a track.
 
 ## Behavior and Limits
 

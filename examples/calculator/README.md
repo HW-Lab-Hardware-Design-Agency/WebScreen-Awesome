@@ -4,7 +4,7 @@ Offline arithmetic calculator with a complete keypad display and an automatic ca
 
 ## Usage
 
-Press the hardware button to pause/resume the demo. Enter keys through the serial console, for example `/eval key("C"); key("1"); key("2"); key("+"); key("5"); key("=");`. Manual input pauses the demo.
+Press the BOOT button to pause/resume the demo. Enter keys through the serial console, for example `/eval key("C"); key("1"); key("2"); key("+"); key("5"); key("=");`. Manual input pauses the demo.
 
 ## Behavior and Limits
 

@@ -4,7 +4,7 @@ Four daily reminders driven by the firmware NTP clock.
 
 ## Usage
 
-Configure Wi-Fi and the local timezone. Due reminders display `[!]`; press the hardware button to acknowledge the earliest due, unfinished item. Acknowledged items show `[X]`.
+Configure Wi-Fi and the local timezone. Due reminders display `[!]`; press the BOOT button to acknowledge the earliest due, unfinished item. Acknowledged items show `[X]`.
 
 ## Behavior and Limits
 

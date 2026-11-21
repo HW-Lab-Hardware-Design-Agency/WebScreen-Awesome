@@ -20,8 +20,8 @@ Wait for `DEMO READY:` before sending another command. Keep your existing `websc
 
 ## Controls and checks
 
-- **Short press:** Clockwise → counterclockwise → paused.
-- **Long press:** power off, as usual.
-- In the serial console, `/eval demo_button(1);` also advances the mode.
+- **BOOT click:** Clockwise → counterclockwise → paused.
+- **Power button:** powers the device off.
+- **Press Button** in WebScreen Admin, or `/button` in the serial console, also advances the mode.
 
 Check that both text rings stay readable and reverse independently. Use `/errors` and `/stats` to inspect runtime health; `/screenshot` captures the display. The animation uses one timer and reuses its objects and styles.

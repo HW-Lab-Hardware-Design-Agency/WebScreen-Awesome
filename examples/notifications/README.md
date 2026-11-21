@@ -4,7 +4,7 @@ Offline notification display with five retained entries, newest first.
 
 ## Usage
 
-Sample notifications arrive every eight seconds and pages cycle every five seconds. Press the hardware button to browse immediately. To inject an entry, use `/eval addNotification("Hello", "Message, with commas", "Serial");`.
+Sample notifications arrive every eight seconds and pages cycle every five seconds. Press the BOOT button to browse immediately. To inject an entry, use `/eval addNotification("Hello", "Message, with commas", "Serial");`.
 
 ## Behavior and Limits
 

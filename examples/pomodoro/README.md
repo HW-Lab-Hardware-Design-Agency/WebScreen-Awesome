@@ -4,7 +4,7 @@ Offline focus timer alternating 25-minute work sessions and five-minute breaks.
 
 ## Usage
 
-Press the hardware button to pause/resume. The screen shows the current phase and number of completed focus sessions. Edit `WORK_TIME` and `BREAK_TIME` in seconds to change durations.
+Press the BOOT button to pause/resume. The screen shows the current phase and number of completed focus sessions. Edit `WORK_TIME` and `BREAK_TIME` in seconds to change durations.
 
 ## Behavior and Limits
 
