@@ -4,7 +4,7 @@ Offline Steam-style profile display with sample game activity, level, and friend
 
 ## Usage
 
-The demo changes game activity automatically. Press the hardware button to cycle games immediately.
+The demo changes game activity automatically. Press the BOOT button to cycle games immediately.
 
 ## Behavior and Limits
 

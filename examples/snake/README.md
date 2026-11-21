@@ -4,7 +4,7 @@ Offline Snake demo on a 30 by 12 grid, controlled by an automatic food-seeking p
 
 ## Usage
 
-The snake avoids walls and occupied body cells. Food appears on a free cell. Press the hardware button to restart at any time, including after Game Over.
+The snake avoids walls and occupied body cells. Food appears on a free cell. Press the BOOT button to restart at any time, including after Game Over.
 
 ## Behavior and Limits
 

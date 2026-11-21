@@ -4,7 +4,7 @@ Browse the SD card root directory on screen without waiting for Wi-Fi.
 
 ## Usage
 
-Four directory entries appear per page. Press the hardware button to advance. The listing refreshes every 15 seconds; an unavailable or empty directory displays a status message.
+Four directory entries appear per page. Press the BOOT button to advance. The listing refreshes every 15 seconds; an unavailable or empty directory displays a status message.
 
 ## Behavior and Limits
 

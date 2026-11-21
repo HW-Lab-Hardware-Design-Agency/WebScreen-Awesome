@@ -4,7 +4,7 @@ Offline rotating feed with six sample posts, usernames, avatars, and engagement 
 
 ## Usage
 
-Posts advance every five seconds. Press the hardware button to advance immediately. Text is split over two lines and page indicators reflect the current post.
+Posts advance every five seconds. Press the BOOT button to advance immediately. Text is split over two lines and page indicators reflect the current post.
 
 ## Behavior and Limits
 

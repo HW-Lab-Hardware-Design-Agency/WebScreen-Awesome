@@ -4,7 +4,7 @@ Paginated news-card display using eight bundled sample headlines.
 
 ## Usage
 
-Two headlines appear at a time, with sources and timestamps. Pages advance every five seconds; the hardware button advances immediately.
+Two headlines appear at a time, with sources and timestamps. Pages advance every five seconds; the BOOT button advances immediately.
 
 ## Behavior and Limits
 

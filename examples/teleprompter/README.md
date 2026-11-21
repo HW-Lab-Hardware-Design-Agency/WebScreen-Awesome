@@ -4,7 +4,7 @@ Scroll text loaded from `/speech.txt` on the SD card. If the file is absent or e
 
 ## Usage
 
-Use plain text, preferably ASCII, with line breaks for paragraphs. Press the hardware button to pause/resume. Text wraps at spaces where possible and loops after the final line.
+Use plain text, preferably ASCII, with line breaks for paragraphs. Press the BOOT button to pause/resume. Text wraps at spaces where possible and loops after the final line.
 
 ## Behavior and Limits
 

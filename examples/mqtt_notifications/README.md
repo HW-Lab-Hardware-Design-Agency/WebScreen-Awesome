@@ -258,7 +258,7 @@ mosquitto_pub -h 192.168.1.100 -t "webscreen/notifications" \
 - Stores the last 5 notifications with auto-pagination
 - Auto-cycles through notifications every 6 seconds
 - Shows subscription status and automatically retries failed connections
-- Hardware button advances to the next retained notification
+- BOOT button advances to the next retained notification
 - Drains up to four queued messages per tick; limits displayed title/body/source lengths
 - Accepts JSON messages with `title`, `message`, and `source` fields
 - Falls back to plain text display for non-JSON messages

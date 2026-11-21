@@ -4,7 +4,7 @@ Six-card dashboard with sample temperature, humidity, motion, door, and light re
 
 ## Usage
 
-Runs offline. Press the hardware button to toggle the simulated kitchen light. Other sample readings update once per second and stay within bounded ranges.
+Runs offline. Press the BOOT button to toggle the simulated kitchen light. Other sample readings update once per second and stay within bounded ranges.
 
 ## Behavior and Limits
 
